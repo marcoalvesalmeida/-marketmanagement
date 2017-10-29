@@ -5,6 +5,8 @@
  */
 package br.edu.ifnmg.marketmanagement.aplicacao;
 
+import java.math.BigDecimal;
+
 /**
  *
  * @author marco
@@ -16,10 +18,14 @@ public class SISMERCADO {
      */
     public static void main(String[] args) throws ViolacaoRegraNegocioException {
         // TODO code application logic here
-        Veiculo veic = new Veiculo(1,"Uno","GZR-8909");
+        /*Veiculo veic = new Veiculo(1,"Uno","GZR-8909");
         veic.setPlaca("KDS-4337");
         veic.setChassi("1AB34343434343434");
         System.out.println(veic.toString());
+        */
+        Lancamento l1 = new Lancamento();
+        BigDecimal valor = new BigDecimal(7);
+        l1.setValorTotal(valor);
     }
     
 }

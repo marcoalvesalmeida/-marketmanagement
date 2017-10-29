@@ -7,5 +7,4 @@ package br.edu.ifnmg.marketmanagement.aplicacao;
 public interface Entidade {
     public long getId();
     public void setId(long id) throws ViolacaoRegraNegocioException;
-    
 }

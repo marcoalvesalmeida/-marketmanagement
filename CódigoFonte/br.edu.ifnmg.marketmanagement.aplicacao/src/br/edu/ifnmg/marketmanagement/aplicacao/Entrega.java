@@ -98,7 +98,7 @@ public class Entrega implements Entidade {
 
     @Override
     public String toString() {
-        return "Entrega{" + "id=" + id + ", compra=" + venda + ", endereco=" + endereco + '}';
+        return "Entrega{" + "id=" + id + ", Venda=" + venda + ", Endereco=" + endereco + '}';
     }
         
     
