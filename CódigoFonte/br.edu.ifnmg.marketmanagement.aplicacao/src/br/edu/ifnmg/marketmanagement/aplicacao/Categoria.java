@@ -64,5 +64,9 @@ public class Categoria implements Entidade{
         }
         return true;
     }
-    
+
+    @Override
+    public String toString() {
+        return "Categoria{" + "id=" + id + ", descricao=" + descricao + '}';
+    } 
 }

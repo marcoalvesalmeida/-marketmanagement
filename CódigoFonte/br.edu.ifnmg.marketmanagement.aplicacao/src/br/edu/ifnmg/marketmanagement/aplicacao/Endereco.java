@@ -138,5 +138,10 @@ public class Endereco implements Entidade {
         }
         return true;
     }
-  
+
+    @Override
+    public String toString() {
+        return "Endereco{" + "id=" + id + ", rua=" + rua + ", cep=" + cep + ", numero=" + numero + ", bairro=" + bairro + ", complemento=" + complemento + ", cidade=" + cidade + ", uf=" + uf + '}';
+    }
+
 }

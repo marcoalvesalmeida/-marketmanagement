@@ -64,6 +64,10 @@ public class Fornecedor extends Pessoa {
         }
         return true;
     }
-   
+
+    @Override
+    public String toString() {
+        return "Fornecedor{" + "razaoSocial=" + razaoSocial + ", cnpj=" + cnpj + '}';
+    } 
   
 }

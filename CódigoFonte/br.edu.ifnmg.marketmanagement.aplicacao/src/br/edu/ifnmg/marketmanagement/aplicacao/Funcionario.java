@@ -74,4 +74,9 @@ public class Funcionario extends PessoaFisica{
         this.cnh = cnh;
     }
 
+    @Override
+    public String toString() {
+        return "Funcionario{" + "salario=" + salario + ", cargaHoraria=" + cargaHoraria + ", tipo=" + tipo + ", senha=" + senha + ", cnh=" + cnh + '}';
+    }
+
 }

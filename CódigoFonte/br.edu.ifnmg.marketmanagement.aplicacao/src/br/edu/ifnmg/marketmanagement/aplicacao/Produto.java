@@ -222,4 +222,10 @@ public class Produto implements Entidade {
         }
         return true;
     } 
+
+    @Override
+    public String toString() {
+        return "Produto{" + "id=" + id + ", descricao=" + descricao + ", categoria=" + categoria + ", valorCusto=" + valorCusto + ", valorVarejo=" + valorVarejo + ", valorAtacado=" + valorAtacado + ", codigo=" + codigo + ", unMedida=" + unMedida + ", pontuacao=" + pontuacao + ", estoqueMinimo=" + estoqueMinimo + ", estoqueAtual=" + estoqueAtual + ", ativo=" + ativo + ", informacoesAdicionais=" + informacoesAdicionais + ", fracionar=" + fracionar + ", fornecedor=" + fornecedor + '}';
+    }
+  
 }
