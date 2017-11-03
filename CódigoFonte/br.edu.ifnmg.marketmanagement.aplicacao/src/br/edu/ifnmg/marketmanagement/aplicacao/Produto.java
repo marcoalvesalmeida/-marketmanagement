@@ -4,8 +4,7 @@ import java.math.BigDecimal;
  *
  * @author guilherme
  */
-public class Produto implements Entidade {
-    
+public class Produto implements Entidade {    
     private long id;
     private String descricao;
     private Categoria categoria;
@@ -20,7 +19,8 @@ public class Produto implements Entidade {
     private boolean ativo;
     private String informacoesAdicionais; 
     private boolean fracionar;
-    private Fornecedor fornecedor;    
+    private Fornecedor fornecedor;  
+    private final BigDecimal TEMP = new BigDecimal(0);
 
     @Override
     public long getId(){
@@ -54,7 +54,10 @@ public class Produto implements Entidade {
         return descricao;
     }
 
-    public void setDescricao(String descricao) {
+    public void setDescricao(String descricao)throws ViolacaoRegraNegocioException {
+        if(descricao == null || descricao.isEmpty()){
+            throw new ViolacaoRegraNegocioException("A descrição não pode ficar vazia!"); 
+        }
         this.descricao = descricao;
     }
 
@@ -62,7 +65,11 @@ public class Produto implements Entidade {
         return categoria;
     }
 
-    public void setCategoria(Categoria categoria) {
+   
+    public void setCategoria(Categoria categoria) throws ViolacaoRegraNegocioException{
+        if(categoria == null){
+            throw new ViolacaoRegraNegocioException("A categoria não pode ser nula!"); 
+        }
         this.categoria = categoria;
     }
 
@@ -70,15 +77,21 @@ public class Produto implements Entidade {
         return valorCusto;
     }
 
-    public void setValorCusto(BigDecimal valorCusto) {
+    public void setValorCusto(BigDecimal valorCusto) throws ViolacaoRegraNegocioException {
+        if(valorCusto==null || valorCusto.compareTo(TEMP)==0 || valorCusto.compareTo(TEMP)==-1){
+            throw new ViolacaoRegraNegocioException("O valor de custo deve ser maior que 0!");
+        }    
         this.valorCusto = valorCusto;
     }
 
-    public BigDecimal getValorVarejo() {
+    public BigDecimal getValorVarejo() {          
         return valorVarejo;
     }
 
-    public void setValorVarejo(BigDecimal valorVarejo) {
+    public void setValorVarejo(BigDecimal valorVarejo) throws ViolacaoRegraNegocioException {
+        if(valorVarejo==null || valorVarejo.compareTo(TEMP)==0 || valorVarejo.compareTo(TEMP)==-1){
+            throw new ViolacaoRegraNegocioException("O valor de varejo deve ser maior que 0!");
+        } 
         this.valorVarejo = valorVarejo;
     }
 
@@ -86,7 +99,10 @@ public class Produto implements Entidade {
         return valorAtacado;
     }
 
-    public void setValorAtacado(BigDecimal valorAtacado) {
+    public void setValorAtacado(BigDecimal valorAtacado) throws ViolacaoRegraNegocioException {
+        if(valorAtacado==null || valorAtacado.compareTo(TEMP)==0 || valorAtacado.compareTo(TEMP)==-1){
+            throw new ViolacaoRegraNegocioException("O valor de atacado deve ser maior que 0!");
+        } 
         this.valorAtacado = valorAtacado;
     }
 
@@ -94,7 +110,10 @@ public class Produto implements Entidade {
         return codigo;
     }
 
-    public void setCodigo(int codigo) {
+    public void setCodigo(int codigo) throws ViolacaoRegraNegocioException{
+        if(codigo <= 0){
+            throw new ViolacaoRegraNegocioException("O codigo deve ser maior que 0!");
+        }
         this.codigo = codigo;
     }
 
@@ -102,14 +121,18 @@ public class Produto implements Entidade {
         return unMedida;
     }
 
-    public void setUnMedida(EnumUnidadeMedida unMedida) {
+    public void setUnMedida(EnumUnidadeMedida unMedida) throws ViolacaoRegraNegocioException {
+        if(unMedida == null){
+            throw new ViolacaoRegraNegocioException("A unidade de medida deve ser informada!");
+        }
         this.unMedida = unMedida;
     }
 
     public long getPontuacao() {
         return pontuacao;
     }
-
+    
+    //ver com marco
     public void setPontuacao(long pontuacao) {
         this.pontuacao = pontuacao;
     }
@@ -118,7 +141,10 @@ public class Produto implements Entidade {
         return estoqueMinimo;
     }
 
-    public void setEstoqueMinimo(long estoqueMinimo) {
+    public void setEstoqueMinimo(long estoqueMinimo) throws ViolacaoRegraNegocioException{
+        if(estoqueMinimo < 0){
+            throw new ViolacaoRegraNegocioException("O estoque minimo não pode ser menor que 0!");
+        }
         this.estoqueMinimo = estoqueMinimo;
     }
 
@@ -126,7 +152,10 @@ public class Produto implements Entidade {
         return estoqueAtual;
     }
 
-    public void setEstoqueAtual(long estoqueAtual) {
+    public void setEstoqueAtual(long estoqueAtual) throws ViolacaoRegraNegocioException {
+        if (estoqueAtual < 0){
+            throw new ViolacaoRegraNegocioException("O estoque atual não pode ser menor que 0!");
+        }
         this.estoqueAtual = estoqueAtual;
     }
 
@@ -134,7 +163,7 @@ public class Produto implements Entidade {
         return ativo;
     }
 
-    public void setAtivo(boolean ativo) {
+    public void setAtivo(boolean ativo){       
         this.ativo = ativo;
     }
 
@@ -158,8 +187,39 @@ public class Produto implements Entidade {
         return fornecedor;
     }
 
-    public void setFornecedor(Fornecedor fornecedor) {
+    public void setFornecedor(Fornecedor fornecedor) throws ViolacaoRegraNegocioException {
+        if (fornecedor == null){
+            throw new ViolacaoRegraNegocioException("O fornecedor não pode ser nulo!");
+        }
         this.fornecedor = fornecedor;
-    }    
-   
+    }   
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 71 * hash + (int) (this.id ^ (this.id >>> 32));
+        hash = 71 * hash + this.codigo;
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Produto other = (Produto) obj;
+        if (this.id != other.id) {
+            return false;
+        }
+        if (this.codigo != other.codigo) {
+            return false;
+        }
+        return true;
+    } 
 }

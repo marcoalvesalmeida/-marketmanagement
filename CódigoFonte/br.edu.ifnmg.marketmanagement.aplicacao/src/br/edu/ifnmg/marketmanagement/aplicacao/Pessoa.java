@@ -1,4 +1,7 @@
 package br.edu.ifnmg.marketmanagement.aplicacao;
+
+import java.util.Objects;
+
 /**
  *
  * @author guilherme
@@ -14,25 +17,26 @@ public abstract class Pessoa implements Entidade {
         this.endereco = endereco;
         this.telefone = telefone;
         this.email = email;
-    }  
-    
+    }   
+  
     @Override
     public long getId(){
         return id;
     }
     
     @Override
-    public void setId(long id){
-        if (id> 0){
-            this.id = id;
-        }
+    public void setId(long id){        
+        this.id = id;       
     }
     
     public Endereco getEndereco() {
         return endereco;
     }
 
-    public void setEndereco(Endereco endereco) {
+    public void setEndereco(Endereco endereco) throws ViolacaoRegraNegocioException{
+        if(endereco==null){
+            throw new ViolacaoRegraNegocioException("O endereco não pode ser nulo!");
+        }
         this.endereco = endereco;
     }
 
@@ -40,7 +44,10 @@ public abstract class Pessoa implements Entidade {
         return telefone;
     }
 
-    public void setTelefone(String telefone) {
+    public void setTelefone(String telefone) throws ViolacaoRegraNegocioException{
+        if(telefone==null || telefone.length()< 11 || telefone.length() > 12){
+            throw new ViolacaoRegraNegocioException("O telefone deve ter o seguinte formato: 00-12345678 ou 00-123456789");
+        }
         this.telefone = telefone;
     }
 
@@ -61,5 +68,5 @@ public abstract class Pessoa implements Entidade {
        }
         this.email = email;       
     }
-       
+  
 }
