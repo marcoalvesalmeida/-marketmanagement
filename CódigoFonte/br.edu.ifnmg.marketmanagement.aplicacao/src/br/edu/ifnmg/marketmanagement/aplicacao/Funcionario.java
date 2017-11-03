@@ -1,17 +1,20 @@
 package br.edu.ifnmg.marketmanagement.aplicacao;
+
+import java.math.BigDecimal;
+
 /**
  *
  * @author guilherme
  */
 public class Funcionario extends PessoaFisica{
-    private Double salario;
-    private Double cargaHoraria;
-    private String tipo;
+    private BigDecimal salario;
+    private int cargaHoraria;
+    private int tipo;
     private String senha;
     private String cnh;
     private String login;
 
-    public Funcionario(Double salario, Double cargaHoraria, String tipo, String senha, String cnh, String login, String nome, String dataNascimento, String cpf, String rg, long id, Endereco endereco, Telefone[] telefone, String email) {
+    public Funcionario(BigDecimal salario, int cargaHoraria, int tipo, String senha, String cnh, String login, String nome, String dataNascimento, String cpf, String rg, long id, Endereco endereco, String telefone, String email) {
         super(nome, dataNascimento, cpf, rg, id, endereco, telefone, email);
         this.salario = salario;
         this.cargaHoraria = cargaHoraria;
@@ -21,27 +24,28 @@ public class Funcionario extends PessoaFisica{
         this.login = login;
     }
 
-    public Double getSalario() {
+ 
+    public BigDecimal getSalario() {
         return salario;
     }
 
-    public void setSalario(Double salario) {
+    public void setSalario(BigDecimal salario) {
         this.salario = salario;
     }
 
-    public Double getCargaHoraria() {
+    public int getCargaHoraria() {
         return cargaHoraria;
     }
 
-    public void setCargaHoraria(Double cargaHoraria) {
+    public void setCargaHoraria(int cargaHoraria) {
         this.cargaHoraria = cargaHoraria;
     }
 
-    public String getTipo() {
+    public int getTipo() {
         return tipo;
     }
 
-    public void setTipo(String tipo) {
+    public void setTipo(int tipo) {
         this.tipo = tipo;
     }
 

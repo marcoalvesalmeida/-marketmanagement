@@ -9,13 +9,13 @@ public class PessoaFisica extends Pessoa{
     private String cpf;
     private String rg;
 
-    public PessoaFisica(String nome, String dataNascimento, String cpf, String rg, long id, Endereco endereco, Telefone[] telefone, String email) {
+    public PessoaFisica(String nome, String dataNascimento, String cpf, String rg, long id, Endereco endereco, String telefone, String email) {
         super(id, endereco, telefone, email);
         this.nome = nome;
         this.dataNascimento = dataNascimento;
         this.cpf = cpf;
         this.rg = rg;
-    }
+    } 
 
     public String getNome() {
         return nome;

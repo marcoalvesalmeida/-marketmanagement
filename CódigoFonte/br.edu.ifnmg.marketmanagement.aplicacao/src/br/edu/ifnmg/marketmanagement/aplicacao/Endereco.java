@@ -30,10 +30,8 @@ public class Endereco implements Entidade {
     }
     
     @Override
-    public void setId(long id){
-        if (id> 0){
-            this.id = id;
-        }
+    public void setId(long id){       
+        this.id = id;        
     }
 
     public String getRua() {
@@ -91,9 +89,5 @@ public class Endereco implements Entidade {
     public void setUf(String uf) {
         this.uf = uf;
     }
-    
-    
-        
-    
-    
+ 
 }

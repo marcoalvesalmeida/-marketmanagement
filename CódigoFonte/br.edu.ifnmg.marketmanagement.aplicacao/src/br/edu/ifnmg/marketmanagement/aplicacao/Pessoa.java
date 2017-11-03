@@ -6,10 +6,10 @@ package br.edu.ifnmg.marketmanagement.aplicacao;
 public abstract class Pessoa implements Entidade {
     private long id;
     private Endereco endereco;
-    private Telefone telefone [];
+    private String telefone;
     private String email;
 
-    public Pessoa(long id, Endereco endereco, Telefone[] telefone, String email) {
+    public Pessoa(long id, Endereco endereco, String telefone, String email) {
         this.id = id;
         this.endereco = endereco;
         this.telefone = telefone;
@@ -36,11 +36,11 @@ public abstract class Pessoa implements Entidade {
         this.endereco = endereco;
     }
 
-    public Telefone[] getTelefone() {
+    public String getTelefone() {
         return telefone;
     }
 
-    public void setTelefone(Telefone[] telefone) {
+    public void setTelefone(String telefone) {
         this.telefone = telefone;
     }
 
