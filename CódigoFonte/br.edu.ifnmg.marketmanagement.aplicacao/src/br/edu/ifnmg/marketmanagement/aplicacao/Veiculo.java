@@ -13,12 +13,12 @@ public class Veiculo implements Entidade{
     private String placa;
     private String chassi;
     private EnumTipoVeiculo tipo;
-    private Date anoFab;
+    private long anoFab;
     private EnumMarcaVeiculo marca;
     private EnumCombustivel combustivel;   
     private String observacoes;
 
-    public Veiculo(long id, String modelo, String placa, String chassi, EnumTipoVeiculo tipo, Date anoFab, EnumMarcaVeiculo marca, EnumCombustivel combustivel, String observacoes) {
+    public Veiculo(long id, String modelo, String placa, String chassi, EnumTipoVeiculo tipo, long anoFab, EnumMarcaVeiculo marca, EnumCombustivel combustivel, String observacoes) {
         this.id = id;
         this.modelo = modelo;
         this.placa = placa;
@@ -34,6 +34,9 @@ public class Veiculo implements Entidade{
         this.id = id;
         this.modelo = modelo;
         this.placa = placa;
+    }
+
+    public Veiculo() {
     }
     
 
@@ -51,9 +54,8 @@ public class Veiculo implements Entidade{
     }
 
     public void setModelo(String modelo) throws ViolacaoRegraNegocioException{
-        if(modelo==null){
+        if(modelo==null)
             throw new ViolacaoRegraNegocioException("O modelo não pode ser atribuido como nulo!");
-        }
         this.modelo = modelo;
     }
 
@@ -62,9 +64,8 @@ public class Veiculo implements Entidade{
     }
 
     public void setPlaca(String placa) throws ViolacaoRegraNegocioException {
-        if(!placa.matches("[A-Z]{3,3}-\\d{4,4}")){
-            throw new ViolacaoRegraNegocioException("A placa possui formato inválido!");       
-        }
+        if(!placa.matches("[A-Z]{3,3}-\\d{4,4}"))
+            throw new ViolacaoRegraNegocioException("A placa possui formato inválido!");
         this.placa = placa.replace("-","");
     }
 
@@ -73,9 +74,8 @@ public class Veiculo implements Entidade{
     }
 
     public void setChassi(String chassi) throws ViolacaoRegraNegocioException {
-        if(chassi==null || chassi.length()<17){
-            throw new ViolacaoRegraNegocioException("O chassi possui formato inválido!");  
-        }
+        if(chassi==null || chassi.length()<17)
+            throw new ViolacaoRegraNegocioException("O chassi possui formato inválido!"); 
         this.chassi = chassi;
     }
 
@@ -84,20 +84,18 @@ public class Veiculo implements Entidade{
     }
 
     public void setTipo(EnumTipoVeiculo tipo) throws ViolacaoRegraNegocioException{
-        if(tipo==null){
-            throw new ViolacaoRegraNegocioException("É obrigatório que o veículo tenha um tipo!");  
-        }        
+        if(tipo==null)
+            throw new ViolacaoRegraNegocioException("É obrigatório que o veículo tenha um tipo!");       
         this.tipo = tipo;
     }
 
-    public Date getAnoFab() {
+    public long getAnoFab() {
         return anoFab;
     }
 
-    public void setAnoFab(Date anoFab) throws ViolacaoRegraNegocioException {
-        if(anoFab==null){
+    public void setAnoFab(int anoFab) throws ViolacaoRegraNegocioException {
+        if(anoFab<1900)
             throw new ViolacaoRegraNegocioException("É obrigatório que o veículo tenha ano de fabricação!");  
-        }
         this.anoFab = anoFab;
     }
 
@@ -106,9 +104,8 @@ public class Veiculo implements Entidade{
     }
 
     public void setMarca(EnumMarcaVeiculo marca) throws ViolacaoRegraNegocioException {
-        if(marca==null){
+        if(marca==null)
             throw new ViolacaoRegraNegocioException("É obrigatório que o veículo tenha uma marca!");  
-        }
         this.marca = marca;
     }
 
@@ -117,9 +114,8 @@ public class Veiculo implements Entidade{
     }
 
     public void setCombustivel(EnumCombustivel combustivel) throws ViolacaoRegraNegocioException {
-        if(combustivel==null){
-            throw new ViolacaoRegraNegocioException("É obrigatório que o veículo tenha um tipo de combustível!");  
-        }
+        if(combustivel==null)
+            throw new ViolacaoRegraNegocioException("É obrigatório que o veículo tenha um tipo de combustível!");
         this.combustivel = combustivel;
     }
 

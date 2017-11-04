@@ -66,6 +66,10 @@ public class Entrega implements Entidade {
              throw new ViolacaoRegraNegocioException("A referência está vazia!");  
         this.motorista = motorista;
     }
+    
+    public void gerarRelatorio(){
+        
+    }
 
     @Override
     public int hashCode() {

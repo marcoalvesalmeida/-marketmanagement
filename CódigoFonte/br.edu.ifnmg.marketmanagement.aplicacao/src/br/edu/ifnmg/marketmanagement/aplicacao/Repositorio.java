@@ -12,7 +12,7 @@ import java.util.Collection;
  * @author aluno
  * @param <T>
  */
-public interface Repositorio<T extends Entidade>{
+public interface Repositorio<T>{
     public boolean salvar(T obj);
     public boolean apagar(T obj);
     public T abrir(long id);
