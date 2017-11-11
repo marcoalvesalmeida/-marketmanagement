@@ -15,12 +15,13 @@ public class Venda extends Lancamento{
     private Funcionario operador;
     private ArrayList<ItemTransacao> itens;
 
-    public Venda(String turno, long terminal, long controle, Funcionario operador, long id, Date data, String tipo, BigDecimal valorTotal, String modo, BigDecimal acrescimo, BigDecimal desconto, String planejamento) {
-        super(id, data, tipo, valorTotal, modo, acrescimo, desconto, planejamento);
+    public Venda(String turno, long terminal, long controle, Funcionario operador, ArrayList<ItemTransacao> itens, long id, Date data, String tipo, BigDecimal valorTotal, String modo, BigDecimal acrescimo, BigDecimal desconto, Cliente cliente, String planejamento) {
+        super(id, data, tipo, valorTotal, modo, acrescimo, desconto, cliente, planejamento);
         this.turno = turno;
         this.terminal = terminal;
         this.controle = controle;
         this.operador = operador;
+        this.itens = itens;
     }
 
     public Venda() {

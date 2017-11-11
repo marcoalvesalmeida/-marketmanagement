@@ -1,23 +1,28 @@
 
 package br.edu.ifnmg.marketmanagement.aplicacao;
 
+import java.util.Objects;
+
 /**
  *
  * @author marco
  */
 public class Entrega implements Entidade {
     private long id;
-    private long venda;
+    private Venda venda;
     private Veiculo veiculo;
     private Endereco endereco;
     private Funcionario motorista;
 
-    public Entrega(long id, long venda, Veiculo veiculo, Endereco endereco, Funcionario motorista) {
+    public Entrega(long id, Venda venda, Veiculo veiculo, Endereco endereco, Funcionario motorista) {
         this.id = id;
         this.venda = venda;
         this.veiculo = veiculo;
         this.endereco = endereco;
         this.motorista = motorista;
+    }
+
+    public Entrega() {
     }
     @Override
     public long getId() {
@@ -30,12 +35,12 @@ public class Entrega implements Entidade {
         this.id = id;
     }
 
-    public long getVenda() {
+    public Venda getVenda() {
         return venda;
     }
 
-    public void setVenda(long venda) throws ViolacaoRegraNegocioException {
-        if(venda<=0){
+    public void setVenda(Venda venda) throws ViolacaoRegraNegocioException {
+        if(venda==null || venda.getId()<=0){
             throw new ViolacaoRegraNegocioException("Referência a venda inválida!");
         }
         this.venda=venda;
@@ -74,8 +79,8 @@ public class Entrega implements Entidade {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 97 * hash + (int) (this.id ^ (this.id >>> 32));
-        hash = 97 * hash + (int) (this.venda ^ (this.venda >>> 32));
+        hash = 41 * hash + (int) (this.id ^ (this.id >>> 32));
+        hash = 41 * hash + Objects.hashCode(this.venda);
         return hash;
     }
 
@@ -94,15 +99,16 @@ public class Entrega implements Entidade {
         if (this.id != other.id) {
             return false;
         }
-        if (this.venda != other.venda) {
+        if (!Objects.equals(this.venda, other.venda)) {
             return false;
         }
         return true;
     }
 
+
     @Override
     public String toString() {
-        return "Entrega{" + "id=" + id + ", Venda=" + venda + ", Endereco=" + endereco + '}';
+        return "Entrega{" + "id=" + id + ", Venda=" + venda.getId() + ", Endereco=" + endereco + '}';
     }
         
     

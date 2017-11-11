@@ -9,6 +9,6 @@ package br.edu.ifnmg.marketmanagement.aplicacao;
  *
  * @author marco
  */
-public interface LancamentoRepositorio extends Repositorio<Lancamento>{
+public interface CompraRepositorio extends Repositorio<Compra>{
     
 }

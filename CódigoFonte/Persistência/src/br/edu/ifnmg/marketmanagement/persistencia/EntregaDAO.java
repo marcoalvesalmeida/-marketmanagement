@@ -5,8 +5,8 @@
  */
 package br.edu.ifnmg.marketmanagement.persistencia;
 
-import br.edu.ifnmg.marketmanagement.aplicacao.Veiculo;
-import br.edu.ifnmg.marketmanagement.aplicacao.VeiculoRepositorio;
+import br.edu.ifnmg.marketmanagement.aplicacao.EntregaRepositorio;
+import br.edu.ifnmg.marketmanagement.aplicacao.Entrega;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  *
  * @author marco
  */
-public class VeiculoDAO extends DAOGenerico<Veiculo> implements VeiculoRepositorio {
+public class EntregaDAO extends DAOGenerico<Entrega> implements EntregaRepositorio {
 
     @Override
     protected String consultaAbrir() {
@@ -26,12 +26,12 @@ public class VeiculoDAO extends DAOGenerico<Veiculo> implements VeiculoRepositor
 
     @Override
     protected String consultaInsert() {
-        return "insert into veiculo(modelo, placa, chassi, tipo, anoFab, marca, combustivel, observacoes) values(?,?,?,?,?,?,?,?)";
+        return "insert into entrega(venda, veiculo, endereco, motorista ) values(?,?,?,?)";
     }
 
     @Override
     protected String consultaUpdate() {
-        return "update veiculo set modelo = ?, placa = ?, chassi = ?, tipo = ?, anoFab = ?, marca = ?, combustivel = ?, observacoes = ? where id = ?";
+        return "update entrega set venda = ?, veiculo = ?, endereco = ?, motorista = ? where id = ?";
     }
 
     @Override
@@ -44,31 +44,28 @@ public class VeiculoDAO extends DAOGenerico<Veiculo> implements VeiculoRepositor
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+
     @Override
-    protected void carregaParametros(Veiculo obj, PreparedStatement consulta) {
+    protected Entrega carregaObjeto(ResultSet dados) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    protected void carregaParametros(Entrega obj, PreparedStatement consulta) {
         try {
             if (obj.getId() > 0) {
-                //consulta.setLong(9, obj.getId());
+                //consulta.setLong(5, obj.getId());
                 System.out.println("Editar");
             } else {
-                consulta.setString(1, obj.getModelo());
-                consulta.setString(2, obj.getPlaca());
-                consulta.setString(3, obj.getChassi());
-                consulta.setString(4, obj.getTipo().toString());
-                consulta.setInt(5, (int) obj.getAnoFab());
-                consulta.setString(6, obj.getMarca().toString());
-                consulta.setString(7, obj.getCombustivel().toString());
-                consulta.setString(8, obj.getObservacoes());
+                consulta.setLong(1, obj.getVenda().getId());
+                consulta.setLong(2, obj.getVeiculo().getId());
+                consulta.setLong(3, obj.getEndereco().getId());
+                consulta.setLong(4, obj.getMotorista().getId());
             }
 
         } catch (SQLException ex) {
             Logger.getLogger(VeiculoDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-
-    @Override
-    protected Veiculo carregaObjeto(ResultSet dados) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

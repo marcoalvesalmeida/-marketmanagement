@@ -18,6 +18,10 @@ public abstract class Pessoa implements Entidade {
         this.telefone = telefone;
         this.email = email;
     }   
+
+    public Pessoa() {
+    }
+    
   
     @Override
     public long getId(){

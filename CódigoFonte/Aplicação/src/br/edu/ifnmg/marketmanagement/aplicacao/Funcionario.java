@@ -20,6 +20,9 @@ public class Funcionario extends PessoaFisica{
         this.senha = senha;
         this.cnh = cnh;
     }
+
+    public Funcionario() {
+    }
  
     public BigDecimal getSalario() {
         return salario;

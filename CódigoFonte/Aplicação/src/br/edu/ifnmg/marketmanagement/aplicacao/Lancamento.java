@@ -21,11 +21,11 @@ public class Lancamento implements Entidade {
     private String modo;
     private BigDecimal acrescimo;
     private BigDecimal desconto;
-    //private Cliente cliente;
+    private Cliente cliente;
     private String planejamento;
     private final BigDecimal TEMP = new BigDecimal(0);
 
-    public Lancamento(long id, Date data, String tipo, BigDecimal valorTotal, String modo, BigDecimal acrescimo, BigDecimal desconto/*Cliente cliente*/, String planejamento) {
+    public Lancamento(long id, Date data, String tipo, BigDecimal valorTotal, String modo, BigDecimal acrescimo, BigDecimal desconto,Cliente cliente, String planejamento) {
         this.id = id;
         this.data = data;
         this.tipo = tipo;
@@ -33,7 +33,7 @@ public class Lancamento implements Entidade {
         this.modo = modo;
         this.acrescimo = acrescimo;
         this.desconto = desconto;
-        //this.cliente = cliente;
+        this.cliente = cliente;
         this.planejamento = planejamento;
     }
 
@@ -77,7 +77,7 @@ public class Lancamento implements Entidade {
     }
 
     public void setValorTotal(BigDecimal valorTotal) throws ViolacaoRegraNegocioException {
-        if(valorTotal==null || valorTotal.compareTo(TEMP)==0 || valorTotal.compareTo(TEMP)==-1)
+        if(valorTotal==null || valorTotal.compareTo(TEMP)<=0)
              throw new ViolacaoRegraNegocioException("O valor deve ser maior que 0!");  
         this.valorTotal = valorTotal;
     }
@@ -97,7 +97,7 @@ public class Lancamento implements Entidade {
     }
 
     public void setAcrescimo(BigDecimal acrescimo) throws ViolacaoRegraNegocioException {
-        if(acrescimo==null || acrescimo.compareTo(TEMP)==0 || acrescimo.compareTo(TEMP)==-1)
+        if(acrescimo==null || acrescimo.compareTo(TEMP)<=0)
             throw new ViolacaoRegraNegocioException("O acréscimo deve ser maior que 0!"); 
         this.acrescimo = acrescimo;
     }
@@ -107,7 +107,7 @@ public class Lancamento implements Entidade {
     }
 
     public void setDesconto(BigDecimal desconto) throws ViolacaoRegraNegocioException {
-        if(desconto==null || desconto.compareTo(TEMP)==0 || desconto.compareTo(TEMP)==-1)
+        if(desconto==null || desconto.compareTo(TEMP)<=0)
             throw new ViolacaoRegraNegocioException("O desconto deve ser maior que 0!"); 
         this.desconto = desconto;
     }

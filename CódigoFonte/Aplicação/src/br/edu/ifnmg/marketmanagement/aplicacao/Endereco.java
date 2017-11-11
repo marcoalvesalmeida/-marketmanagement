@@ -16,7 +16,7 @@ public class Endereco implements Entidade {
     private String cidade;
     private String uf;
     private static Pattern regex_cep = Pattern.compile("^\\d{5}\\-\\d{3}$");
-
+    
     public Endereco(long id, String rua, String cep, int numero, String bairro, String complemento, String cidade, String uf) {
         this.id = id;
         this.rua = rua;
@@ -27,6 +27,9 @@ public class Endereco implements Entidade {
         this.cidade = cidade;
         this.uf = uf;
     }  
+
+    public Endereco() {
+    }
 
     @Override
     public long getId(){

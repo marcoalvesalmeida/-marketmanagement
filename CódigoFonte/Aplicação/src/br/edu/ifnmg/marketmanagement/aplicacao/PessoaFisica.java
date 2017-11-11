@@ -20,6 +20,10 @@ public abstract class PessoaFisica extends Pessoa{
         this.cpf = cpf;
         this.rg = rg;
     }   
+
+    public PessoaFisica(){
+    }
+    
   
     public String getNome(){
         return nome;
