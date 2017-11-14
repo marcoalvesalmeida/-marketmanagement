@@ -76,4 +76,9 @@ public class VendaDAO extends DAOGenerico<Venda> implements VendaRepositorio {
         }
     }
 
+    @Override
+    protected String carregaParametrosBusca(Venda obj) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

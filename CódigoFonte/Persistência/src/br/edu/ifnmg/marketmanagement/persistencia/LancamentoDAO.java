@@ -71,4 +71,9 @@ public class LancamentoDAO extends DAOGenerico<Lancamento> implements Lancamento
         }
     }
 
+    @Override
+    protected String carregaParametrosBusca(Lancamento obj) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

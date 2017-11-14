@@ -74,4 +74,9 @@ public class CompraDAO extends DAOGenerico<Compra> implements CompraRepositorio 
         }
     }
 
+    @Override
+    protected String carregaParametrosBusca(Compra obj) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

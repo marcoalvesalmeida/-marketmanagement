@@ -2,6 +2,8 @@ package br.edu.ifnmg.marketmanagement.persistencia;
 
 import br.edu.ifnmg.marketmanagement.aplicacao.Cliente;
 import br.edu.ifnmg.marketmanagement.aplicacao.ClienteRepositorio;
+import br.edu.ifnmg.marketmanagement.aplicacao.ViolacaoRegraNegocioException;
+import static com.mysql.jdbc.Messages.getString;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,7 +20,7 @@ public class ClienteDAO extends DAOGenerico <Cliente> implements ClienteReposito
 
     @Override
     protected String consultaAbrir() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "select id,nome,dataNascimento,cpf,rg,telefone,email from clientes where id= ?";
     }
 
     @Override
@@ -33,12 +35,12 @@ public class ClienteDAO extends DAOGenerico <Cliente> implements ClienteReposito
 
     @Override
     protected String consultaDelete() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "delete from clientes where id = ?";
     }
 
     @Override
     protected String consultaBuscar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "select id,nome,dataNascimento,cpf,rg,telefone,email from clientes  ";
     }
 
     @Override
@@ -62,7 +64,35 @@ public class ClienteDAO extends DAOGenerico <Cliente> implements ClienteReposito
 
     @Override
     protected Cliente carregaObjeto(ResultSet dados) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+      
+        Cliente cli = new Cliente();
+        try {
+            cli.setNome(dados.getString("nome"));
+            cli.setId(dados.getLong("id"));
+            return cli;
+        } catch (SQLException ex) {
+            Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ViolacaoRegraNegocioException ex) {
+            Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return null;
+    }
+    
+    
+    protected String carregaParametrosBusca(Cliente obj){
+        String sql = "";
+        
+        if(obj.getId() > 0)
+            sql = this.filtrarPor(sql, "id", Long.toString( obj.getId() ));
+        
+        if(obj.getNome() != null && !obj.getNome().isEmpty())
+            sql = this.filtrarPor(sql, "nome", obj.getNome());
+        
+        if(obj.getCpf() != null && !obj.getCpf().isEmpty())
+            sql = this.filtrarPor(sql, "cpf", obj.getCpf().replace(".", "").replace("-", ""));        
+        
+        return sql;
     }
     
 }

@@ -61,4 +61,9 @@ public class FuncionarioDAO extends DAOGenerico <Funcionario> implements Funcion
     protected Funcionario carregaObjeto(ResultSet dados) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }   
+
+    @Override
+    protected String carregaParametrosBusca(Funcionario obj) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

@@ -68,4 +68,9 @@ public class EntregaDAO extends DAOGenerico<Entrega> implements EntregaRepositor
         }
     }
 
+    @Override
+    protected String carregaParametrosBusca(Entrega obj) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

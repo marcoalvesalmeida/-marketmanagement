@@ -55,5 +55,10 @@ public class FornecedorDAO extends DAOGenerico <Fornecedor> implements Fornecedo
     protected Fornecedor carregaObjeto(ResultSet dados) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    protected String carregaParametrosBusca(Fornecedor obj) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }

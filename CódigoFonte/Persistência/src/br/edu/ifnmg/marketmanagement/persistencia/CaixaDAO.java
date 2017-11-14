@@ -21,7 +21,7 @@ public class CaixaDAO extends DAOGenerico<Caixa> implements CaixaRepositorio {
 
     @Override
     protected String consultaAbrir() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "";
     }
 
     @Override
@@ -77,6 +77,11 @@ public class CaixaDAO extends DAOGenerico<Caixa> implements CaixaRepositorio {
             Logger.getLogger(VeiculoDAO.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    @Override
+    protected String carregaParametrosBusca(Caixa obj) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

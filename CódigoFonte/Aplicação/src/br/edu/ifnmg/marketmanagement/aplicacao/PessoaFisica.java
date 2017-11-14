@@ -48,7 +48,9 @@ public abstract class PessoaFisica extends Pessoa{
     }
 
     public String getCpf() {
+        if (cpf != null)
         return cpf.substring(0,3)+"."+cpf.substring(3,6)+"."+cpf.substring(6,9)+"-"+cpf.substring(9,11);
+        return cpf;
     }
 
     public void setCpf(String cpf) throws ViolacaoRegraNegocioException {
@@ -97,4 +99,11 @@ public abstract class PessoaFisica extends Pessoa{
         }
         return true;
     }   
+
+    @Override
+    public String toString() {
+        return  nome;
+    }
+    
+    
 }

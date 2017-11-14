@@ -71,4 +71,9 @@ public class VeiculoDAO extends DAOGenerico<Veiculo> implements VeiculoRepositor
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
+    protected String carregaParametrosBusca(Veiculo obj) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }
