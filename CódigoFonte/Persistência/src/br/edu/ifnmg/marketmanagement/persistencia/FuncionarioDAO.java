@@ -1,6 +1,7 @@
 package br.edu.ifnmg.marketmanagement.persistencia;
 import br.edu.ifnmg.marketmanagement.aplicacao.Funcionario;
 import br.edu.ifnmg.marketmanagement.aplicacao.FuncionarioRepositorio;
+import br.edu.ifnmg.marketmanagement.aplicacao.ViolacaoRegraNegocioException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,7 +15,7 @@ public class FuncionarioDAO extends DAOGenerico <Funcionario> implements Funcion
 
     @Override
     protected String consultaAbrir() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "select id,nome, dataNascimento, cpf, telefone, email, salario, cargaHoraria, tipo, senha, cnh from funcionarios where id= ?";
     }
 
     @Override
@@ -28,12 +29,12 @@ public class FuncionarioDAO extends DAOGenerico <Funcionario> implements Funcion
 
     @Override
     protected String consultaDelete() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "delete from funcionarios where id = ?";
     }
 
     @Override
     protected String consultaBuscar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "select id,nome, dataNascimento, cpf, telefone, email, salario, cargaHoraria, tipo, senha, cnh from funcionarios";
     }
 
     @Override
@@ -50,8 +51,7 @@ public class FuncionarioDAO extends DAOGenerico <Funcionario> implements Funcion
             consulta.setString(9, obj.getSenha());
             consulta.setString(10, obj.getCnh());            
             if(obj.getId() > 0)
-                consulta.setLong(10, obj.getId());
-            
+                consulta.setLong(11, obj.getId());            
         }catch(SQLException e){
             Logger.getLogger(FuncionarioDAO.class.getName()).log(Level.SEVERE, null, e);            
         }
@@ -59,11 +59,36 @@ public class FuncionarioDAO extends DAOGenerico <Funcionario> implements Funcion
 
     @Override
     protected Funcionario carregaObjeto(ResultSet dados) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Funcionario func = new Funcionario();
+        try {
+            func.setId(dados.getLong("id"));            
+            func.setNome(dados.getString("nome"));
+            func.setDataNascimento(dados.getString("dataNascimento"));
+            func.setCpf(dados.getString("cpf"));
+            func.setTelefone(dados.getString("telefone"));
+            func.setEmail(dados.getString("email"));
+            func.setSalario(dados.getBigDecimal("salario"));
+            func.setCargaHoraria(dados.getInt("cargaHoraria"));
+            func.setTipo(dados.getInt("tipo"));
+            func.setSenha(dados.getString("senha"));
+            func.setCnh(dados.getString("cnh"));
+            return func;
+        } catch (SQLException | ViolacaoRegraNegocioException ex) {
+            Logger.getLogger(FuncionarioDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }   
 
     @Override
     protected String carregaParametrosBusca(Funcionario obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String sql = "";        
+        if(obj.getId() > 0)
+            sql = this.filtrarPor(sql, "id", Long.toString( obj.getId()));        
+        if(obj.getNome() != null && !obj.getNome().isEmpty())
+            sql = this.filtrarPor(sql, "nome", obj.getNome());        
+        if(obj.getCpf() != null && !obj.getCpf().isEmpty()){
+            sql = this.filtrarPor(sql, "cpf", obj.getCpf());             
+        }
+        return sql;
     }
 }
