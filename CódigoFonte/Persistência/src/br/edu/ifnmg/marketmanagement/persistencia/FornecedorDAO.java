@@ -1,6 +1,7 @@
 package br.edu.ifnmg.marketmanagement.persistencia;
 import br.edu.ifnmg.marketmanagement.aplicacao.Fornecedor;
 import br.edu.ifnmg.marketmanagement.aplicacao.FornecedorRepositorio;
+import br.edu.ifnmg.marketmanagement.aplicacao.ViolacaoRegraNegocioException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,7 +15,7 @@ public class FornecedorDAO extends DAOGenerico <Fornecedor> implements Fornecedo
 
     @Override
     protected String consultaAbrir() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "select id,razaoSocial,cnpj,telefone,email from fornecedores where id= ?";
     }
 
     @Override
@@ -29,12 +30,12 @@ public class FornecedorDAO extends DAOGenerico <Fornecedor> implements Fornecedo
 
     @Override
     protected String consultaDelete() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "delete from fornecedores where id = ?";
     }
 
     @Override
     protected String consultaBuscar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "select id,razaoSocial,cnpj,telefone,email from fornecedores";
     }
 
     @Override
@@ -53,12 +54,30 @@ public class FornecedorDAO extends DAOGenerico <Fornecedor> implements Fornecedo
 
     @Override
     protected Fornecedor carregaObjeto(ResultSet dados) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Fornecedor fornecedor = new Fornecedor();
+        try {
+            fornecedor.setId(dados.getLong("id"));
+            fornecedor.setRazaoSocial(dados.getString("razaoSocial"));
+            fornecedor.setCnpj(dados.getString("cnpj"));
+            fornecedor.setEmail(dados.getString("email"));
+            fornecedor.setTelefone(dados.getString("telefone"));
+            return fornecedor;
+        } catch (SQLException | ViolacaoRegraNegocioException ex) {
+            Logger.getLogger(FornecedorDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }       
+        return null;        
     }
 
     @Override
     protected String carregaParametrosBusca(Fornecedor obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String sql = "";        
+        if(obj.getId() > 0)
+            sql = this.filtrarPor(sql, "id", Long.toString( obj.getId()));        
+        if(obj.getRazaoSocial() != null && !obj.getRazaoSocial().isEmpty())
+            sql = this.filtrarPor(sql, "razaoSocial", obj.getRazaoSocial());        
+        if(obj.getCnpj() != null && !obj.getCnpj().isEmpty())
+            sql = this.filtrarPor(sql, "cnpj", obj.getCnpj());        
+        return sql;
     }
     
 }
