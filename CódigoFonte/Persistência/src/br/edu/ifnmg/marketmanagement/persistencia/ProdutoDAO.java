@@ -1,6 +1,7 @@
 package br.edu.ifnmg.marketmanagement.persistencia;
 import br.edu.ifnmg.marketmanagement.aplicacao.Produto;
 import br.edu.ifnmg.marketmanagement.aplicacao.ProdutoRepositorio;
+import br.edu.ifnmg.marketmanagement.aplicacao.ViolacaoRegraNegocioException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,7 +15,7 @@ public class ProdutoDAO extends DAOGenerico <Produto> implements ProdutoReposito
 
     @Override
     protected String consultaAbrir() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "select id,descricao,valorCusto,valorVarejo,valorAtacado,codigo, pontuacao,estoqueMinino,estoqueaAtual,ativo,informacoesAdicionais,fracionar from produtos where id= ?";
     }
 
     @Override
@@ -29,12 +30,12 @@ public class ProdutoDAO extends DAOGenerico <Produto> implements ProdutoReposito
 
     @Override
     protected String consultaDelete() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "delete from produtos where id = ?";
     }
 
     @Override
     protected String consultaBuscar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "select id,descricao,valorCusto,valorVarejo,valorAtacado,codigo, pontuacao,estoqueMinino,estoqueaAtual,ativo,informacoesAdicionais,fracionar from produtos";
     }
 
     @Override
@@ -47,12 +48,12 @@ public class ProdutoDAO extends DAOGenerico <Produto> implements ProdutoReposito
             consulta.setInt(5, obj.getCodigo());
             consulta.setLong(6, obj.getPontuacao());
             consulta.setLong(7, obj.getEstoqueMinimo());
-            consulta.setBoolean(8, obj.isAtivo());
-            consulta.setLong(9, obj.getEstoqueMinimo());
-            consulta.setLong(10, obj.getEstoqueMinimo());
-            consulta.setString(11, obj.getInformacoesAdicionais());
+            consulta.setLong(8, obj.getEstoqueAtual());
+            consulta.setBoolean(9, obj.isAtivo());         
+            consulta.setString(10, obj.getInformacoesAdicionais());
+            consulta.setBoolean(11, obj.isFracionar());
             if(obj.getId() > 0){
-                consulta.setLong(11,obj.getId());
+                consulta.setLong(12,obj.getId());
             }
         } catch (SQLException ex) {
             Logger.getLogger(ProdutoDAO.class.getName()).log(Level.SEVERE, null, ex);
@@ -60,15 +61,38 @@ public class ProdutoDAO extends DAOGenerico <Produto> implements ProdutoReposito
     }
 
     @Override
-    protected Produto carregaObjeto(ResultSet dados) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    protected Produto carregaObjeto(ResultSet dados){
+        Produto produto = new Produto();
+        try {
+            produto.setId(dados.getLong("id"));
+            produto.setDescricao(dados.getString("descricao"));
+            produto.setAtivo(dados.getBoolean("ativo"));
+            produto.setValorCusto(dados.getBigDecimal("valorCusto"));
+            produto.setValorAtacado(dados.getBigDecimal("valorAtacado"));
+            produto.setValorVarejo(dados.getBigDecimal("valorVarejo"));
+            produto.setCodigo(dados.getInt("codigo"));
+            produto.setPontuacao(dados.getLong("pontuacao"));
+            produto.setEstoqueMinimo(dados.getLong("estoqueMinino"));
+            produto.setEstoqueAtual(dados.getLong("estoqueaAtual"));
+            produto.setAtivo(dados.getBoolean("ativo"));
+            produto.setInformacoesAdicionais(dados.getString("informacoesAdicionais"));
+            produto.setFracionar(dados.getBoolean("fracionar"));
+            return produto;
+        } catch (SQLException | ViolacaoRegraNegocioException ex) {
+            Logger.getLogger(ProdutoDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }        
+        return null;        
     }
 
     @Override
     protected String carregaParametrosBusca(Produto obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-   
-   
+        String sql = "";        
+        if(obj.getId() > 0)
+            sql = this.filtrarPor(sql, "id", Long.toString( obj.getId()));        
+        if(obj.getDescricao() != null && !obj.getDescricao().isEmpty())
+            sql = this.filtrarPor(sql, "descricao", obj.getDescricao());        
+        if(obj.getCodigo() > 0)
+            sql = this.filtrarPor(sql, "codigo", Long.toString(obj.getCodigo()));        
+        return sql;    
+    } 
 }
