@@ -21,7 +21,7 @@ public class VeiculoDAO extends DAOGenerico<Veiculo> implements VeiculoRepositor
 
     @Override
     protected String consultaAbrir() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "select  * from veiculo where id=?";
     }
 
     @Override
@@ -36,12 +36,31 @@ public class VeiculoDAO extends DAOGenerico<Veiculo> implements VeiculoRepositor
 
     @Override
     protected String consultaDelete() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "delete from veiculo where id=?";
     }
 
     @Override
     protected String consultaBuscar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "select  * from veiculo";
+    }
+    @Override
+    protected String carregaParametrosBusca(Veiculo obj){
+        String sql = "";
+        
+        if(obj.getId() > 0)
+            sql = this.filtrarPor(sql, "id", Long.toString( obj.getId() ));
+        
+        if(obj.getPlaca() != null && !obj.getPlaca().isEmpty())
+            sql = this.filtrarPor(sql, "placa", obj.getPlaca().replace("-", ""));
+        
+        if(obj.getModelo() != null && !obj.getModelo().isEmpty())
+            sql = this.filtrarPor(sql, "modelo", obj.getModelo());        
+                
+        //Implementar por ano
+                        
+        if(obj.getMarca() != null)
+            sql = this.filtrarPor(sql, "marca", obj.getMarca().toString());
+        return sql;
     }
 
     @Override
@@ -68,12 +87,18 @@ public class VeiculoDAO extends DAOGenerico<Veiculo> implements VeiculoRepositor
 
     @Override
     protected Veiculo carregaObjeto(ResultSet dados) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            Veiculo obj = new Veiculo(
+                    dados.getLong("id"), 
+                    dados.getString("modelo"), 
+                    dados.getString("placa"),
+                    dados.getString("tipo"),
+                    dados.getLong("anoFab"),
+                    dados.getString("observacoes"));
+            return obj;
+        } catch (SQLException ex) {
+            Logger.getLogger(VeiculoDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
-
-    @Override
-    protected String carregaParametrosBusca(Veiculo obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
 }

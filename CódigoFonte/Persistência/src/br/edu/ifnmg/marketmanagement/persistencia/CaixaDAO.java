@@ -21,7 +21,7 @@ public class CaixaDAO extends DAOGenerico<Caixa> implements CaixaRepositorio {
 
     @Override
     protected String consultaAbrir() {
-        return "";
+        return "select * from caixa where id=?";
     }
 
     @Override
@@ -38,17 +38,41 @@ public class CaixaDAO extends DAOGenerico<Caixa> implements CaixaRepositorio {
 
     @Override
     protected String consultaDelete() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "delete from veiculo where id=?";
     }
 
     @Override
     protected String consultaBuscar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "select * from caixa";
     }
 
     @Override
     protected Caixa carregaObjeto(ResultSet dados) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Caixa obj;
+        try {
+            obj = new Caixa(
+                    dados.getLong("id"),
+                    null,
+                    dados.getBigDecimal("saldo"),
+                    null,
+                    null,
+                    dados.getLong("terminal"),
+                    dados.getBigDecimal("valorinicial"),
+                    dados.getLong("turno"),
+                    dados.getBigDecimal("valordinheiro"),
+                    dados.getBigDecimal("valorboleto"),
+                    dados.getBigDecimal("valorcartao"),
+                    dados.getBigDecimal("valorcarne"),
+                    dados.getBigDecimal("somavendas"),
+                    dados.getBigDecimal("totalpagamentos"),
+                    dados.getBigDecimal("valorproximocaixa"),
+                    dados.getBigDecimal("somatotalturno")
+            );
+            return obj;
+        } catch (SQLException ex) {
+            Logger.getLogger(CaixaDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;       
     }
 
     @Override
@@ -81,7 +105,23 @@ public class CaixaDAO extends DAOGenerico<Caixa> implements CaixaRepositorio {
 
     @Override
     protected String carregaParametrosBusca(Caixa obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String sql = "";
+        
+        if(obj.getId() > 0)
+            sql = this.filtrarPor(sql, "id", Long.toString(obj.getId()));
+        
+        if(obj.getDataHoraAbertura() != null)
+            sql = this.filtrarPor(sql, "dataHoraAbertura", obj.getDataHoraAbertura().toString().replace("-", ""));
+        
+        if(obj.getDataHoraFechamento() != null)
+            sql = this.filtrarPor(sql, "dataHoraFechamento", obj.getDataHoraFechamento().toString().replace("-", ""));
+        
+        if(obj.getOperador().getId() > 0)
+            sql = this.filtrarPor(sql, "operador", Long.toString(obj.getOperador().getId()));
+        
+        if(obj.getTurno() > 0)
+            sql = this.filtrarPor(sql, "turno", Long.toString(obj.getTurno()));
+        return sql;
     }
 
 }

@@ -21,7 +21,7 @@ public class CompraDAO extends DAOGenerico<Compra> implements CompraRepositorio 
 
     @Override
     protected String consultaAbrir() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "select * from compra where id=?";
     }
 
     @Override
@@ -36,7 +36,7 @@ public class CompraDAO extends DAOGenerico<Compra> implements CompraRepositorio 
 
     @Override
     protected String consultaDelete() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+          return "delete from compra where id=?";
     }
 
     @Override
@@ -47,9 +47,38 @@ public class CompraDAO extends DAOGenerico<Compra> implements CompraRepositorio 
 
     @Override
     protected Compra carregaObjeto(ResultSet dados) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            Compra obj = new Compra(
+                    null,
+                    null,
+                    dados.getLong("id"),
+                    null,
+                    dados.getString("tipo"),
+                    dados.getBigDecimal("valortotal"),
+                    dados.getString("modo"),
+                    dados.getBigDecimal("acrescimo"),
+                    dados.getBigDecimal("desconto"),
+                    null,
+                    dados.getString("planejamento")
+            );
+            return obj;
+        } catch (SQLException ex) {
+            Logger.getLogger(CompraDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
-
+    @Override
+    protected String carregaParametrosBusca(Compra obj){
+        String sql = "";
+        
+        if(obj.getId() > 0)
+            sql = this.filtrarPor(sql, "id", Long.toString(obj.getId()));
+        
+        if(obj.getData() != null)
+            sql = this.filtrarPor(sql, "data", obj.getData().toString().replace("-", ""));
+        
+        return sql;
+    }
     @Override
     protected void carregaParametros(Compra obj, PreparedStatement consulta) {
         try {
@@ -72,11 +101,6 @@ public class CompraDAO extends DAOGenerico<Compra> implements CompraRepositorio 
         } catch (SQLException ex) {
             Logger.getLogger(VeiculoDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-
-    @Override
-    protected String carregaParametrosBusca(Compra obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

@@ -21,7 +21,7 @@ public class LancamentoDAO extends DAOGenerico<Lancamento> implements Lancamento
 
     @Override
     protected String consultaAbrir() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "select * from lancamento where id=?";
     }
 
     @Override
@@ -36,7 +36,7 @@ public class LancamentoDAO extends DAOGenerico<Lancamento> implements Lancamento
 
     @Override
     protected String consultaDelete() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "delete from lancamento where id=?";
     }
 
     @Override
@@ -44,10 +44,25 @@ public class LancamentoDAO extends DAOGenerico<Lancamento> implements Lancamento
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-
     @Override
     protected Lancamento carregaObjeto(ResultSet dados) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            Lancamento obj = new Lancamento(
+                    dados.getLong("id"),
+                    null,
+                    dados.getString("tipo"),
+                    dados.getBigDecimal("valortotal"),
+                    dados.getString("modo"),
+                    dados.getBigDecimal("acrescimo"),
+                    dados.getBigDecimal("desconto"),
+                    null,
+                    dados.getString("planejamento")
+            );
+            return obj;
+        } catch (SQLException ex) {
+            Logger.getLogger(LancamentoDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     @Override
@@ -73,7 +88,15 @@ public class LancamentoDAO extends DAOGenerico<Lancamento> implements Lancamento
 
     @Override
     protected String carregaParametrosBusca(Lancamento obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String sql = "";
+        
+        if(obj.getId() > 0)
+            sql = this.filtrarPor(sql, "id", Long.toString(obj.getId()));
+        
+        if(obj.getData() != null)
+            sql = this.filtrarPor(sql, "data", obj.getData().toString().replace("-", ""));
+        
+        return sql;
     }
 
 }

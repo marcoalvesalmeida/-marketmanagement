@@ -36,18 +36,30 @@ public class EntregaDAO extends DAOGenerico<Entrega> implements EntregaRepositor
 
     @Override
     protected String consultaDelete() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "delete from entrega where id=?";
     }
 
     @Override
     protected String consultaBuscar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "select * from entrega";
     }
 
 
     @Override
     protected Entrega carregaObjeto(ResultSet dados) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    @Override
+    protected String carregaParametrosBusca(Entrega obj){
+        String sql = "";
+        
+        if(obj.getId() > 0)
+            sql = this.filtrarPor(sql, "id", Long.toString( obj.getId() ));
+        
+        if(obj.getVenda().getId() > 0)
+            sql = this.filtrarPor(sql, "venda", Long.toString(obj.getVenda().getId()));
+        
+        return sql;
     }
 
     @Override
@@ -66,11 +78,6 @@ public class EntregaDAO extends DAOGenerico<Entrega> implements EntregaRepositor
         } catch (SQLException ex) {
             Logger.getLogger(VeiculoDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-
-    @Override
-    protected String carregaParametrosBusca(Entrega obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

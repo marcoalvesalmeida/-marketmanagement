@@ -21,12 +21,12 @@ public class VendaDAO extends DAOGenerico<Venda> implements VendaRepositorio {
 
     @Override
     protected String consultaAbrir() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "select * from venda where id=?";
     }
 
     @Override
     protected String consultaInsert() {
-        return "insert into venda(data, tipo, valorTotal, modo, acrescimo, desconto, cliente, turno, controle, operador) values(?,?,?,?,?,?,?,?,?,?)";
+        return "insert into venda(data, tipo, valorTotal, modo, acrescimo, desconto, cliente, turno, controle, operador, terminal) values(?,?,?,?,?,?,?,?,?,?)";
     }
 
     @Override
@@ -36,18 +36,39 @@ public class VendaDAO extends DAOGenerico<Venda> implements VendaRepositorio {
 
     @Override
     protected String consultaDelete() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "delete from veiculo where id=?";
     }
 
     @Override
     protected String consultaBuscar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "select * from venda";
     }
 
 
     @Override
     protected Venda carregaObjeto(ResultSet dados) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            Venda obj = new Venda(
+                    dados.getString("turno"),
+                    dados.getLong("terminal"),
+                    dados.getLong("controle"),
+                    null,
+                    null,
+                    dados.getLong("id"),
+                    null,
+                    dados.getString("tipo"),
+                    dados.getBigDecimal("valortotal"),
+                    dados.getString("modo"),
+                    dados.getBigDecimal("acrescimo"),
+                    dados.getBigDecimal("desconto"),
+                    null,
+                    dados.getString("planejamento")                    
+            );
+            return obj;
+        } catch (SQLException ex) {
+            Logger.getLogger(VendaDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     @Override
@@ -68,6 +89,7 @@ public class VendaDAO extends DAOGenerico<Venda> implements VendaRepositorio {
                 consulta.setString(9, obj.getTurno());
                 consulta.setLong(10, obj.getControle());
                 consulta.setLong(11, obj.getOperador().getId());
+                consulta.setLong(12, obj.getTerminal());
                 // Implementar a persistência do ArrayList de itens! ArrayList<Produto> itens;
             }
 
@@ -78,7 +100,15 @@ public class VendaDAO extends DAOGenerico<Venda> implements VendaRepositorio {
 
     @Override
     protected String carregaParametrosBusca(Venda obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String sql = "";
+        
+        if(obj.getId() > 0)
+            sql = this.filtrarPor(sql, "id", Long.toString(obj.getId()));
+        
+        if(obj.getData() != null)
+            sql = this.filtrarPor(sql, "data", obj.getData().toString().replace("-", ""));
+        
+        return sql;
     }
 
 }
