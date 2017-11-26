@@ -111,8 +111,8 @@ public class TelaVeiculo extends javax.swing.JInternalFrame {
         try {
             maskPlaca = new MaskFormatter("UUU-####");
             maskAno = new MaskFormatter("####");
-            maskMarca = new MaskFormatter("*****");
-            maskModelo = new MaskFormatter("*****");
+            maskMarca = new MaskFormatter("***********************");
+            maskModelo = new MaskFormatter("**********************");
         } catch (ParseException ex) {
             ex.printStackTrace();
         }
@@ -286,36 +286,6 @@ public class TelaVeiculo extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
 
     }//GEN-LAST:event_jButton3ActionPerformed
-/*
-    private void rdAnoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdAnoActionPerformed
-        try {
-            //setMascara("****");
-            txtPesquisa.setFormatterFactory(new DefaultFormatterFactory(new MaskFormatter("####")));
-        } catch (ParseException ex) {
-            Logger.getLogger(TelaVeiculo.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_rdAnoActionPerformed
-
-    private void rdPlacaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdPlacaActionPerformed
-        txtPesquisa.setText("");
-        try {
-            //setMascara("UUU-####");
-            txtPesquisa.setFormatterFactory(new DefaultFormatterFactory(new MaskFormatter("UUU-####")));
-        } catch (ParseException ex) {
-            Logger.getLogger(TelaVeiculo.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_rdPlacaActionPerformed
-
-    private void rdModeloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdModeloActionPerformed
-        txtPesquisa.setText("");
-        try {
-            //setMascara("**********");
-            txtPesquisa.setFormatterFactory(new DefaultFormatterFactory(new MaskFormatter("*********")));
-        } catch (ParseException ex) {
-            Logger.getLogger(TelaVeiculo.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_rdModeloActionPerformed
-    */
     private void btnPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarActionPerformed
         System.out.println(txtPesquisa);
         try {
