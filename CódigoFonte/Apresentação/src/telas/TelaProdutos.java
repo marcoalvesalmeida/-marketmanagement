@@ -9,12 +9,12 @@ package telas;
  *
  * @author marco
  */
-public class TelaProdutosd extends javax.swing.JInternalFrame {
+public class TelaProdutos extends javax.swing.JInternalFrame {
 
     /**
      * Creates new form TelaProdutosd
      */
-    public TelaProdutosd() {
+    public TelaProdutos() {
         initComponents();
     }
 
@@ -173,8 +173,10 @@ public class TelaProdutosd extends javax.swing.JInternalFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-        CadastrodeProdutos nova = new CadastrodeProdutos();
+        TelaEditarProduto nova = new TelaEditarProduto();
+        this.getParent().add(nova);
         nova.setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_jButton3ActionPerformed
 
 
