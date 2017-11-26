@@ -50,6 +50,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
         subMenuCadProdutos = new javax.swing.JMenuItem();
         subMenuCadClientes = new javax.swing.JMenuItem();
         subMenuCadFornecedores = new javax.swing.JMenuItem();
+        jMenuItem5 = new javax.swing.JMenuItem();
         menuRelatorios = new javax.swing.JMenu();
         subMenuRelClientes = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -178,6 +179,14 @@ public class MenuPrincipal extends javax.swing.JFrame {
         });
         menuCadastros.add(subMenuCadFornecedores);
 
+        jMenuItem5.setText("Categoria ");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        menuCadastros.add(jMenuItem5);
+
         jMenuBar1.add(menuCadastros);
 
         menuRelatorios.setText("Relatorios");
@@ -304,6 +313,13 @@ public class MenuPrincipal extends javax.swing.JFrame {
         nova.setPosicao();
     }//GEN-LAST:event_btnVeiculosActionPerformed
 
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        TelaCategoria cat = new TelaCategoria();
+        Desktop.add(cat);
+        cat.setVisible(true);
+ 
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -358,6 +374,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JMenu menuCadastros;
     private javax.swing.JMenu menuRelatorios;
