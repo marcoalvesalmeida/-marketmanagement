@@ -5,13 +5,21 @@
  */
 package telas;
 
+import br.edu.ifnmg.marketmanagement.aplicacao.RepositorioBuilder;
+import br.edu.ifnmg.marketmanagement.aplicacao.Veiculo;
+import br.edu.ifnmg.marketmanagement.aplicacao.VeiculoRepositorio;
+import br.edu.ifnmg.marketmanagement.aplicacao.ViolacaoRegraNegocioException;
 import java.awt.Dimension;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.text.ParseException;
+import java.util.List;
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
-
 /**
  *
  * @author marco
@@ -65,8 +73,9 @@ public class TelaVeiculo extends javax.swing.JInternalFrame {
         rdMarca = new javax.swing.JRadioButton();
         rdAno = new javax.swing.JRadioButton();
         txtPesquisa = new javax.swing.JFormattedTextField();
+        btnPesquisar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tabResultado = new javax.swing.JTable();
 
         setClosable(true);
 
@@ -77,12 +86,7 @@ public class TelaVeiculo extends javax.swing.JInternalFrame {
 
         jButton3.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         jButton3.setText("Novo");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-
+        
         jButton5.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         jButton5.setText("Relatório");
 
@@ -93,18 +97,19 @@ public class TelaVeiculo extends javax.swing.JInternalFrame {
 
         rdPlaca.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         rdPlaca.setText("Placa");
-
+        
         rdModelo.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         rdModelo.setText("Modelo");
-
+        
         rdMarca.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         rdMarca.setText("Marca");
 
         rdAno.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         rdAno.setText("Ano");
+        
         // cria as mascaras e já a deixa pronta pra uso
         try {
-           	maskPlaca = new MaskFormatter("UUU-####");
+            maskPlaca = new MaskFormatter("UUU-####");
             maskAno = new MaskFormatter("####");
             maskMarca = new MaskFormatter("*****");
             maskModelo = new MaskFormatter("*****");
@@ -183,6 +188,14 @@ public class TelaVeiculo extends javax.swing.JInternalFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        btnPesquisar.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
+        btnPesquisar.setText("Pesquisar");
+        btnPesquisar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPesquisarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -191,13 +204,15 @@ public class TelaVeiculo extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(81, 81, 81)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(82, 82, 82)
-                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(26, 26, 26)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(26, 26, 26)
+                        .addComponent(btnPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel1)
-                    .addComponent(txtPesquisa))
+                    .addComponent(txtPesquisa, javax.swing.GroupLayout.DEFAULT_SIZE, 515, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(6, 6, 6))
@@ -216,35 +231,36 @@ public class TelaVeiculo extends javax.swing.JInternalFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
-        jTable1.setBorder(null);
-        jTable1.setFont(new java.awt.Font("Trebuchet MS", 0, 12)); // NOI18N
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tabResultado.setBorder(null);
+        tabResultado.setFont(new java.awt.Font("Trebuchet MS", 0, 12)); // NOI18N
+        tabResultado.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Placa", "Modelo", "Marca", "Ano Fab.", "Combustível", "Tipo", "Chassi"
+
             }
         ));
-        jTable1.setGridColor(new java.awt.Color(254, 254, 254));
-        jTable1.setRowMargin(0);
-        jScrollPane1.setViewportView(jTable1);
+        tabResultado.setGridColor(new java.awt.Color(254, 254, 254));
+        tabResultado.setRowMargin(0);
+        jScrollPane1.setViewportView(tabResultado);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -258,8 +274,8 @@ public class TelaVeiculo extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 296, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 305, Short.MAX_VALUE)
+                .addGap(6, 6, 6))
         );
 
         pack();
@@ -299,9 +315,51 @@ public class TelaVeiculo extends javax.swing.JInternalFrame {
             Logger.getLogger(TelaVeiculo.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_rdModeloActionPerformed
-*/
+    */
+    private void btnPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarActionPerformed
+        System.out.println(txtPesquisa);
+        try {
+            VeiculoRepositorio veiculos = RepositorioBuilder.getVeiculoRepositorio();
+            
+            Veiculo filtro = new Veiculo();
+            
+            if(!txtPesquisa.getText().isEmpty() && txtPesquisa!=null){
+                if(rdPlaca.isSelected())
+                    filtro.setPlaca(txtPesquisa.getText());
+                else if(rdAno.isSelected())
+                    filtro.setAnoFab(Integer.parseInt(txtPesquisa.getText()));
+                //else if(rdMarca.isSelected())
+                    //filtro.setMarca(txtPesquisa.getText());
+                else if(rdModelo.isSelected())
+                    filtro.setModelo(txtPesquisa.getText());  
+            }
+           
+            List<Veiculo> resultado = (List<Veiculo>) veiculos.buscar(filtro);
+            
+            DefaultTableModel modelo = new DefaultTableModel();
+            
+            modelo.addColumn("ID");
+            modelo.addColumn("Placa");
+            modelo.addColumn("Modelo");
+            
+            for(Veiculo v : resultado){
+                Vector valores = new Vector();
+                valores.add(v.getId());
+                valores.add(v.getPlaca());
+                valores.add(v.getModelo());                
+                modelo.addRow(valores);
+            }
+            
+            tabResultado.setModel(modelo);
+            
+        } catch (ViolacaoRegraNegocioException ex) {
+            Logger.getLogger(TelaVeiculo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnPesquisarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnPesquisar;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton5;
@@ -309,12 +367,12 @@ public class TelaVeiculo extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JRadioButton rdAno;
     private javax.swing.ButtonGroup rdGrupo;
     private javax.swing.JRadioButton rdMarca;
     private javax.swing.JRadioButton rdModelo;
     private javax.swing.JRadioButton rdPlaca;
+    private javax.swing.JTable tabResultado;
     private javax.swing.JFormattedTextField txtPesquisa;
     // End of variables declaration//GEN-END:variables
 
