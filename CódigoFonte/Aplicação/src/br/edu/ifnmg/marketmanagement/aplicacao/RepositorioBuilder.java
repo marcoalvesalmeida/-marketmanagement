@@ -57,4 +57,23 @@ public class RepositorioBuilder {
         return veiculo;
     }
     
+     private static ClienteRepositorio cliente;
+    
+    public static ClienteRepositorio getClienteRepositorio(){
+        if(cliente == null){
+            try {
+                
+                // Carrega a classe
+                Class obj = Class.forName(prop.getProperty("ClienteRepositorio"));
+                
+                // Cria uma nova instância da classe
+                cliente = (ClienteRepositorio)obj.newInstance();
+                
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+                Logger.getLogger(RepositorioBuilder.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return cliente;
+    }
+    
 }
