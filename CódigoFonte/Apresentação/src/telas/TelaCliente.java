@@ -32,14 +32,14 @@ public class TelaCliente extends javax.swing.JInternalFrame {
 
         jPanel1 = new javax.swing.JPanel();
         txtBusca = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btnEditar = new javax.swing.JButton();
+        btnNovo = new javax.swing.JButton();
         btnPesquisar = new javax.swing.JButton();
         lblPesquisa = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         rdNome = new javax.swing.JRadioButton();
         rdCpf = new javax.swing.JRadioButton();
-        jButton6 = new javax.swing.JButton();
+        btnRelatorio = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbClientes = new javax.swing.JTable();
 
@@ -50,16 +50,21 @@ public class TelaCliente extends javax.swing.JInternalFrame {
 
         txtBusca.setFont(new java.awt.Font("Trebuchet MS", 0, 12)); // NOI18N
 
-        jButton2.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
-        jButton2.setText("Editar");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnEditar.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
+        btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnEditarActionPerformed(evt);
             }
         });
 
-        jButton3.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
-        jButton3.setText("Novo");
+        btnNovo.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
+        btnNovo.setText("Novo");
+        btnNovo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNovoActionPerformed(evt);
+            }
+        });
 
         btnPesquisar.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         btnPesquisar.setText("Pesquisar");
@@ -107,8 +112,8 @@ public class TelaCliente extends javax.swing.JInternalFrame {
                 .addContainerGap(19, Short.MAX_VALUE))
         );
 
-        jButton6.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
-        jButton6.setText("Relatório");
+        btnRelatorio.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
+        btnRelatorio.setText("Relatório");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -120,11 +125,11 @@ public class TelaCliente extends javax.swing.JInternalFrame {
                     .addComponent(lblPesquisa)
                     .addComponent(txtBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 515, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnNovo, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnRelatorio, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(btnPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -143,10 +148,10 @@ public class TelaCliente extends javax.swing.JInternalFrame {
                         .addComponent(txtBusca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnNovo, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(btnRelatorio, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(22, Short.MAX_VALUE))
         );
 
@@ -231,7 +236,7 @@ public class TelaCliente extends javax.swing.JInternalFrame {
         }     
     }//GEN-LAST:event_btnPesquisarActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         int linha = tbClientes.getSelectedRow();
         if(linha <0){
             JOptionPane.showMessageDialog(rootPane, "É necessário selecionar um cliente!");
@@ -254,18 +259,26 @@ public class TelaCliente extends javax.swing.JInternalFrame {
         tela.setEntidade(obj);
         
         tela.setTelaBusca(this);
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_btnEditarActionPerformed
 
     private void rdCpfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdCpfActionPerformed
         lblPesquisa.setText("Pesquisar cadastro já existente por CPF: ");
     }//GEN-LAST:event_rdCpfActionPerformed
 
+    private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
+        TelaEditarCliente nova = new TelaEditarCliente();
+        this.getParent().add(nova);  
+        nova.setVisible(true);
+        this.setVisible(false);
+        nova.setTelaBusca(this);
+    }//GEN-LAST:event_btnNovoActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnEditar;
+    private javax.swing.JButton btnNovo;
     private javax.swing.JButton btnPesquisar;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton6;
+    private javax.swing.JButton btnRelatorio;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;

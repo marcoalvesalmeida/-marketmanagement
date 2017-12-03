@@ -59,11 +59,11 @@
                       <Component id="lblPesquisa" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="txtBusca" alignment="0" min="-2" pref="515" max="-2" attributes="0"/>
                       <Group type="102" alignment="0" attributes="0">
-                          <Component id="jButton3" min="-2" pref="114" max="-2" attributes="0"/>
+                          <Component id="btnNovo" min="-2" pref="114" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
-                          <Component id="jButton2" min="-2" pref="122" max="-2" attributes="0"/>
+                          <Component id="btnEditar" min="-2" pref="122" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="jButton6" min="-2" pref="114" max="-2" attributes="0"/>
+                          <Component id="btnRelatorio" min="-2" pref="114" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="btnPesquisar" min="-2" pref="114" max="-2" attributes="0"/>
                       </Group>
@@ -86,10 +86,10 @@
                           <Component id="txtBusca" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jButton2" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
-                              <Component id="jButton3" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
+                              <Component id="btnEditar" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
+                              <Component id="btnNovo" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
                               <Component id="btnPesquisar" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
-                              <Component id="jButton6" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
+                              <Component id="btnRelatorio" alignment="3" min="-2" pref="40" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -106,7 +106,7 @@
             </Property>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="jButton2">
+        <Component class="javax.swing.JButton" name="btnEditar">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Trebuchet MS" size="14" style="1"/>
@@ -114,16 +114,19 @@
             <Property name="text" type="java.lang.String" value="Editar"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton2ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEditarActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="jButton3">
+        <Component class="javax.swing.JButton" name="btnNovo">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Trebuchet MS" size="14" style="1"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Novo"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnNovoActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="btnPesquisar">
           <Properties>
@@ -207,7 +210,7 @@
             </Component>
           </SubComponents>
         </Container>
-        <Component class="javax.swing.JButton" name="jButton6">
+        <Component class="javax.swing.JButton" name="btnRelatorio">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Trebuchet MS" size="14" style="1"/>

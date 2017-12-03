@@ -35,7 +35,7 @@ public class TelaEditarCliente extends javax.swing.JInternalFrame{
     }
 
     public void setEntidade(Cliente entidade) {
-        this.entidade = entidade;        
+        this.entidade = entidade;         
         txtNome.setText(entidade.getNome());
         txtCpf.setText(entidade.getCpf());
         txtEmail.setText(entidade.getEmail());
@@ -51,6 +51,7 @@ public class TelaEditarCliente extends javax.swing.JInternalFrame{
         txtUf.setText(entidade.getEndereco().getUf());
         txtBairro.setText(entidade.getEndereco().getBairro());
         txtDataNascimento.setText(entidade.getDataNascimento().toString());
+        
         
         /*SimpleDateFormat formatoBR = new SimpleDateFormat("dd/MM/yyyy");            
         String h;
@@ -69,7 +70,7 @@ public class TelaEditarCliente extends javax.swing.JInternalFrame{
         this.telaBusca = telaBusca;
     }
     
-    private void carregaObjeto() throws ViolacaoRegraNegocioException, ParseException{        
+    private void carregaObjeto() throws ViolacaoRegraNegocioException, ParseException{          
         entidade.setNome(txtNome.getText());        
         entidade.setCpf(txtCpf.getText());  
         entidade.setRg(txtRg.getText());
