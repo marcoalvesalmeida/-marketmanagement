@@ -1,6 +1,8 @@
 package telas;
 import br.edu.ifnmg.marketmanagement.aplicacao.Cliente;
 import br.edu.ifnmg.marketmanagement.aplicacao.ClienteRepositorio;
+import br.edu.ifnmg.marketmanagement.aplicacao.Endereco;
+import br.edu.ifnmg.marketmanagement.aplicacao.EnderecoRepositorio;
 import br.edu.ifnmg.marketmanagement.aplicacao.RepositorioBuilder;
 import br.edu.ifnmg.marketmanagement.aplicacao.ViolacaoRegraNegocioException;
 import java.math.BigDecimal;
@@ -23,6 +25,8 @@ public class TelaEditarCliente extends javax.swing.JInternalFrame{
         initComponents();  
     }
     
+    EnderecoRepositorio end = RepositorioBuilder.getEnderecoRepositorio();
+    
     Cliente entidade;    
     TelaCliente telaBusca;
 
@@ -40,7 +44,14 @@ public class TelaEditarCliente extends javax.swing.JInternalFrame{
         txtCelular.setText(entidade.getCelular());
         txtSaldoCompras.setText(entidade.getSaldoCompras().toString());
         txtDescontos.setText(entidade.getDescontos().toString());
-        txtInfo.setText(entidade.getInformacoesAdicionais());        
+        txtInfo.setText(entidade.getInformacoesAdicionais());   
+        txtRua.setText(entidade.getEndereco().getRua());
+        txtCep.setText(entidade.getEndereco().getCep());
+        txtCidade.setText(entidade.getEndereco().getCidade());
+        txtUf.setText(entidade.getEndereco().getUf());
+        txtBairro.setText(entidade.getEndereco().getBairro());
+        txtDataNascimento.setText(entidade.getDataNascimento().toString());
+        
         /*SimpleDateFormat formatoBR = new SimpleDateFormat("dd/MM/yyyy");            
         String h;
         h =  entidade.getDataNascimento().toString();
@@ -68,6 +79,14 @@ public class TelaEditarCliente extends javax.swing.JInternalFrame{
         entidade.setDescontos(new BigDecimal (txtDescontos.getText()));
         entidade.setSaldoCompras(new BigDecimal (txtSaldoCompras.getText()));
         entidade.setInformacoesAdicionais(txtInfo.getText());
+        Endereco endereco = new Endereco();
+        endereco.setId(entidade.getEndereco().getId());
+        endereco.setBairro(txtBairro.getText());
+        endereco.setCep(txtCep.getText());
+        endereco.setCidade(txtCidade.getText());
+        endereco.setRua(txtRua.getText());
+        endereco.setUf(txtUf.getText());
+        entidade.setEndereco(endereco);
        /* SimpleDateFormat formatoBR = new SimpleDateFormat("dd/MM/yyyy"); 
         String datas = txtDataNascimento.getText();
         Date data;
@@ -99,16 +118,16 @@ public class TelaEditarCliente extends javax.swing.JInternalFrame{
         txtTelefone = new javax.swing.JTextField();
         txtCelular = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        txtCep = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jTextField14 = new javax.swing.JTextField();
+        txtRua = new javax.swing.JTextField();
         jLabel14 = new javax.swing.JLabel();
         jLabel15 = new javax.swing.JLabel();
-        jTextField15 = new javax.swing.JTextField();
-        jTextField16 = new javax.swing.JTextField();
+        txtBairro = new javax.swing.JTextField();
+        txtCidade = new javax.swing.JTextField();
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
-        jTextField17 = new javax.swing.JTextField();
+        txtUf = new javax.swing.JTextField();
         jLabel18 = new javax.swing.JLabel();
         txtEmail = new javax.swing.JTextField();
         jLabel22 = new javax.swing.JLabel();
@@ -164,7 +183,7 @@ public class TelaEditarCliente extends javax.swing.JInternalFrame{
         jLabel17.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         jLabel17.setText("UF:");
 
-        jTextField17.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
+        txtUf.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
 
         jLabel18.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         jLabel18.setText("Email:");
@@ -247,17 +266,17 @@ public class TelaEditarCliente extends javax.swing.JInternalFrame{
                                 .addGap(71, 71, 71)
                                 .addComponent(jLabel14))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtCep, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jTextField14, javax.swing.GroupLayout.PREFERRED_SIZE, 317, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(txtRua, javax.swing.GroupLayout.PREFERRED_SIZE, 317, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel15)
-                            .addComponent(jTextField15)))
+                            .addComponent(txtBairro)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField16, javax.swing.GroupLayout.PREFERRED_SIZE, 561, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtCidade, javax.swing.GroupLayout.PREFERRED_SIZE, 561, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addGroup(jPanel1Layout.createSequentialGroup()
                                     .addGap(1, 1, 1)
@@ -267,7 +286,7 @@ public class TelaEditarCliente extends javax.swing.JInternalFrame{
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                 .addComponent(jLabel17)
-                                                .addComponent(jTextField17, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                .addComponent(txtUf, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                         .addGroup(jPanel1Layout.createSequentialGroup()
                                             .addComponent(jLabel18)
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -293,7 +312,7 @@ public class TelaEditarCliente extends javax.swing.JInternalFrame{
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jTextField17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtUf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -323,15 +342,15 @@ public class TelaEditarCliente extends javax.swing.JInternalFrame{
                                     .addComponent(jLabel15))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTextField14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(jTextField15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(txtCep, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtRua, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txtBairro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel16)
                             .addComponent(jLabel17))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(txtCidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -386,10 +405,11 @@ public class TelaEditarCliente extends javax.swing.JInternalFrame{
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
         if(JOptionPane.showConfirmDialog(this, "Deseja realmente salvar os dados ?", "Confirmação", JOptionPane.YES_NO_OPTION)==0){
+            
             try {
                 carregaObjeto();
                 ClienteRepositorio clientes = RepositorioBuilder.getClienteRepositorio();
-                if(clientes.salvar(entidade))
+                if(clientes.salvar(entidade) && end.salvar(entidade.getEndereco()))
                     JOptionPane.showMessageDialog(rootPane, "Dados salvos com sucesso!");
                 else  
                     JOptionPane.showMessageDialog(rootPane, "Falha ao salvar os dados! Informe o administrador do sistema.");
@@ -425,12 +445,10 @@ public class TelaEditarCliente extends javax.swing.JInternalFrame{
     private javax.swing.JLabel jLabel87;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField14;
-    private javax.swing.JTextField jTextField15;
-    private javax.swing.JTextField jTextField16;
-    private javax.swing.JTextField jTextField17;
-    private javax.swing.JTextField jTextField3;
+    private javax.swing.JTextField txtBairro;
     private javax.swing.JTextField txtCelular;
+    private javax.swing.JTextField txtCep;
+    private javax.swing.JTextField txtCidade;
     private javax.swing.JTextField txtCpf;
     private javax.swing.JTextField txtDataNascimento;
     private javax.swing.JTextField txtDescontos;
@@ -438,7 +456,9 @@ public class TelaEditarCliente extends javax.swing.JInternalFrame{
     private javax.swing.JTextArea txtInfo;
     private javax.swing.JTextField txtNome;
     private javax.swing.JTextField txtRg;
+    private javax.swing.JTextField txtRua;
     private javax.swing.JTextField txtSaldoCompras;
     private javax.swing.JTextField txtTelefone;
+    private javax.swing.JTextField txtUf;
     // End of variables declaration//GEN-END:variables
 }

@@ -242,7 +242,8 @@ public class TelaCliente extends javax.swing.JInternalFrame {
         
         ClienteRepositorio clientes = RepositorioBuilder.getClienteRepositorio();
         
-        Cliente obj = clientes.abrir(id);
+        Cliente obj = clientes.abrir(id);     
+        
         
                 
         TelaEditarCliente tela = new TelaEditarCliente();

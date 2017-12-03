@@ -16,7 +16,7 @@ public class EnderecoDAO extends DAOGenerico<Endereco> implements EnderecoReposi
 
     @Override
     protected String consultaAbrir() {
-        return "select rua, cep,numero,bairro,cidade,uf from enderecos where id = ?";
+        return "select id,rua, cep,numero,bairro,cidade,uf from enderecos where id = ?";
     }
 
     @Override
@@ -36,7 +36,7 @@ public class EnderecoDAO extends DAOGenerico<Endereco> implements EnderecoReposi
 
     @Override
     protected String consultaBuscar() {
-        return "select rua, cep,numero,bairro,cidade,uf from enderecos";
+        return "select id,rua, cep,numero,bairro,cidade,uf from enderecos";
     }
 
     @Override
@@ -56,7 +56,7 @@ public class EnderecoDAO extends DAOGenerico<Endereco> implements EnderecoReposi
     protected void carregaParametros(Endereco obj, PreparedStatement consulta) {
         try {
             consulta.setString(1, obj.getRua());
-            consulta.setString(2, obj.getCep());
+            consulta.setString(2,(obj.getCep().replace("-", "")));
             consulta.setInt(3, obj.getNumero());
             consulta.setString(4, obj.getBairro());
             consulta.setString(5, obj.getCidade());
@@ -71,8 +71,9 @@ public class EnderecoDAO extends DAOGenerico<Endereco> implements EnderecoReposi
     @Override
     protected Endereco carregaObjeto(ResultSet dados) {
         Endereco end = new Endereco();
-        try {
+        try {           
             end.setBairro(dados.getString("bairro"));
+            end.setId(dados.getLong("id"));
             end.setCep((dados.getString("cep").substring(0,5)+"-"+dados.getString("cep").substring(5,8)));
             end.setCidade(dados.getString("cidade"));
             end.setNumero(dados.getInt("numero"));

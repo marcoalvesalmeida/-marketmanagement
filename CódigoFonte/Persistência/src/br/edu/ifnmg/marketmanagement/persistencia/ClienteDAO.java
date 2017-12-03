@@ -34,7 +34,7 @@ public class ClienteDAO extends DAOGenerico <Cliente> implements ClienteReposito
 
     @Override
     protected String consultaUpdate() {
-        return "update clientes set nome = ?, dataNascimento = ?,cpf = ?, rg = ?,endereco=?, telefone = ?,celular=?, email = ?, informacoesAdicionais = ?,saldoCompras =?, descontos=? where id = ?";
+        return "update clientes set nome = ?, dataNascimento = ?,cpf = ?, rg = ?, telefone = ?,celular=?, email = ?, informacoesAdicionais = ?,saldoCompras =?, descontos=? where id = ?";
     }
 
     @Override
@@ -51,11 +51,11 @@ public class ClienteDAO extends DAOGenerico <Cliente> implements ClienteReposito
     protected void carregaParametros(Cliente obj, PreparedStatement consulta) {
         try{            
             consulta.setString(1, obj.getNome());
-            consulta.setDate(2, (Date) obj.getDataNascimento());
-            consulta.setString(3, obj.getCpf());
-            consulta.setString(4, obj.getRg()); 
-            consulta.setLong(5, obj.getEndereco().getId());
-            consulta.setString(6, obj.getTelefone());
+            consulta.setDate(2, (Date) obj.getDataNascimento());            
+            consulta.setString(3, obj.getCpf().replace(".", "").replace("-", ""));
+            consulta.setString(4, obj.getRg());           
+            consulta.setString(5, obj.getTelefone());
+            consulta.setString(6, obj.getCelular());
             consulta.setString(7, obj.getEmail());
             consulta.setString(8, obj.getInformacoesAdicionais());
             consulta.setBigDecimal(9, obj.getSaldoCompras());
@@ -94,6 +94,7 @@ public class ClienteDAO extends DAOGenerico <Cliente> implements ClienteReposito
     }
     
     
+    @Override
     protected String carregaParametrosBusca(Cliente obj){
         String sql = "";
         
