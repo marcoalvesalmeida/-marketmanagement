@@ -1,5 +1,4 @@
 package telas;
-
 import br.edu.ifnmg.marketmanagement.aplicacao.Fornecedor;
 import br.edu.ifnmg.marketmanagement.aplicacao.FornecedorRepositorio;
 import br.edu.ifnmg.marketmanagement.aplicacao.RepositorioBuilder;
@@ -10,7 +9,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-
 /**
  *
  * @author guilherme

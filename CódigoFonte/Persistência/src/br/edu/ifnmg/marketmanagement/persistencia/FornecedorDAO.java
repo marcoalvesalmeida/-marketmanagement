@@ -1,6 +1,8 @@
 package br.edu.ifnmg.marketmanagement.persistencia;
+import br.edu.ifnmg.marketmanagement.aplicacao.EnderecoRepositorio;
 import br.edu.ifnmg.marketmanagement.aplicacao.Fornecedor;
 import br.edu.ifnmg.marketmanagement.aplicacao.FornecedorRepositorio;
+import br.edu.ifnmg.marketmanagement.aplicacao.RepositorioBuilder;
 import br.edu.ifnmg.marketmanagement.aplicacao.ViolacaoRegraNegocioException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,6 +14,8 @@ import java.util.logging.Logger;
  * @author guilherme
  */
 public class FornecedorDAO extends DAOGenerico <Fornecedor> implements FornecedorRepositorio{
+    
+    EnderecoRepositorio end = RepositorioBuilder.getEnderecoRepositorio();
 
     @Override
     protected String consultaAbrir() {
@@ -70,9 +74,7 @@ public class FornecedorDAO extends DAOGenerico <Fornecedor> implements Fornecedo
             fornecedor.setCelular(dados.getString("telefone2"));
             fornecedor.setInformacoesAdicionais(dados.getString("informacoesAdicionais"));
             fornecedor.setInscricaoEstadual(dados.getString("inscricaoSocial"));
-            
-            
-            
+            fornecedor.setEndereco(end.abrir(dados.getInt("endereco")));           
             return fornecedor;
         } catch (SQLException | ViolacaoRegraNegocioException ex) {
             Logger.getLogger(FornecedorDAO.class.getName()).log(Level.SEVERE, null, ex);

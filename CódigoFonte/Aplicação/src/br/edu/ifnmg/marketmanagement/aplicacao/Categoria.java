@@ -14,6 +14,10 @@ public class Categoria implements Entidade{
         this.id = id;
         this.descricao = descricao;
     }
+    
+     public Categoria() {
+       
+    }
 
     public String getDescricao() {
         return descricao;

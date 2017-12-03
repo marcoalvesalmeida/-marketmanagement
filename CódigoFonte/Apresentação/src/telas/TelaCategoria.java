@@ -20,7 +20,8 @@ public class TelaCategoria extends javax.swing.JInternalFrame {
     public TelaCategoria() {
         initComponents();
         this.exibirTodos();
-    }
+    }    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -40,6 +41,7 @@ public class TelaCategoria extends javax.swing.JInternalFrame {
         jButton2a = new javax.swing.JButton();
 
         setClosable(true);
+        setTitle("Edição de Categorias");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(201, 201, 201)));
         jPanel1.setForeground(new java.awt.Color(1, 1, 1));
@@ -83,6 +85,7 @@ public class TelaCategoria extends javax.swing.JInternalFrame {
             }
         ));
         tbDescricao.setToolTipText("Categorias Cadastradas");
+        tbDescricao.setEnabled(false);
         tbDescricao.setGridColor(new java.awt.Color(254, 254, 254));
         jScrollPane1.setViewportView(tbDescricao);
         tbDescricao.getAccessibleContext().setAccessibleName("");
@@ -140,18 +143,21 @@ public class TelaCategoria extends javax.swing.JInternalFrame {
     private void jButton2a1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2a1ActionPerformed
         CategoriaRepositorio cat = new CategoriaDAO();
         Categoria c = new Categoria();
-        if (txtCategoria.getText().length() > 3 && !txtCategoria.getText().isEmpty()) {
-            try {
-                c.setDescricao(txtCategoria.getText());
-                if (cat.salvar(c)){
-                    this.exibirTodos(); 
-                    txtCategoria.setText("");
+        if(JOptionPane.showConfirmDialog(this, "Deseja realmente salvar os dados?","Confirmação",
+                JOptionPane.YES_NO_OPTION) == 0) {
+            if (txtCategoria.getText().length() > 3 && !txtCategoria.getText().isEmpty()) {
+                try {
+                    c.setDescricao(txtCategoria.getText());
+                    if (cat.salvar(c)){
+                        this.exibirTodos(); 
+                        txtCategoria.setText("");
+                    }
+                } catch (ViolacaoRegraNegocioException ex) {
+                    Logger.getLogger(TelaCategoria.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            } catch (ViolacaoRegraNegocioException ex) {
-                Logger.getLogger(TelaCategoria.class.getName()).log(Level.SEVERE, null, ex);
+            }else{
+                JOptionPane.showMessageDialog(null, "A descrição deve ter no mínimo 4 caracteres!");
             }
-        }else{
-            JOptionPane.showMessageDialog(null, "A descrição deve ter no mínimo 4 caracteres!");
         }
     }//GEN-LAST:event_jButton2a1ActionPerformed
 
@@ -177,6 +183,7 @@ public class TelaCategoria extends javax.swing.JInternalFrame {
     private void exibirTodos() {        
         CategoriaRepositorio clientes = new CategoriaDAO();
         DefaultTableModel modelo = new DefaultTableModel();
+        
         Categoria filtro = new Categoria();
         modelo.addColumn("ID");
         modelo.addColumn("DESCRIÇÃO");

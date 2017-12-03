@@ -2,6 +2,7 @@ package br.edu.ifnmg.marketmanagement.persistencia;
 import br.edu.ifnmg.marketmanagement.aplicacao.Funcionario;
 import br.edu.ifnmg.marketmanagement.aplicacao.FuncionarioRepositorio;
 import br.edu.ifnmg.marketmanagement.aplicacao.ViolacaoRegraNegocioException;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -41,7 +42,7 @@ public class FuncionarioDAO extends DAOGenerico <Funcionario> implements Funcion
     protected void carregaParametros(Funcionario obj, PreparedStatement consulta) {
         try{
             consulta.setString(1, obj.getNome());
-            consulta.setString(2, obj.getDataNascimento());
+            consulta.setDate(2, (Date) obj.getDataNascimento());
             consulta.setString(3, obj.getCpf());
             consulta.setString(4, obj.getTelefone());
             consulta.setString(5, obj.getEmail());
@@ -63,7 +64,7 @@ public class FuncionarioDAO extends DAOGenerico <Funcionario> implements Funcion
         try {
             func.setId(dados.getLong("id"));            
             func.setNome(dados.getString("nome"));
-            func.setDataNascimento(dados.getString("dataNascimento"));
+            func.setDataNascimento(dados.getDate("dataNascimento"));
             func.setCpf(dados.getString("cpf"));
             func.setTelefone(dados.getString("telefone"));
             func.setEmail(dados.getString("email"));

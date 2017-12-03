@@ -1,5 +1,6 @@
 package br.edu.ifnmg.marketmanagement.aplicacao;
 import java.math.BigDecimal;
+import java.util.Date;
 /**
  *
  * @author guilherme
@@ -12,14 +13,16 @@ public class Funcionario extends PessoaFisica{
     private String cnh;
     private final BigDecimal TEMP = new BigDecimal(0);
 
-    public Funcionario(BigDecimal salario, int cargaHoraria, int tipo, String senha, String cnh, String login, String nome, String dataNascimento, String cpf, String rg, long id, Endereco endereco, String telefone, String email) {
-        super(nome, dataNascimento, cpf, rg, id, endereco, telefone, email);
+    public Funcionario(BigDecimal salario, int cargaHoraria, int tipo, String senha, String cnh, String nome, Date dataNascimento, String cpf, String rg, long id, Endereco endereco, String telefone, String email, String celular) {
+        super(nome, dataNascimento, cpf, rg, id, endereco, telefone, email, celular);
         this.salario = salario;
         this.cargaHoraria = cargaHoraria;
         this.tipo = tipo;
         this.senha = senha;
         this.cnh = cnh;
     }
+
+ 
 
     public Funcionario() {
     }

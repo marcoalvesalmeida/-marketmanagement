@@ -49,6 +49,10 @@ public class Produto implements Entidade {
         this.fracionar = fracionar;
         this.fornecedor = fornecedor;
     }
+    
+    public Produto(){
+        
+    }
 
     public String getDescricao() {
         return descricao;

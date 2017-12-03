@@ -15,17 +15,17 @@ public class ProdutoDAO extends DAOGenerico <Produto> implements ProdutoReposito
 
     @Override
     protected String consultaAbrir() {
-        return "select id,descricao,valorCusto,valorVarejo,valorAtacado,codigo, pontuacao,estoqueMinino,estoqueaAtual,ativo,informacoesAdicionais,fracionar from produtos where id= ?";
+        return "select id,descricao,valorCusto,valorVarejo,valorAtacado,codigo, pontuacao,estoqueMinimo,estoqueAtual,ativo,informacoesAdicionais,fracionar from produtos where id= ?";
     }
 
     @Override
     protected String consultaInsert() {
-        return "insert into produtos (descricao,valorCusto,valorVarejo,valorAtacado,codigo, pontuacao,estoqueMinino,estoqueaAtual,ativo,informacoesAdicionais,fracionar) values (?,?,?,?,?,?,?,?,?,?,?)";
+        return "insert into produtos (descricao,valorCusto,valorVarejo,valorAtacado,codigo, pontuacao,estoqueMinimo,estoqueAtual,ativo,informacoesAdicionais,fracionar) values (?,?,?,?,?,?,?,?,?,?,?)";
     }
 
     @Override
     protected String consultaUpdate() {
-        return "update produtos set descricao =?,valorCusto =?,valorVarejo=?,valorAtacado=?,codigo=?,pontuacao=?,estoqueMinino=?,estoqueaAtual=?,ativo=?,informacoesAdicionais=?,fracionar=? where id = ?";
+        return "update produtos set descricao =?,valorCusto =?,valorVarejo=?,valorAtacado=?,codigo=?,pontuacao=?,estoqueMinimo=?,estoqueAtual=?,ativo=?,informacoesAdicionais=?,fracionar=? where id = ?";
     }
 
     @Override
@@ -35,7 +35,7 @@ public class ProdutoDAO extends DAOGenerico <Produto> implements ProdutoReposito
 
     @Override
     protected String consultaBuscar() {
-        return "select id,descricao,valorCusto,valorVarejo,valorAtacado,codigo, pontuacao,estoqueMinino,estoqueaAtual,ativo,informacoesAdicionais,fracionar from produtos";
+        return "select id,descricao,valorCusto,valorVarejo,valorAtacado,codigo, pontuacao,estoqueMinimo,estoqueAtual,ativo,informacoesAdicionais,fracionar from produtos";
     }
 
     @Override

@@ -10,16 +10,26 @@ public abstract class Pessoa implements Entidade {
     private long id;
     private Endereco endereco;
     private String telefone;
+    private String celular;
     private String email;
 
-    public Pessoa(long id, Endereco endereco, String telefone, String email) {
+    public Pessoa(long id, Endereco endereco, String telefone, String email, String celular) {
         this.id = id;
         this.endereco = endereco;
         this.telefone = telefone;
         this.email = email;
+        this.celular = celular;
     }   
 
     public Pessoa() {
+    }
+
+    public String getCelular() {
+        return celular;
+    }
+
+    public void setCelular(String celular) {
+        this.celular = celular;
     }
     
   

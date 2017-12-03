@@ -1,4 +1,5 @@
 package br.edu.ifnmg.marketmanagement.aplicacao;
+import java.util.Date;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -8,19 +9,20 @@ import java.util.regex.Pattern;
  */
 public abstract class PessoaFisica extends Pessoa{
     private String nome;
-    private String dataNascimento;
+    private Date dataNascimento;
     private String cpf;
     private String rg;
     private static Pattern regex_cpf = Pattern.compile("^\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}$");
 
-    public PessoaFisica(String nome, String dataNascimento, String cpf, String rg, long id, Endereco endereco, String telefone, String email) {
-        super(id, endereco, telefone, email);
+    public PessoaFisica(String nome, Date dataNascimento, String cpf, String rg, long id, Endereco endereco, String telefone, String email, String celular) {
+        super(id, endereco, telefone, email, celular);
         this.nome = nome;
         this.dataNascimento = dataNascimento;
         this.cpf = cpf;
         this.rg = rg;
-    }   
+    }
 
+ 
     public PessoaFisica(){
     }
     
@@ -36,15 +38,12 @@ public abstract class PessoaFisica extends Pessoa{
         this.nome = nome;
     }
 
-    public String getDataNascimento() {        
-        return dataNascimento.substring(0,2)+"-"+dataNascimento.substring(2,4)+"-"+dataNascimento.substring(4,8);
+    public Date getDataNascimento() {        
+        return dataNascimento;
     }
 
-    public void setDataNascimento(String dataNascimento)throws ViolacaoRegraNegocioException{
-        if(!dataNascimento.matches("^\\d{2}\\-\\d{2}\\-\\d{4}$") || dataNascimento == null){
-            throw new ViolacaoRegraNegocioException("A data de nascimento deve ter o seguinte padrão: dd-mm-aaaa"); 
-        }      
-        this.dataNascimento = dataNascimento.replace("-", "");
+    public void setDataNascimento(Date dataNascimento)throws ViolacaoRegraNegocioException{          
+        this.dataNascimento = dataNascimento;
     }
 
     public String getCpf() {
