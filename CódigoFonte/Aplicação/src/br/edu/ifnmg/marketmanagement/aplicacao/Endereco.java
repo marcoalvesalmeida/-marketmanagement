@@ -12,18 +12,16 @@ public class Endereco implements Entidade {
     private String cep;
     private int numero;
     private String bairro;
-    private String complemento;
     private String cidade;
     private String uf;
     private static Pattern regex_cep = Pattern.compile("^\\d{5}\\-\\d{3}$");
     
-    public Endereco(long id, String rua, String cep, int numero, String bairro, String complemento, String cidade, String uf) {
+    public Endereco(long id, String rua, String cep, int numero, String bairro, String cidade, String uf) {
         this.id = id;
         this.rua = rua;
         this.cep = cep;
         this.numero = numero;
-        this.bairro = bairro;
-        this.complemento = complemento;
+        this.bairro = bairro;        
         this.cidade = cidade;
         this.uf = uf;
     }  
@@ -83,14 +81,6 @@ public class Endereco implements Entidade {
         this.bairro = bairro;
     }
 
-    public String getComplemento() {
-        return complemento;
-    }
-
-    public void setComplemento(String complemento) {
-        this.complemento = complemento;
-    }
-
     public String getCidade() {
         return cidade;
     }
@@ -144,7 +134,7 @@ public class Endereco implements Entidade {
 
     @Override
     public String toString() {
-        return "Endereco{" + "id=" + id + ", rua=" + rua + ", cep=" + cep + ", numero=" + numero + ", bairro=" + bairro + ", complemento=" + complemento + ", cidade=" + cidade + ", uf=" + uf + '}';
+        return "Endereco{" + "id=" + id + ", rua=" + rua + ", cep=" + cep + ", numero=" + numero + ", bairro=" + bairro + ", cidade=" + cidade + ", uf=" + uf + '}';
     }
 
 }
