@@ -15,17 +15,17 @@ public class FornecedorDAO extends DAOGenerico <Fornecedor> implements Fornecedo
 
     @Override
     protected String consultaAbrir() {
-        return "select id,razaoSocial,cnpj,telefone,email from fornecedores where id= ?";
+        return "select id,razaoSocial,cnpj,telefone,telefone2, inscricaoSocial,endereco,informacoesAdicionais,ativo, email from fornecedores where id= ?";
     }
 
     @Override
     protected String consultaInsert() {
-        return "insert into fornecedores (razaoSocial, cnpj, telefone, email) values (?,?,?,?)";
+        return "insert into fornecedores (razaoSocial, cnpj, telefone,telefone2,inscricaoSocial,endereco,informacoesAdicionais,ativo, email) values (?,?,?,?)";
     }
 
     @Override
     protected String consultaUpdate() {
-        return "update fornecedores set razaoSocial = ?, cnpj = ?, telefone = ?, email = ? where id = ?";
+        return "update fornecedores set razaoSocial = ?, cnpj = ?, telefone = ?,telefone2=?,inscricaoSocial=?,endereco=?,informacoesAdicionais=?,ativo=?, email = ? where id = ?";
     }
 
     @Override
@@ -35,7 +35,7 @@ public class FornecedorDAO extends DAOGenerico <Fornecedor> implements Fornecedo
 
     @Override
     protected String consultaBuscar() {
-        return "select id,razaoSocial,cnpj,telefone,email from fornecedores";
+        return "select id,razaoSocial,cnpj,telefone,telefone2,inscricaoSocial,endereco,informacoesAdicionais,ativo,email from fornecedores";
     }
 
     @Override
@@ -44,9 +44,14 @@ public class FornecedorDAO extends DAOGenerico <Fornecedor> implements Fornecedo
             consulta.setString(1,obj.getRazaoSocial());
             consulta.setString(2,obj.getCnpj());
             consulta.setString(3,obj.getTelefone());
-            consulta.setString(4,obj.getEmail());            
+            consulta.setString(4, obj.getCelular());
+            consulta.setString(5, obj.getInscricaoEstadual());
+            consulta.setLong(6, obj.getEndereco().getId());
+            consulta.setString(7, obj.getInformacoesAdicionais());
+            consulta.setBoolean(8, obj.isAtivo());            
+            consulta.setString(9,obj.getEmail());            
             if(obj.getId() > 0)
-                consulta.setLong(5,obj.getId());    
+                consulta.setLong(10,obj.getId());    
         }catch(SQLException e){
             Logger.getLogger(FornecedorDAO.class.getName()).log(Level.SEVERE, null, e);            
         }
@@ -61,6 +66,13 @@ public class FornecedorDAO extends DAOGenerico <Fornecedor> implements Fornecedo
             fornecedor.setCnpj(dados.getString("cnpj"));
             fornecedor.setEmail(dados.getString("email"));
             fornecedor.setTelefone(dados.getString("telefone"));
+            fornecedor.setAtivo(dados.getBoolean("ativo"));
+            fornecedor.setCelular(dados.getString("telefone2"));
+            fornecedor.setInformacoesAdicionais(dados.getString("informacoesAdicionais"));
+            fornecedor.setInscricaoEstadual(dados.getString("inscricaoSocial"));
+            
+            
+            
             return fornecedor;
         } catch (SQLException | ViolacaoRegraNegocioException ex) {
             Logger.getLogger(FornecedorDAO.class.getName()).log(Level.SEVERE, null, ex);

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -52,6 +53,11 @@ public class TelaFornecedores extends javax.swing.JInternalFrame{
 
         btnEditar.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
 
         btnNovo.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         btnNovo.setText("Novo");
@@ -214,6 +220,29 @@ public class TelaFornecedores extends javax.swing.JInternalFrame{
             Logger.getLogger(Fornecedor.class.getName()).log(Level.SEVERE, null, ex);
         }     
     }//GEN-LAST:event_btnPesquisarActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        int linha = tbResultado.getSelectedRow();
+        if(linha <0){
+            JOptionPane.showMessageDialog(rootPane, "É necessário selecionar um fornecedor!");
+            return;
+        }
+        
+        long id = Long.parseLong(tbResultado.getValueAt(linha, 0).toString() );
+        
+        FornecedorRepositorio fornecedores = RepositorioBuilder.getFornecedorRepositorio();
+        
+        Fornecedor obj = fornecedores.abrir(id);
+        
+        TelaEditarFornecedor tela = new TelaEditarFornecedor();
+        this.getParent().add(tela);
+        tela.setVisible(true);
+        this.setVisible(false);
+        
+        tela.setEntidade(obj);
+        
+        tela.setTelaBusca(this);
+    }//GEN-LAST:event_btnEditarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
