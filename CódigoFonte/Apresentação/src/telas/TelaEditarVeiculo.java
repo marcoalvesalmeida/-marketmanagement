@@ -1,19 +1,26 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package telas;
 
+import br.edu.ifnmg.marketmanagement.aplicacao.EnumCombustivel;
+import br.edu.ifnmg.marketmanagement.aplicacao.EnumMarcaVeiculo;
+import br.edu.ifnmg.marketmanagement.aplicacao.EnumTipoVeiculo;
 import br.edu.ifnmg.marketmanagement.aplicacao.Veiculo;
+import br.edu.ifnmg.marketmanagement.aplicacao.VeiculoRepositorio;
+import br.edu.ifnmg.marketmanagement.aplicacao.ViolacaoRegraNegocioException;
+import br.edu.ifnmg.marketmanagement.persistencia.VeiculoDAO;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author marco
  */
 public class TelaEditarVeiculo extends javax.swing.JInternalFrame {
+
+    Posicionamento pos = new Posicionamento();
     Veiculo entidade;
-    
+    VeiculoRepositorio veiculos = new VeiculoDAO();
     TelaVeiculo telaVeiculo;
 
     public Veiculo getEntidade() {
@@ -22,12 +29,13 @@ public class TelaEditarVeiculo extends javax.swing.JInternalFrame {
 
     public void setEntidade(Veiculo entidade) {
         this.entidade = entidade;
-        
         txtModelo.setText(entidade.getModelo());
-        cmbCombustivel.setSelectedItem("");
+        cmbCombustivel.setSelectedItem(entidade.getCombustivel());
         txtPlaca.setText(entidade.getPlaca());
         txtAnoFab.setText(Long.toString(entidade.getAnoFab()));
-        txtMarca.setText(entidade.getMarca().toString());
+        cmbMarca.setSelectedItem(entidade.getMarca());
+        cmbTipo.setSelectedItem(entidade.getTipo());
+        cmbCombustivel.setSelectedItem(entidade.getMarca());
         txtChassi.setText(entidade.getChassi());
         txtObservacoes.setText(entidade.getObservacoes());
     }
@@ -39,12 +47,19 @@ public class TelaEditarVeiculo extends javax.swing.JInternalFrame {
     public void setTelaVeiculo(TelaVeiculo telaVeiculo) {
         this.telaVeiculo = telaVeiculo;
     }
-
+    
+    public void preencherCMB(){
+        cmbCombustivel.setModel(new DefaultComboBoxModel<>(EnumCombustivel.values()));
+        cmbMarca.setModel(new DefaultComboBoxModel<>(EnumMarcaVeiculo.values()));
+        cmbTipo.setModel(new DefaultComboBoxModel<>(EnumTipoVeiculo.values()));
+    }
+    
     /**
      * Creates new form TelaEditarVeiculo
      */
     public TelaEditarVeiculo() {
         initComponents();
+        preencherCMB();
     }
 
     /**
@@ -61,21 +76,24 @@ public class TelaEditarVeiculo extends javax.swing.JInternalFrame {
         txtModelo = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        txtPlaca = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        txtMarca = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        cmbCombustivel = new javax.swing.JComboBox<>();
+        cmbCombustivel = new javax.swing.JComboBox<EnumCombustivel>();
         jLabel6 = new javax.swing.JLabel();
-        cmbTipo = new javax.swing.JComboBox<>();
+        cmbTipo = new javax.swing.JComboBox<EnumTipoVeiculo>();
         jLabel7 = new javax.swing.JLabel();
-        txtChassi = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtObservacoes = new javax.swing.JTextArea();
-        txtAnoFab = new javax.swing.JTextField();
+        txtAnoFab = new javax.swing.JFormattedTextField();
+        txtPlaca = new javax.swing.JFormattedTextField();
+        txtChassi = new javax.swing.JFormattedTextField();
+        cmbMarca = new javax.swing.JComboBox<EnumMarcaVeiculo>();
         btnSalvar = new javax.swing.JButton();
-        btnSair = new javax.swing.JButton();
+        btnVoltar = new javax.swing.JButton();
+        btnDeletar = new javax.swing.JButton();
+
+        setClosable(true);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(209, 209, 209)), "Informações Básicas", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 12), new java.awt.Color(1, 1, 1))); // NOI18N
 
@@ -94,12 +112,8 @@ public class TelaEditarVeiculo extends javax.swing.JInternalFrame {
         jLabel5.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         jLabel5.setText("Combustível:");
 
-        cmbCombustivel.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Gasolina" }));
-
         jLabel6.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         jLabel6.setText("Tipo:");
-
-        cmbTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Caminhonete" }));
 
         jLabel7.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         jLabel7.setText("Chassi:");
@@ -120,6 +134,24 @@ public class TelaEditarVeiculo extends javax.swing.JInternalFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
         );
+
+        try {
+            txtAnoFab.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+
+        try {
+            txtPlaca.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("UUU-####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+
+        try {
+            txtChassi.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("#UU###UU##U######")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -150,25 +182,24 @@ public class TelaEditarVeiculo extends javax.swing.JInternalFrame {
                                 .addComponent(cmbCombustivel, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(cmbTipo, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(cmbTipo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addComponent(txtPlaca, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, 18)
                                         .addComponent(jLabel2)
                                         .addGap(0, 0, Short.MAX_VALUE)))
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGap(5, 5, 5)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtAnoFab, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jLabel4)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(txtMarca, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(30, 30, 30)
                                         .addComponent(jLabel7)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(txtChassi)))))))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(txtChassi, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(txtAnoFab, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(13, 13, 13)
+                                        .addComponent(jLabel4)
+                                        .addGap(8, 8, 8)
+                                        .addComponent(cmbMarca, 0, 116, Short.MAX_VALUE)))))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -183,11 +214,11 @@ public class TelaEditarVeiculo extends javax.swing.JInternalFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(txtPlaca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
                     .addComponent(jLabel4)
-                    .addComponent(txtMarca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtAnoFab, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtAnoFab, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtPlaca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmbMarca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
@@ -206,7 +237,19 @@ public class TelaEditarVeiculo extends javax.swing.JInternalFrame {
             }
         });
 
-        btnSair.setText("Sair");
+        btnVoltar.setText("Voltar");
+        btnVoltar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVoltarActionPerformed(evt);
+            }
+        });
+
+        btnDeletar.setText("Deletar");
+        btnDeletar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeletarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -214,37 +257,67 @@ public class TelaEditarVeiculo extends javax.swing.JInternalFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addGap(118, 118, 118)
+                .addGap(54, 54, 54)
                 .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(102, 102, 102)
-                .addComponent(btnSair, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(69, 69, 69)
+                .addComponent(btnDeletar, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(44, 44, 44))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnSair, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDeletar, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(38, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        
+        try {
+            Veiculo x = new Veiculo();
+            x.setModelo(txtModelo.getText());
+            x.setPlaca(txtPlaca.getText());
+            x.setChassi(txtChassi.getText());
+            x.setTipo((EnumTipoVeiculo)cmbTipo.getSelectedItem());
+            x.setAnoFab((int) Long.parseLong(txtAnoFab.getText()));
+            x.setMarca((EnumMarcaVeiculo)cmbMarca.getSelectedItem());
+            x.setCombustivel((EnumCombustivel) cmbCombustivel.getSelectedItem());
+            x.setObservacoes(txtObservacoes.getText());
+            boolean salvar = veiculos.salvar(x);
+        } catch (ViolacaoRegraNegocioException ex) {
+            Logger.getLogger(TelaEditarVeiculo.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnSalvarActionPerformed
+
+    private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
+        this.setVisible(false);
+        telaVeiculo.setVisible(true);
+    }//GEN-LAST:event_btnVoltarActionPerformed
+
+    private void btnDeletarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeletarActionPerformed
+        if(JOptionPane.showConfirmDialog(this, "Tem certeza que deseja deletar esse veículo?", "Atenção!", JOptionPane.YES_NO_OPTION)==1)
+            return;
+        if(veiculos.apagar(entidade))
+            JOptionPane.showMessageDialog(this, "Veículo Deletado com Sucesso!");
+    }//GEN-LAST:event_btnDeletarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnSair;
+    private javax.swing.JButton btnDeletar;
     private javax.swing.JButton btnSalvar;
-    private javax.swing.JComboBox<String> cmbCombustivel;
-    private javax.swing.JComboBox<String> cmbTipo;
+    private javax.swing.JButton btnVoltar;
+    private javax.swing.JComboBox<EnumCombustivel> cmbCombustivel;
+    private javax.swing.JComboBox<EnumMarcaVeiculo> cmbMarca;
+    private javax.swing.JComboBox<EnumTipoVeiculo> cmbTipo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -255,11 +328,10 @@ public class TelaEditarVeiculo extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField txtAnoFab;
-    private javax.swing.JTextField txtChassi;
-    private javax.swing.JTextField txtMarca;
+    private javax.swing.JFormattedTextField txtAnoFab;
+    private javax.swing.JFormattedTextField txtChassi;
     private javax.swing.JTextField txtModelo;
     private javax.swing.JTextArea txtObservacoes;
-    private javax.swing.JTextField txtPlaca;
+    private javax.swing.JFormattedTextField txtPlaca;
     // End of variables declaration//GEN-END:variables
 }

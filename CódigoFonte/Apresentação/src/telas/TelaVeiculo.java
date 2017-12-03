@@ -9,7 +9,6 @@ import br.edu.ifnmg.marketmanagement.aplicacao.RepositorioBuilder;
 import br.edu.ifnmg.marketmanagement.aplicacao.Veiculo;
 import br.edu.ifnmg.marketmanagement.aplicacao.VeiculoRepositorio;
 import br.edu.ifnmg.marketmanagement.aplicacao.ViolacaoRegraNegocioException;
-import java.awt.Dimension;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.text.ParseException;
@@ -17,6 +16,7 @@ import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
@@ -24,7 +24,8 @@ import javax.swing.text.MaskFormatter;
  *
  * @author marco
  */
-public class TelaVeiculo extends javax.swing.JInternalFrame {
+public class TelaVeiculo extends javax.swing.JInternalFrame{
+    protected Posicionamento pos = new Posicionamento();
     private MaskFormatter maskPlaca;
     private MaskFormatter maskAno;
     private MaskFormatter maskModelo;
@@ -47,11 +48,6 @@ public class TelaVeiculo extends javax.swing.JInternalFrame {
         txtPesquisa.setFormatterFactory(new DefaultFormatterFactory(new MaskFormatter(mascara)));
     }
 
-    public final void setPosicao() {
-        Dimension d = this.getDesktopPane().getSize();
-        this.setLocation((d.width - this.getSize().width) / 2, (d.height - this.getSize().height) / 2);
-    }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -63,9 +59,9 @@ public class TelaVeiculo extends javax.swing.JInternalFrame {
 
         rdGrupo = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        btnEditar = new javax.swing.JButton();
+        btnNovo = new javax.swing.JButton();
+        btnRelatorio = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         rdPlaca = new javax.swing.JRadioButton();
@@ -81,33 +77,43 @@ public class TelaVeiculo extends javax.swing.JInternalFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(160, 160, 160)));
 
-        jButton2.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
-        jButton2.setText("Editar");
+        btnEditar.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
+        btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
 
-        jButton3.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
-        jButton3.setText("Novo");
-        
-        jButton5.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
-        jButton5.setText("Relatório");
+        btnNovo.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
+        btnNovo.setText("Novo");
+        btnNovo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNovoActionPerformed(evt);
+            }
+        });
+
+        btnRelatorio.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
+        btnRelatorio.setText("Relatório");
 
         jLabel1.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         jLabel1.setText("Pesquisar Veiculo por Placa:");
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(158, 158, 158)), "Modos de Pesquisa", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 12), new java.awt.Color(5, 0, 0))); // NOI18N
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(191, 191, 191)), "", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 12), new java.awt.Color(131, 128, 128)), "Modos de Pesquisa", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 12), new java.awt.Color(4, 2, 2))); // NOI18N
 
         rdPlaca.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         rdPlaca.setText("Placa");
-        
+
         rdModelo.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         rdModelo.setText("Modelo");
-        
+
         rdMarca.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         rdMarca.setText("Marca");
 
         rdAno.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         rdAno.setText("Ano");
-        
-        // cria as mascaras e já a deixa pronta pra uso
+
+         // cria as mascaras e já a deixa pronta pra uso
         try {
             maskPlaca = new MaskFormatter("UUU-####");
             maskAno = new MaskFormatter("####");
@@ -157,6 +163,7 @@ public class TelaVeiculo extends javax.swing.JInternalFrame {
                 }
             }
         });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -204,11 +211,11 @@ public class TelaVeiculo extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnNovo, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(26, 26, 26)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnRelatorio, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(26, 26, 26)
                         .addComponent(btnPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel1)
@@ -229,9 +236,9 @@ public class TelaVeiculo extends javax.swing.JInternalFrame {
                         .addComponent(txtPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnNovo, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnRelatorio, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
@@ -274,7 +281,7 @@ public class TelaVeiculo extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 305, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE)
                 .addGap(6, 6, 6))
         );
 
@@ -282,12 +289,16 @@ public class TelaVeiculo extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-
-    }//GEN-LAST:event_jButton3ActionPerformed
+    private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
+        TelaEditarVeiculo nova = new TelaEditarVeiculo();
+        this.getParent().add(nova);
+        nova.setVisible(true);
+        nova.pos.setTamanho(nova);
+        nova.setTelaVeiculo(this);
+        this.setVisible(false);
+    }//GEN-LAST:event_btnNovoActionPerformed
     private void btnPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarActionPerformed
-        System.out.println(txtPesquisa);
+
         try {
             VeiculoRepositorio veiculos = RepositorioBuilder.getVeiculoRepositorio();
             
@@ -311,12 +322,22 @@ public class TelaVeiculo extends javax.swing.JInternalFrame {
             modelo.addColumn("ID");
             modelo.addColumn("Placa");
             modelo.addColumn("Modelo");
+            modelo.addColumn("Marca");
+            modelo.addColumn("Chassi");
+            modelo.addColumn("AnoFab");
+            modelo.addColumn("Combustivel");
+            modelo.addColumn("Observações");
             
             for(Veiculo v : resultado){
                 Vector valores = new Vector();
                 valores.add(v.getId());
                 valores.add(v.getPlaca());
-                valores.add(v.getModelo());                
+                valores.add(v.getModelo());   
+                valores.add(v.getMarca());
+                valores.add(v.getChassi());
+                valores.add(v.getAnoFab());
+                valores.add(v.getCombustivel());
+                valores.add(v.getObservacoes());
                 modelo.addRow(valores);
             }
             
@@ -327,12 +348,34 @@ public class TelaVeiculo extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_btnPesquisarActionPerformed
 
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        
+        int linha = tabResultado.getSelectedRow();
+        if(linha<0){
+            JOptionPane.showMessageDialog(this, "Um veículo deve estar selecionado!");
+            return;
+        }
+        long id = Long.parseLong(tabResultado.getValueAt(linha, 0).toString());
+        
+        VeiculoRepositorio veiculo = RepositorioBuilder.getVeiculoRepositorio();
+        
+        Veiculo obj = veiculo.abrir(id);
+        
+        TelaEditarVeiculo nova = new TelaEditarVeiculo();
+        this.getParent().add(nova);
+        nova.setVisible(true);
+        this.setVisible(false); 
+        nova.pos.setTamanho(nova);
+        nova.setEntidade(obj);        
+        nova.setTelaVeiculo(this);
+    }//GEN-LAST:event_btnEditarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnEditar;
+    private javax.swing.JButton btnNovo;
     private javax.swing.JButton btnPesquisar;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton5;
+    private javax.swing.JButton btnRelatorio;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
