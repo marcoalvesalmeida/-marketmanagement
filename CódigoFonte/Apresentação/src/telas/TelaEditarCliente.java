@@ -3,6 +3,7 @@ import br.edu.ifnmg.marketmanagement.aplicacao.Cliente;
 import br.edu.ifnmg.marketmanagement.aplicacao.ClienteRepositorio;
 import br.edu.ifnmg.marketmanagement.aplicacao.RepositorioBuilder;
 import br.edu.ifnmg.marketmanagement.aplicacao.ViolacaoRegraNegocioException;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -10,7 +11,6 @@ import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-
 /**
  *
  * @author guilherme
@@ -20,14 +20,10 @@ public class TelaEditarCliente extends javax.swing.JInternalFrame{
      * Creates new form TelaEditarClientes
      */
     public TelaEditarCliente() {
-        initComponents();
-        
-        
-        
+        initComponents();  
     }
     
-    Cliente entidade;
-    
+    Cliente entidade;    
     TelaCliente telaBusca;
 
     public Cliente getEntidade() {
@@ -41,15 +37,17 @@ public class TelaEditarCliente extends javax.swing.JInternalFrame{
         txtEmail.setText(entidade.getEmail());
         txtTelefone.setText(entidade.getTelefone());
         txtRg.setText(entidade.getRg());
-        System.out.println(entidade.getDataNascimento());
-        SimpleDateFormat formatoBR = new SimpleDateFormat("dd/MM/yyyy");            
+        txtCelular.setText(entidade.getCelular());
+        txtSaldoCompras.setText(entidade.getSaldoCompras().toString());
+        txtDescontos.setText(entidade.getDescontos().toString());
+        txtInfo.setText(entidade.getInformacoesAdicionais());        
+        /*SimpleDateFormat formatoBR = new SimpleDateFormat("dd/MM/yyyy");            
         String h;
         h =  entidade.getDataNascimento().toString();
         java.sql.Date data;
-      
         String udata = formatoBR.format(h);
         System.out.println(h);        
-        txtDataNascimento.setText(udata);        
+        txtDataNascimento.setText(udata); */       
     }
 
     public TelaCliente getTelaBusca() {
@@ -65,16 +63,19 @@ public class TelaEditarCliente extends javax.swing.JInternalFrame{
         entidade.setCpf(txtCpf.getText());  
         entidade.setRg(txtRg.getText());
         entidade.setTelefone(txtTelefone.getText());  
-        entidade.setEmail(txtEmail.getText());    
-        SimpleDateFormat formatoBR = new SimpleDateFormat("dd/MM/yyyy"); 
+        entidade.setEmail(txtEmail.getText());  
+        entidade.setCelular(txtCelular.getText());
+        entidade.setDescontos(new BigDecimal (txtDescontos.getText()));
+        entidade.setSaldoCompras(new BigDecimal (txtSaldoCompras.getText()));
+        entidade.setInformacoesAdicionais(txtInfo.getText());
+       /* SimpleDateFormat formatoBR = new SimpleDateFormat("dd/MM/yyyy"); 
         String datas = txtDataNascimento.getText();
         Date data;
         data = (Date) formatoBR.parse(datas);
         System.out.println(data);
-      //  data = formatoBR.format(data);
+        data = formatoBR.format(data);
         entidade.setDataNascimento(data);
-        
-
+        */
     }
 
     /**
@@ -96,7 +97,7 @@ public class TelaEditarCliente extends javax.swing.JInternalFrame{
         jLabel5 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
         txtTelefone = new javax.swing.JTextField();
-        jTextField13 = new javax.swing.JTextField();
+        txtCelular = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
         jTextField3 = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
@@ -112,18 +113,19 @@ public class TelaEditarCliente extends javax.swing.JInternalFrame{
         txtEmail = new javax.swing.JTextField();
         jLabel22 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        txtInfo = new javax.swing.JTextArea();
         jLabel23 = new javax.swing.JLabel();
-        jTextField20 = new javax.swing.JTextField();
+        txtSaldoCompras = new javax.swing.JTextField();
         jLabel24 = new javax.swing.JLabel();
-        jTextField21 = new javax.swing.JTextField();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        txtDescontos = new javax.swing.JTextField();
+        btnImprimir = new javax.swing.JButton();
+        btnSair = new javax.swing.JButton();
+        btnSalvar = new javax.swing.JButton();
         jLabel87 = new javax.swing.JLabel();
         txtDataNascimento = new javax.swing.JTextField();
 
         setClosable(true);
+        setTitle("Editar Cliente");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Informações Básicas", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 12), new java.awt.Color(0, 0, 0))); // NOI18N
 
@@ -170,9 +172,9 @@ public class TelaEditarCliente extends javax.swing.JInternalFrame{
         jLabel22.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         jLabel22.setText("Informações Adicionais:");
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        txtInfo.setColumns(20);
+        txtInfo.setRows(5);
+        jScrollPane1.setViewportView(txtInfo);
 
         jLabel23.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         jLabel23.setText("Saldo para Compras:");
@@ -180,22 +182,22 @@ public class TelaEditarCliente extends javax.swing.JInternalFrame{
         jLabel24.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         jLabel24.setText("Descontos:");
 
-        jButton3.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
-        jButton3.setText("Imprimir Ficha");
+        btnImprimir.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
+        btnImprimir.setText("Imprimir Ficha");
 
-        jButton4.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
-        jButton4.setText("Sair");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        btnSair.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
+        btnSair.setText("Sair");
+        btnSair.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                btnSairActionPerformed(evt);
             }
         });
 
-        jButton5.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
-        jButton5.setText("Salvar");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        btnSalvar.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
+        btnSalvar.setText("Salvar");
+        btnSalvar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                btnSalvarActionPerformed(evt);
             }
         });
 
@@ -208,11 +210,11 @@ public class TelaEditarCliente extends javax.swing.JInternalFrame{
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(78, 78, 78)
-                .addComponent(jButton3)
+                .addComponent(btnImprimir)
                 .addGap(83, 83, 83)
-                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnSair, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(88, 88, 88))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(21, 21, 21)
@@ -236,7 +238,7 @@ public class TelaEditarCliente extends javax.swing.JInternalFrame{
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel13)
-                            .addComponent(jTextField13)))
+                            .addComponent(txtCelular)))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
@@ -279,8 +281,8 @@ public class TelaEditarCliente extends javax.swing.JInternalFrame{
                                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                         .addComponent(jLabel24)
                                         .addComponent(jLabel23, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jTextField20)
-                                        .addComponent(jTextField21)))
+                                        .addComponent(txtSaldoCompras)
+                                        .addComponent(txtDescontos)))
                                 .addGroup(jPanel1Layout.createSequentialGroup()
                                     .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 409, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGap(43, 43, 43)
@@ -309,7 +311,7 @@ public class TelaEditarCliente extends javax.swing.JInternalFrame{
                                     .addComponent(txtRg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jButton2)
                                     .addComponent(txtTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTextField13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(txtCelular, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel13)
                                 .addGap(41, 41, 41)))
@@ -348,16 +350,16 @@ public class TelaEditarCliente extends javax.swing.JInternalFrame{
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel23)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField20, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtSaldoCompras, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel24)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField21, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(txtDescontos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnImprimir, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSair, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -377,12 +379,12 @@ public class TelaEditarCliente extends javax.swing.JInternalFrame{
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void btnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairActionPerformed
         this.setVisible(false);
         this.telaBusca.setVisible(true);
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_btnSairActionPerformed
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
         if(JOptionPane.showConfirmDialog(this, "Deseja realmente salvar os dados ?", "Confirmação", JOptionPane.YES_NO_OPTION)==0){
             try {
                 carregaObjeto();
@@ -398,14 +400,14 @@ public class TelaEditarCliente extends javax.swing.JInternalFrame{
             }
           
         }
-    }//GEN-LAST:event_jButton5ActionPerformed
+    }//GEN-LAST:event_btnSalvarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnImprimir;
+    private javax.swing.JButton btnSair;
+    private javax.swing.JButton btnSalvar;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
@@ -423,20 +425,20 @@ public class TelaEditarCliente extends javax.swing.JInternalFrame{
     private javax.swing.JLabel jLabel87;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField13;
     private javax.swing.JTextField jTextField14;
     private javax.swing.JTextField jTextField15;
     private javax.swing.JTextField jTextField16;
     private javax.swing.JTextField jTextField17;
-    private javax.swing.JTextField jTextField20;
-    private javax.swing.JTextField jTextField21;
     private javax.swing.JTextField jTextField3;
+    private javax.swing.JTextField txtCelular;
     private javax.swing.JTextField txtCpf;
     private javax.swing.JTextField txtDataNascimento;
+    private javax.swing.JTextField txtDescontos;
     private javax.swing.JTextField txtEmail;
+    private javax.swing.JTextArea txtInfo;
     private javax.swing.JTextField txtNome;
     private javax.swing.JTextField txtRg;
+    private javax.swing.JTextField txtSaldoCompras;
     private javax.swing.JTextField txtTelefone;
     // End of variables declaration//GEN-END:variables
 }

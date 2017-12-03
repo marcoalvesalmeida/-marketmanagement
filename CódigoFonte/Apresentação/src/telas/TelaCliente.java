@@ -244,6 +244,7 @@ public class TelaCliente extends javax.swing.JInternalFrame {
         
         Cliente obj = clientes.abrir(id);
         
+                
         TelaEditarCliente tela = new TelaEditarCliente();
         this.getParent().add(tela);
         tela.setVisible(true);
