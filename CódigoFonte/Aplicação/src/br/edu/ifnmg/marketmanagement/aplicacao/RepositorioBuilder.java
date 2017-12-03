@@ -76,4 +76,23 @@ public class RepositorioBuilder {
         return cliente;
     }
     
+    private static FornecedorRepositorio fornecedor;
+    
+    public static FornecedorRepositorio getFornecedorRepositorio(){
+        if(fornecedor == null){
+            try {
+                
+                // Carrega a classe
+                Class obj = Class.forName(prop.getProperty("FornecedorRepositorio"));
+                
+                // Cria uma nova instância da classe
+                fornecedor = (FornecedorRepositorio)obj.newInstance();
+                
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+                Logger.getLogger(RepositorioBuilder.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return fornecedor;
+    }
+    
 }
