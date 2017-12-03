@@ -168,6 +168,11 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
         subMenuCadClientes.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.ALT_MASK));
         subMenuCadClientes.setText("Clientes");
+        subMenuCadClientes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                subMenuCadClientesActionPerformed(evt);
+            }
+        });
         menuCadastros.add(subMenuCadClientes);
 
         subMenuCadFornecedores.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.ALT_MASK));
@@ -253,7 +258,9 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void subMenuCadFornecedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subMenuCadFornecedoresActionPerformed
-        // TODO add your handling code here:
+        TelaFornecedores nova = new TelaFornecedores();
+         Desktop.add(nova);
+        nova.setVisible(true);
     }//GEN-LAST:event_subMenuCadFornecedoresActionPerformed
 
     private void jMenu6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu6ActionPerformed
@@ -319,6 +326,12 @@ public class MenuPrincipal extends javax.swing.JFrame {
         cat.setVisible(true);
  
     }//GEN-LAST:event_jMenuItem5ActionPerformed
+
+    private void subMenuCadClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subMenuCadClientesActionPerformed
+        TelaCliente cli = new TelaCliente();
+        Desktop.add(cli);
+        cli.setVisible(true);
+    }//GEN-LAST:event_subMenuCadClientesActionPerformed
 
     /**
      * @param args the command line arguments

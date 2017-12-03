@@ -1,28 +1,19 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package telas;
-
 import br.edu.ifnmg.marketmanagement.aplicacao.Cliente;
 import br.edu.ifnmg.marketmanagement.aplicacao.ClienteRepositorio;
 import br.edu.ifnmg.marketmanagement.aplicacao.RepositorioBuilder;
 import br.edu.ifnmg.marketmanagement.aplicacao.ViolacaoRegraNegocioException;
-import br.edu.ifnmg.marketmanagement.persistencia.ClienteDAO;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-
 /**
  *
- * @author marco
+ * @author guilherme
  */
 public class TelaCliente extends javax.swing.JInternalFrame {
-
     /**
      * Creates new form TelaCliente
      */
@@ -30,7 +21,6 @@ public class TelaCliente extends javax.swing.JInternalFrame {
         initComponents();
         rdNome.setSelected(true);
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -206,7 +196,7 @@ public class TelaCliente extends javax.swing.JInternalFrame {
 
     private void btnPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarActionPerformed
         try {
-            ClienteRepositorio clientes = new ClienteDAO();            
+            ClienteRepositorio clientes = RepositorioBuilder.getClienteRepositorio();          
             Cliente filtro = new Cliente();            
             if(!txtBusca.getText().isEmpty())
                 filtro.setNome(txtBusca.getText());
@@ -221,8 +211,7 @@ public class TelaCliente extends javax.swing.JInternalFrame {
             modelo.addColumn("CPF");
             modelo.addColumn("RG");
             modelo.addColumn("TELEFONE");
-            modelo.addColumn("EMAIL");        
-
+            modelo.addColumn("EMAIL");     
             
             for(Cliente c : resultado){
                 Vector valores = new Vector();
@@ -239,15 +228,10 @@ public class TelaCliente extends javax.swing.JInternalFrame {
             
         } catch (ViolacaoRegraNegocioException ex) {
             Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-     
-        
+        }     
     }//GEN-LAST:event_btnPesquisarActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        
-        
         int linha = tbClientes.getSelectedRow();
         if(linha <0){
             JOptionPane.showMessageDialog(rootPane, "É necessário selecionar um cliente!");

@@ -1,26 +1,32 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package telas;
-
 import br.edu.ifnmg.marketmanagement.aplicacao.Cliente;
+import br.edu.ifnmg.marketmanagement.aplicacao.ClienteRepositorio;
+import br.edu.ifnmg.marketmanagement.aplicacao.RepositorioBuilder;
+import br.edu.ifnmg.marketmanagement.aplicacao.ViolacaoRegraNegocioException;
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
- * @author marco
+ * @author guilherme
  */
-public class TelaEditarCliente extends javax.swing.JInternalFrame {
-
+public class TelaEditarCliente extends javax.swing.JInternalFrame{
     /**
      * Creates new form TelaEditarClientes
      */
     public TelaEditarCliente() {
         initComponents();
+        
+        
+        
     }
     
-     Cliente entidade;
+    Cliente entidade;
     
     TelaCliente telaBusca;
 
@@ -35,8 +41,15 @@ public class TelaEditarCliente extends javax.swing.JInternalFrame {
         txtEmail.setText(entidade.getEmail());
         txtTelefone.setText(entidade.getTelefone());
         txtRg.setText(entidade.getRg());
-        
-        
+        System.out.println(entidade.getDataNascimento());
+        SimpleDateFormat formatoBR = new SimpleDateFormat("dd/MM/yyyy");            
+        String h;
+        h =  entidade.getDataNascimento().toString();
+        java.sql.Date data;
+      
+        String udata = formatoBR.format(h);
+        System.out.println(h);        
+        txtDataNascimento.setText(udata);        
     }
 
     public TelaCliente getTelaBusca() {
@@ -45,6 +58,23 @@ public class TelaEditarCliente extends javax.swing.JInternalFrame {
 
     public void setTelaBusca(TelaCliente telaBusca) {
         this.telaBusca = telaBusca;
+    }
+    
+    private void carregaObjeto() throws ViolacaoRegraNegocioException, ParseException{        
+        entidade.setNome(txtNome.getText());        
+        entidade.setCpf(txtCpf.getText());  
+        entidade.setRg(txtRg.getText());
+        entidade.setTelefone(txtTelefone.getText());  
+        entidade.setEmail(txtEmail.getText());    
+        SimpleDateFormat formatoBR = new SimpleDateFormat("dd/MM/yyyy"); 
+        String datas = txtDataNascimento.getText();
+        Date data;
+        data = (Date) formatoBR.parse(datas);
+        System.out.println(data);
+      //  data = formatoBR.format(data);
+        entidade.setDataNascimento(data);
+        
+
     }
 
     /**
@@ -91,7 +121,7 @@ public class TelaEditarCliente extends javax.swing.JInternalFrame {
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jLabel87 = new javax.swing.JLabel();
-        jTextField71 = new javax.swing.JTextField();
+        txtDataNascimento = new javax.swing.JTextField();
 
         setClosable(true);
 
@@ -163,6 +193,11 @@ public class TelaEditarCliente extends javax.swing.JInternalFrame {
 
         jButton5.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         jButton5.setText("Salvar");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         jLabel87.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         jLabel87.setText("Nascimento:");
@@ -200,9 +235,7 @@ public class TelaEditarCliente extends javax.swing.JInternalFrame {
                             .addComponent(txtTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel13)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jLabel13)
                             .addComponent(jTextField13)))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -251,7 +284,7 @@ public class TelaEditarCliente extends javax.swing.JInternalFrame {
                                 .addGroup(jPanel1Layout.createSequentialGroup()
                                     .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 409, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGap(43, 43, 43)
-                                    .addComponent(jTextField71))))))
+                                    .addComponent(txtDataNascimento))))))
                 .addGap(32, 32, 32))
         );
         jPanel1Layout.setVerticalGroup(
@@ -304,7 +337,7 @@ public class TelaEditarCliente extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField71, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txtDataNascimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jLabel87))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -349,6 +382,24 @@ public class TelaEditarCliente extends javax.swing.JInternalFrame {
         this.telaBusca.setVisible(true);
     }//GEN-LAST:event_jButton4ActionPerformed
 
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        if(JOptionPane.showConfirmDialog(this, "Deseja realmente salvar os dados ?", "Confirmação", JOptionPane.YES_NO_OPTION)==0){
+            try {
+                carregaObjeto();
+                ClienteRepositorio clientes = RepositorioBuilder.getClienteRepositorio();
+                if(clientes.salvar(entidade))
+                    JOptionPane.showMessageDialog(rootPane, "Dados salvos com sucesso!");
+                else  
+                    JOptionPane.showMessageDialog(rootPane, "Falha ao salvar os dados! Informe o administrador do sistema.");
+            } catch (ViolacaoRegraNegocioException ex) {
+                JOptionPane.showMessageDialog(rootPane, ex.getMessage());
+            } catch (ParseException ex) {
+                Logger.getLogger(TelaEditarCliente.class.getName()).log(Level.SEVERE, null, ex);
+            }
+          
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton2;
@@ -381,8 +432,8 @@ public class TelaEditarCliente extends javax.swing.JInternalFrame {
     private javax.swing.JTextField jTextField20;
     private javax.swing.JTextField jTextField21;
     private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField71;
     private javax.swing.JTextField txtCpf;
+    private javax.swing.JTextField txtDataNascimento;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtNome;
     private javax.swing.JTextField txtRg;
