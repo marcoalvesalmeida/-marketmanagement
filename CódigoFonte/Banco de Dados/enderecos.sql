@@ -4,7 +4,6 @@ create table if not exists enderecos (
     cep varchar (8),
     numero int,
     bairro varchar (50),
-    complemento varchar (15),
     cidade varchar (50),
     uf varchar (2)   
 );

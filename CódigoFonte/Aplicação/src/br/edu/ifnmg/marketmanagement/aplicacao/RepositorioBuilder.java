@@ -57,7 +57,7 @@ public class RepositorioBuilder {
         return veiculo;
     }
     
-     private static ClienteRepositorio cliente;
+    private static ClienteRepositorio cliente;
     
     public static ClienteRepositorio getClienteRepositorio(){
         if(cliente == null){
@@ -93,6 +93,25 @@ public class RepositorioBuilder {
             }
         }
         return fornecedor;
+    }
+    
+    private static EnderecoRepositorio endereco;
+    
+    public static EnderecoRepositorio getEnderecoRepositorio(){
+        if(endereco == null){
+            try {
+                
+                // Carrega a classe
+                Class obj = Class.forName(prop.getProperty("EnderecoRepositorio"));
+                
+                // Cria uma nova instância da classe
+                endereco = (EnderecoRepositorio)obj.newInstance();
+                
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+                Logger.getLogger(RepositorioBuilder.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return endereco;
     }
     
 }
