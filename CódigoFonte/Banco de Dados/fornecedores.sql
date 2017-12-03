@@ -5,7 +5,7 @@ create table if not exists fornecedores (
     inscricaoSocial varchar (11),
     endereco int,
     telefone varchar (11),
-    telefone2 varchar (11),
+    telefone2 varchar (12),
 	email varchar (50),
 	informacoesAdicionais text,
 	ativo boolean,
