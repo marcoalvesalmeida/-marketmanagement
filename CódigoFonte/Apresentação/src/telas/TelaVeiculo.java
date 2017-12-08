@@ -5,6 +5,7 @@
  */
 package telas;
 
+import br.edu.ifnmg.marketmanagement.aplicacao.EnumTipoVeiculo;
 import br.edu.ifnmg.marketmanagement.aplicacao.RepositorioBuilder;
 import br.edu.ifnmg.marketmanagement.aplicacao.Veiculo;
 import br.edu.ifnmg.marketmanagement.aplicacao.VeiculoRepositorio;
@@ -326,15 +327,15 @@ public class TelaVeiculo extends javax.swing.JInternalFrame{
             VeiculoRepositorio veiculos = RepositorioBuilder.getVeiculoRepositorio();
             
             Veiculo filtro = new Veiculo();
-            
             if(!txtPesquisa.getText().isEmpty() && txtPesquisa!=null && !rdTodos.isSelected()){
                 if(rdPlaca.isSelected())
                     filtro.setPlaca(txtPesquisa.getText());
                 else if(rdAno.isSelected())
                     filtro.setAnoFab(Integer.parseInt(txtPesquisa.getText()));
-                //else if(rdMarca.isSelected())
-                    //filtro.setMarca(txtPesquisa.getText());
-                else if(rdModelo.isSelected())
+                else if(rdMarca.isSelected()){
+                    String tipo = txtPesquisa.getText().trim();
+                    filtro.setTipo(EnumTipoVeiculo.valueOf(tipo));
+                 }else if(rdModelo.isSelected())
                     filtro.setModelo(txtPesquisa.getText());  
             }
            

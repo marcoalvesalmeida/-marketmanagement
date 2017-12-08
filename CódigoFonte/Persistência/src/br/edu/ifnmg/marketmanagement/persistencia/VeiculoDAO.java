@@ -51,10 +51,6 @@ public class VeiculoDAO extends DAOGenerico<Veiculo> implements VeiculoRepositor
     protected String carregaParametrosBusca(Veiculo obj) {
         String sql = "";
 
-        if (obj.getId() > 0) {
-            sql = this.filtrarPor(sql, "id", Long.toString(obj.getId()));
-        }
-
         if (obj.getPlaca() != null && !obj.getPlaca().isEmpty()) {
             sql = this.filtrarPor(sql, "placa", obj.getPlaca().replace("-", ""));
         }
@@ -63,9 +59,12 @@ public class VeiculoDAO extends DAOGenerico<Veiculo> implements VeiculoRepositor
             sql = this.filtrarPor(sql, "modelo", obj.getModelo());
         }
 
-        //Implementar por ano
-        if (obj.getMarca() != null) {
-            sql = this.filtrarPor(sql, "marca", obj.getMarca().toString());
+        if (obj.getAnoFab()>0) {
+            sql = this.filtrarPor(sql, "anofab", Long.toString(obj.getAnoFab()));
+        }
+        
+        if (obj.getTipo() != null) {
+            sql = this.filtrarPor(sql, "tipo", obj.getTipo().toString());
         }
         return sql;
     }
