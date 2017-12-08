@@ -30,6 +30,26 @@ public class Veiculo implements Entidade{
         this.observacoes = observacoes;
     }
 
+    public Veiculo(long id, String modelo, String placa, String chassi, long anoFab, String observacoes) {
+        this.id = id;
+        this.modelo = modelo;
+        this.placa = placa;
+        this.chassi = chassi;
+        this.anoFab = anoFab;
+        this.observacoes = observacoes;
+    }
+
+    public Veiculo(String modelo, String placa, String chassi, EnumTipoVeiculo tipo, long anoFab, EnumMarcaVeiculo marca, EnumCombustivel combustivel, String observacoes) {
+        this.modelo = modelo;
+        this.placa = placa;
+        this.chassi = chassi;
+        this.tipo = tipo;
+        this.anoFab = anoFab;
+        this.marca = marca;
+        this.combustivel = combustivel;
+        this.observacoes = observacoes;
+    }
+
     public Veiculo(long id, String modelo, String placa) {
         this.id = id;
         this.modelo = modelo;
@@ -155,8 +175,7 @@ public class Veiculo implements Entidade{
 
     @Override
     public String toString() {
-        return "Veiculo{" + "modelo=" + modelo + ", placa=" + placa + ", observacoes=" + observacoes + '}';
+        return "Veiculo{" + "id=" + id + ", modelo=" + modelo + ", placa=" + placa + ", chassi=" + chassi + ", tipo=" + tipo + ", anoFab=" + anoFab + ", marca=" + marca + ", combustivel=" + combustivel + ", observacoes=" + observacoes + '}';
     }
-
    
 }
