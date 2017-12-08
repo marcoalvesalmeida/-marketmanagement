@@ -95,7 +95,7 @@ public abstract class DAOGenerico<T extends Entidade> implements Repositorio<T> 
     @Override
     public boolean apagar(T obj) {
         try {
-            // Pega a consulta para abrir (select)
+            // Pega a consulta para excluir (delete)
             String sql = this.consultaDelete();
 
             // Utilizando a conexão aberta, cria um Statement (comando)

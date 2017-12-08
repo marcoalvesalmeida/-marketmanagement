@@ -5,6 +5,9 @@
  */
 package br.edu.ifnmg.marketmanagement.persistencia;
 
+import br.edu.ifnmg.marketmanagement.aplicacao.EnumCombustivel;
+import br.edu.ifnmg.marketmanagement.aplicacao.EnumMarcaVeiculo;
+import br.edu.ifnmg.marketmanagement.aplicacao.EnumTipoVeiculo;
 import br.edu.ifnmg.marketmanagement.aplicacao.Veiculo;
 import br.edu.ifnmg.marketmanagement.aplicacao.VeiculoRepositorio;
 import java.sql.PreparedStatement;
@@ -43,23 +46,27 @@ public class VeiculoDAO extends DAOGenerico<Veiculo> implements VeiculoRepositor
     protected String consultaBuscar() {
         return "select  * from veiculo";
     }
+
     @Override
-    protected String carregaParametrosBusca(Veiculo obj){
+    protected String carregaParametrosBusca(Veiculo obj) {
         String sql = "";
-        
-        if(obj.getId() > 0)
-            sql = this.filtrarPor(sql, "id", Long.toString( obj.getId() ));
-        
-        if(obj.getPlaca() != null && !obj.getPlaca().isEmpty())
+
+        if (obj.getId() > 0) {
+            sql = this.filtrarPor(sql, "id", Long.toString(obj.getId()));
+        }
+
+        if (obj.getPlaca() != null && !obj.getPlaca().isEmpty()) {
             sql = this.filtrarPor(sql, "placa", obj.getPlaca().replace("-", ""));
-        
-        if(obj.getModelo() != null && !obj.getModelo().isEmpty())
-            sql = this.filtrarPor(sql, "modelo", obj.getModelo());        
-                
+        }
+
+        if (obj.getModelo() != null && !obj.getModelo().isEmpty()) {
+            sql = this.filtrarPor(sql, "modelo", obj.getModelo());
+        }
+
         //Implementar por ano
-                        
-        if(obj.getMarca() != null)
+        if (obj.getMarca() != null) {
             sql = this.filtrarPor(sql, "marca", obj.getMarca().toString());
+        }
         return sql;
     }
 
@@ -67,14 +74,13 @@ public class VeiculoDAO extends DAOGenerico<Veiculo> implements VeiculoRepositor
     protected void carregaParametros(Veiculo obj, PreparedStatement consulta) {
         try {
             if (obj.getId() > 0) {
-                //consulta.setLong(9, obj.getId());
-                System.out.println("Editar");
+                consulta.setLong(9, obj.getId());
             } else {
                 consulta.setString(1, obj.getModelo());
                 consulta.setString(2, obj.getPlaca());
                 consulta.setString(3, obj.getChassi());
                 consulta.setString(4, obj.getTipo().toString());
-                consulta.setInt(5, (int) obj.getAnoFab());
+                consulta.setLong(5, obj.getAnoFab());
                 consulta.setString(6, obj.getMarca().toString());
                 consulta.setString(7, obj.getCombustivel().toString());
                 consulta.setString(8, obj.getObservacoes());
@@ -88,13 +94,18 @@ public class VeiculoDAO extends DAOGenerico<Veiculo> implements VeiculoRepositor
     @Override
     protected Veiculo carregaObjeto(ResultSet dados) {
         try {
-            Veiculo obj = new Veiculo(
+            Veiculo obj;
+            obj = new Veiculo(
                     dados.getLong("id"), 
-                    dados.getString("modelo"), 
+                    dados.getString("modelo"),
                     dados.getString("placa"),
-                    dados.getString("tipo"),
+                    dados.getString("chassi"),
+                    EnumTipoVeiculo.valueOf(dados.getString("tipo")),                    
                     dados.getLong("anoFab"),
-                    dados.getString("observacoes"));
+                    EnumMarcaVeiculo.valueOf(dados.getString("marca")),
+                    EnumCombustivel.valueOf(dados.getString("combustivel")),
+                    dados.getString("observacoes")
+            );
             return obj;
         } catch (SQLException ex) {
             Logger.getLogger(VeiculoDAO.class.getName()).log(Level.SEVERE, null, ex);
