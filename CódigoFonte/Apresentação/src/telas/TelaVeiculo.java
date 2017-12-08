@@ -30,22 +30,12 @@ public class TelaVeiculo extends javax.swing.JInternalFrame{
     private MaskFormatter maskAno;
     private MaskFormatter maskModelo;
     private MaskFormatter maskMarca;
-
-    
     /**
      * Creates new form TelaVeiculoInternal
      */
     public TelaVeiculo() throws ParseException {
         initComponents();
-        rdGrupo.add(rdPlaca);
-        rdGrupo.add(rdAno);
-        rdGrupo.add(rdModelo);
-        rdGrupo.add(rdMarca);
-        
-    }
-
-    public final void setMascara(String mascara) throws ParseException {
-        txtPesquisa.setFormatterFactory(new DefaultFormatterFactory(new MaskFormatter(mascara)));
+        groupRadio();        
     }
 
     /**
@@ -62,12 +52,13 @@ public class TelaVeiculo extends javax.swing.JInternalFrame{
         btnEditar = new javax.swing.JButton();
         btnNovo = new javax.swing.JButton();
         btnRelatorio = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
+        lblPesquisa = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         rdPlaca = new javax.swing.JRadioButton();
         rdModelo = new javax.swing.JRadioButton();
         rdMarca = new javax.swing.JRadioButton();
         rdAno = new javax.swing.JRadioButton();
+        rdTodos = new javax.swing.JRadioButton();
         txtPesquisa = new javax.swing.JFormattedTextField();
         btnPesquisar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -95,9 +86,14 @@ public class TelaVeiculo extends javax.swing.JInternalFrame{
 
         btnRelatorio.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         btnRelatorio.setText("Relatório");
+        btnRelatorio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRelatorioActionPerformed(evt);
+            }
+        });
 
-        jLabel1.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
-        jLabel1.setText("Pesquisar Veiculo por Placa:");
+        lblPesquisa.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
+        lblPesquisa.setText("Pesquisar Veiculo:");
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(191, 191, 191)), "", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 12), new java.awt.Color(131, 128, 128)), "Modos de Pesquisa", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 12), new java.awt.Color(4, 2, 2))); // NOI18N
 
@@ -112,6 +108,9 @@ public class TelaVeiculo extends javax.swing.JInternalFrame{
 
         rdAno.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         rdAno.setText("Ano");
+
+        rdTodos.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
+        rdTodos.setText("Todos");
 
          // cria as mascaras e já a deixa pronta pra uso
         try {
@@ -128,6 +127,7 @@ public class TelaVeiculo extends javax.swing.JInternalFrame{
             @Override
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
+                    txtPesquisa.setEnabled(true);
                     txtPesquisa.setValue(null);
                     txtPesquisa.setFormatterFactory(new DefaultFormatterFactory(maskPlaca));
                 }
@@ -138,6 +138,7 @@ public class TelaVeiculo extends javax.swing.JInternalFrame{
             @Override
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
+                    txtPesquisa.setEnabled(true);
                     txtPesquisa.setValue(null);
                     txtPesquisa.setFormatterFactory(new DefaultFormatterFactory(maskAno));
                 }
@@ -148,6 +149,7 @@ public class TelaVeiculo extends javax.swing.JInternalFrame{
             @Override
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
+                    txtPesquisa.setEnabled(true);
                     txtPesquisa.setValue(null);
                     txtPesquisa.setFormatterFactory(new DefaultFormatterFactory(maskMarca));
                 }
@@ -158,11 +160,23 @@ public class TelaVeiculo extends javax.swing.JInternalFrame{
             @Override
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
+                    txtPesquisa.setEnabled(true);
                     txtPesquisa.setValue(null);
                     txtPesquisa.setFormatterFactory(new DefaultFormatterFactory(maskModelo));
                 }
             }
         });
+
+        rdTodos.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    txtPesquisa.setEnabled(false);
+                    txtPesquisa.setValue(null);
+                }
+            }
+        });
+
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -171,28 +185,30 @@ public class TelaVeiculo extends javax.swing.JInternalFrame{
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(rdPlaca)
-                    .addComponent(rdModelo))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(rdMarca)
-                    .addComponent(rdAno))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(rdPlaca)
+                            .addComponent(rdModelo))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(rdMarca)
+                            .addComponent(rdAno)))
+                    .addComponent(rdTodos))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(rdMarca)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(rdAno))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(rdPlaca)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(rdModelo)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(rdMarca)
+                    .addComponent(rdPlaca))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(rdAno)
+                    .addComponent(rdModelo))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(rdTodos)
+                .addContainerGap())
         );
 
         btnPesquisar.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
@@ -218,7 +234,7 @@ public class TelaVeiculo extends javax.swing.JInternalFrame{
                         .addComponent(btnRelatorio, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(26, 26, 26)
                         .addComponent(btnPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel1)
+                    .addComponent(lblPesquisa)
                     .addComponent(txtPesquisa, javax.swing.GroupLayout.DEFAULT_SIZE, 515, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -228,20 +244,19 @@ public class TelaVeiculo extends javax.swing.JInternalFrame{
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
+                        .addComponent(lblPesquisa)
                         .addGap(4, 4, 4)
                         .addComponent(txtPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnNovo, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnRelatorio, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                            .addComponent(btnPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         tabResultado.setBorder(null);
@@ -281,13 +296,21 @@ public class TelaVeiculo extends javax.swing.JInternalFrame{
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 310, Short.MAX_VALUE)
-                .addGap(6, 6, 6))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void groupRadio(){
+        rdGrupo.add(rdPlaca);
+        rdGrupo.add(rdAno);
+        rdGrupo.add(rdModelo);
+        rdGrupo.add(rdMarca);
+        rdGrupo.add(rdTodos);
+        rdTodos.setSelected(true);
+    }
 
     private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
         TelaEditarVeiculo nova = new TelaEditarVeiculo();
@@ -304,7 +327,7 @@ public class TelaVeiculo extends javax.swing.JInternalFrame{
             
             Veiculo filtro = new Veiculo();
             
-            if(!txtPesquisa.getText().isEmpty() && txtPesquisa!=null){
+            if(!txtPesquisa.getText().isEmpty() && txtPesquisa!=null && !rdTodos.isSelected()){
                 if(rdPlaca.isSelected())
                     filtro.setPlaca(txtPesquisa.getText());
                 else if(rdAno.isSelected())
@@ -323,6 +346,7 @@ public class TelaVeiculo extends javax.swing.JInternalFrame{
             modelo.addColumn("Placa");
             modelo.addColumn("Modelo");
             modelo.addColumn("Marca");
+            modelo.addColumn("Tipo");
             modelo.addColumn("Chassi");
             modelo.addColumn("AnoFab");
             modelo.addColumn("Combustivel");
@@ -334,6 +358,7 @@ public class TelaVeiculo extends javax.swing.JInternalFrame{
                 valores.add(v.getPlaca());
                 valores.add(v.getModelo());   
                 valores.add(v.getMarca());
+                valores.add(v.getTipo());
                 valores.add(v.getChassi());
                 valores.add(v.getAnoFab());
                 valores.add(v.getCombustivel());
@@ -370,21 +395,29 @@ public class TelaVeiculo extends javax.swing.JInternalFrame{
         nova.setTelaVeiculo(this);
     }//GEN-LAST:event_btnEditarActionPerformed
 
+    private void btnRelatorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRelatorioActionPerformed
+        int linha = tabResultado.getSelectedRow();
+        if(linha<0){
+            JOptionPane.showMessageDialog(this, "Um veículo deve estar selecionado!");
+            return;
+        }
+    }//GEN-LAST:event_btnRelatorioActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnNovo;
     private javax.swing.JButton btnPesquisar;
     private javax.swing.JButton btnRelatorio;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblPesquisa;
     private javax.swing.JRadioButton rdAno;
     private javax.swing.ButtonGroup rdGrupo;
     private javax.swing.JRadioButton rdMarca;
     private javax.swing.JRadioButton rdModelo;
     private javax.swing.JRadioButton rdPlaca;
+    private javax.swing.JRadioButton rdTodos;
     private javax.swing.JTable tabResultado;
     private javax.swing.JFormattedTextField txtPesquisa;
     // End of variables declaration//GEN-END:variables
