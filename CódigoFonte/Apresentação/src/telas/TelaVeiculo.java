@@ -8,7 +8,6 @@ package telas;
 import br.edu.ifnmg.marketmanagement.aplicacao.EnumTipoVeiculo;
 import br.edu.ifnmg.marketmanagement.aplicacao.RepositorioBuilder;
 import br.edu.ifnmg.marketmanagement.aplicacao.Veiculo;
-import br.edu.ifnmg.marketmanagement.aplicacao.VeiculoRepositorio;
 import br.edu.ifnmg.marketmanagement.aplicacao.ViolacaoRegraNegocioException;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -21,22 +20,27 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
+
 /**
  *
  * @author marco
  */
-public class TelaVeiculo extends javax.swing.JInternalFrame{
+public class TelaVeiculo extends TelaBuscar<Veiculo> {
+
     protected Posicionamento pos = new Posicionamento();
     private MaskFormatter maskPlaca;
     private MaskFormatter maskAno;
     private MaskFormatter maskModelo;
-    private MaskFormatter maskMarca;
+    private MaskFormatter maskTipo;
+
     /**
      * Creates new form TelaVeiculoInternal
      */
     public TelaVeiculo() throws ParseException {
         initComponents();
-        groupRadio();        
+        setEditar(new TelaEditarVeiculo());
+        setRepositorio(RepositorioBuilder.getVeiculoRepositorio());
+        groupRadio();
     }
 
     /**
@@ -57,7 +61,7 @@ public class TelaVeiculo extends javax.swing.JInternalFrame{
         jPanel2 = new javax.swing.JPanel();
         rdPlaca = new javax.swing.JRadioButton();
         rdModelo = new javax.swing.JRadioButton();
-        rdMarca = new javax.swing.JRadioButton();
+        rdTipo = new javax.swing.JRadioButton();
         rdAno = new javax.swing.JRadioButton();
         rdTodos = new javax.swing.JRadioButton();
         txtPesquisa = new javax.swing.JFormattedTextField();
@@ -104,8 +108,8 @@ public class TelaVeiculo extends javax.swing.JInternalFrame{
         rdModelo.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         rdModelo.setText("Modelo");
 
-        rdMarca.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
-        rdMarca.setText("Marca");
+        rdTipo.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
+        rdTipo.setText("Tipo");
 
         rdAno.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         rdAno.setText("Ano");
@@ -117,7 +121,7 @@ public class TelaVeiculo extends javax.swing.JInternalFrame{
         try {
             maskPlaca = new MaskFormatter("UUU-####");
             maskAno = new MaskFormatter("####");
-            maskMarca = new MaskFormatter("***********************");
+            maskTipo = new MaskFormatter("***********************");
             maskModelo = new MaskFormatter("**********************");
         } catch (ParseException ex) {
             ex.printStackTrace();
@@ -146,13 +150,13 @@ public class TelaVeiculo extends javax.swing.JInternalFrame{
             }
         });
         
-        rdMarca.addItemListener(new ItemListener() {
+        rdTipo.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
                     txtPesquisa.setEnabled(true);
                     txtPesquisa.setValue(null);
-                    txtPesquisa.setFormatterFactory(new DefaultFormatterFactory(maskMarca));
+                    txtPesquisa.setFormatterFactory(new DefaultFormatterFactory(maskTipo));
                 }
             }
         });
@@ -192,7 +196,7 @@ public class TelaVeiculo extends javax.swing.JInternalFrame{
                             .addComponent(rdModelo))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(rdMarca)
+                            .addComponent(rdTipo)
                             .addComponent(rdAno)))
                     .addComponent(rdTodos))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -201,7 +205,7 @@ public class TelaVeiculo extends javax.swing.JInternalFrame{
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(rdMarca)
+                    .addComponent(rdTipo)
                     .addComponent(rdPlaca))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -304,101 +308,37 @@ public class TelaVeiculo extends javax.swing.JInternalFrame{
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void groupRadio(){
+    private void groupRadio() {
         rdGrupo.add(rdPlaca);
         rdGrupo.add(rdAno);
         rdGrupo.add(rdModelo);
-        rdGrupo.add(rdMarca);
+        rdGrupo.add(rdTipo);
         rdGrupo.add(rdTodos);
         rdTodos.setSelected(true);
     }
 
     private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
-        TelaEditarVeiculo nova = new TelaEditarVeiculo();
-        this.getParent().add(nova);
-        nova.setVisible(true);
-        nova.pos.setTamanho(nova);
-        nova.setTelaVeiculo(this);
-        this.setVisible(false);
+        novo();
     }//GEN-LAST:event_btnNovoActionPerformed
     private void btnPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarActionPerformed
-
-        try {
-            VeiculoRepositorio veiculos = RepositorioBuilder.getVeiculoRepositorio();
-            
-            Veiculo filtro = new Veiculo();
-            if(!txtPesquisa.getText().isEmpty() && txtPesquisa!=null && !rdTodos.isSelected()){
-                if(rdPlaca.isSelected())
-                    filtro.setPlaca(txtPesquisa.getText());
-                else if(rdAno.isSelected())
-                    filtro.setAnoFab(Integer.parseInt(txtPesquisa.getText()));
-                else if(rdMarca.isSelected()){
-                    String tipo = txtPesquisa.getText().trim();
-                    filtro.setTipo(EnumTipoVeiculo.valueOf(tipo));
-                 }else if(rdModelo.isSelected())
-                    filtro.setModelo(txtPesquisa.getText());  
-            }
-           
-            List<Veiculo> resultado = (List<Veiculo>) veiculos.buscar(filtro);
-            
-            DefaultTableModel modelo = new DefaultTableModel();
-            
-            modelo.addColumn("ID");
-            modelo.addColumn("Placa");
-            modelo.addColumn("Modelo");
-            modelo.addColumn("Marca");
-            modelo.addColumn("Tipo");
-            modelo.addColumn("Chassi");
-            modelo.addColumn("AnoFab");
-            modelo.addColumn("Combustivel");
-            modelo.addColumn("Observações");
-            
-            for(Veiculo v : resultado){
-                Vector valores = new Vector();
-                valores.add(v.getId());
-                valores.add(v.getPlaca());
-                valores.add(v.getModelo());   
-                valores.add(v.getMarca());
-                valores.add(v.getTipo());
-                valores.add(v.getChassi());
-                valores.add(v.getAnoFab());
-                valores.add(v.getCombustivel());
-                valores.add(v.getObservacoes());
-                modelo.addRow(valores);
-            }
-            
-            tabResultado.setModel(modelo);
-            
-        } catch (ViolacaoRegraNegocioException ex) {
-            Logger.getLogger(TelaVeiculo.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        buscar();
     }//GEN-LAST:event_btnPesquisarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        
+
         int linha = tabResultado.getSelectedRow();
-        if(linha<0){
+        if (linha < 0) {
             JOptionPane.showMessageDialog(this, "Um veículo deve estar selecionado!");
             return;
         }
         long id = Long.parseLong(tabResultado.getValueAt(linha, 0).toString());
-        
-        VeiculoRepositorio veiculo = RepositorioBuilder.getVeiculoRepositorio();
-        
-        Veiculo obj = veiculo.abrir(id);
-        
-        TelaEditarVeiculo nova = new TelaEditarVeiculo();
-        this.getParent().add(nova);
-        nova.setVisible(true);
-        this.setVisible(false); 
-        nova.pos.setTamanho(nova);
-        nova.setEntidade(obj);        
-        nova.setTelaVeiculo(this);
+        editar(id);
+
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnRelatorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRelatorioActionPerformed
         int linha = tabResultado.getSelectedRow();
-        if(linha<0){
+        if (linha < 0) {
             JOptionPane.showMessageDialog(this, "Um veículo deve estar selecionado!");
             return;
         }
@@ -415,12 +355,68 @@ public class TelaVeiculo extends javax.swing.JInternalFrame{
     private javax.swing.JLabel lblPesquisa;
     private javax.swing.JRadioButton rdAno;
     private javax.swing.ButtonGroup rdGrupo;
-    private javax.swing.JRadioButton rdMarca;
+    private javax.swing.JRadioButton rdTipo;
     private javax.swing.JRadioButton rdModelo;
     private javax.swing.JRadioButton rdPlaca;
     private javax.swing.JRadioButton rdTodos;
     private javax.swing.JTable tabResultado;
     private javax.swing.JFormattedTextField txtPesquisa;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    protected void preencherTabela(List<Veiculo> dados) {
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("ID");
+        modelo.addColumn("Placa");
+        modelo.addColumn("Modelo");
+        modelo.addColumn("Marca");
+        modelo.addColumn("Tipo");
+        modelo.addColumn("Chassi");
+        modelo.addColumn("AnoFab");
+        modelo.addColumn("Combustivel");
+        modelo.addColumn("Observações");
+        for (Veiculo v : dados) {
+            Vector valores = new Vector();
+            valores.add(v.getId());
+            valores.add(v.getPlaca());
+            valores.add(v.getModelo());
+            valores.add(v.getMarca());
+            valores.add(v.getTipo());
+            valores.add(v.getChassi());
+            valores.add(v.getAnoFab());
+            valores.add(v.getCombustivel());
+            valores.add(v.getObservacoes());
+            modelo.addRow(valores);
+        }
+        tabResultado.setModel(modelo);
+    }
+
+    @Override
+    protected Veiculo carregaFiltro() {
+        try {
+            Veiculo filtro = new Veiculo();
+            if (!txtPesquisa.getText().isEmpty() && txtPesquisa != null && !rdTodos.isSelected()) {
+                if (rdPlaca.isSelected()) {
+                    filtro.setPlaca(txtPesquisa.getText());
+                } else if (rdAno.isSelected()) {
+                    filtro.setAnoFab(Integer.parseInt(txtPesquisa.getText()));
+                } else if (rdTipo.isSelected()) {
+                    String tipo = txtPesquisa.getText().trim();
+                    filtro.setTipo(EnumTipoVeiculo.valueOf(tipo));
+                } else if (rdModelo.isSelected()) {
+                    filtro.setModelo(txtPesquisa.getText());
+                }
+            }            
+            return filtro;
+        } catch (ViolacaoRegraNegocioException ex) {
+            Logger.getLogger(TelaVeiculo.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    @Override
+    protected Veiculo novaEntidade() {
+        return new Veiculo();
+    }
 
 }
