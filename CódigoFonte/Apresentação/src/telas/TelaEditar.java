@@ -13,6 +13,7 @@ import javax.swing.JOptionPane;
 /**
  *
  * @author marco
+ * @param <T>
  */
 public abstract class TelaEditar<T extends Entidade> extends javax.swing.JInternalFrame{
     
@@ -56,6 +57,7 @@ public abstract class TelaEditar<T extends Entidade> extends javax.swing.JIntern
     
     protected void voltar(){
         this.getBuscar().setVisible(true);
+        this.getBuscar().pos.setTamanho(this.getBuscar());
         this.setVisible(false);
     }
     

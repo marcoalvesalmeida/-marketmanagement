@@ -3,63 +3,23 @@ package telas;
 import br.edu.ifnmg.marketmanagement.aplicacao.EnumCombustivel;
 import br.edu.ifnmg.marketmanagement.aplicacao.EnumMarcaVeiculo;
 import br.edu.ifnmg.marketmanagement.aplicacao.EnumTipoVeiculo;
+import br.edu.ifnmg.marketmanagement.aplicacao.RepositorioBuilder;
 import br.edu.ifnmg.marketmanagement.aplicacao.Veiculo;
-import br.edu.ifnmg.marketmanagement.aplicacao.VeiculoRepositorio;
 import br.edu.ifnmg.marketmanagement.aplicacao.ViolacaoRegraNegocioException;
-import br.edu.ifnmg.marketmanagement.persistencia.VeiculoDAO;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JOptionPane;
 
 /**
  *
  * @author marco
  */
-public class TelaEditarVeiculo extends javax.swing.JInternalFrame {
-
-    Posicionamento pos = new Posicionamento();
-    Veiculo entidade;
-    VeiculoRepositorio veiculos = new VeiculoDAO();
-    TelaVeiculo telaVeiculo;
-
-    public Veiculo getEntidade() {
-        return entidade;
-    }
-
-    public void setEntidade(Veiculo entidade) {
-        this.entidade = entidade;
-        txtModelo.setText(entidade.getModelo());
-        cmbCombustivel.setSelectedItem(entidade.getCombustivel());
-        txtPlaca.setText(entidade.getPlaca());
-        txtAnoFab.setText(Long.toString(entidade.getAnoFab()));
-        cmbMarca.setSelectedItem(entidade.getMarca());
-        cmbTipo.setSelectedItem(entidade.getTipo());
-        cmbCombustivel.setSelectedItem(entidade.getMarca());
-        txtChassi.setText(entidade.getChassi());
-        txtObservacoes.setText(entidade.getObservacoes());
-    }
-
-    public TelaVeiculo getTelaVeiculo() {
-        return telaVeiculo;
-    }
-
-    public void setTelaVeiculo(TelaVeiculo telaVeiculo) {
-        this.telaVeiculo = telaVeiculo;
-    }
-    
-    public void preencherCMB(){
-        cmbCombustivel.setModel(new DefaultComboBoxModel<>(EnumCombustivel.values()));
-        cmbMarca.setModel(new DefaultComboBoxModel<>(EnumMarcaVeiculo.values()));
-        cmbTipo.setModel(new DefaultComboBoxModel<>(EnumTipoVeiculo.values()));
-    }
-    
+public final class TelaEditarVeiculo extends TelaEditar<Veiculo> {
     /**
      * Creates new form TelaEditarVeiculo
      */
     public TelaEditarVeiculo() {
         initComponents();
         preencherCMB();
+        setRepositorio(RepositorioBuilder.getVeiculoRepositorio());
     }
 
     /**
@@ -282,32 +242,15 @@ public class TelaEditarVeiculo extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        try {
-            Veiculo x = new Veiculo();
-            x.setModelo(txtModelo.getText());
-            x.setPlaca(txtPlaca.getText());
-            x.setChassi(txtChassi.getText());
-            x.setTipo((EnumTipoVeiculo)cmbTipo.getSelectedItem());
-            x.setAnoFab((int) Long.parseLong(txtAnoFab.getText()));
-            x.setMarca((EnumMarcaVeiculo)cmbMarca.getSelectedItem());
-            x.setCombustivel((EnumCombustivel) cmbCombustivel.getSelectedItem());
-            x.setObservacoes(txtObservacoes.getText());
-            boolean salvar = veiculos.salvar(x);
-        } catch (ViolacaoRegraNegocioException ex) {
-            Logger.getLogger(TelaEditarVeiculo.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        salvar();
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void btnVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVoltarActionPerformed
-        this.setVisible(false);
-        telaVeiculo.setVisible(true);
+        voltar();
     }//GEN-LAST:event_btnVoltarActionPerformed
 
     private void btnDeletarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeletarActionPerformed
-        if(JOptionPane.showConfirmDialog(this, "Tem certeza que deseja deletar esse veículo?", "Atenção!", JOptionPane.YES_NO_OPTION)==1)
-            return;
-        if(veiculos.apagar(entidade))
-            JOptionPane.showMessageDialog(this, "Veículo Deletado com Sucesso!");
+        apagar();
     }//GEN-LAST:event_btnDeletarActionPerformed
 
 
@@ -334,4 +277,35 @@ public class TelaEditarVeiculo extends javax.swing.JInternalFrame {
     private javax.swing.JTextArea txtObservacoes;
     private javax.swing.JFormattedTextField txtPlaca;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    protected void carregaObjeto() throws ViolacaoRegraNegocioException {
+        entidade.setModelo(txtModelo.getText());
+        entidade.setPlaca(txtPlaca.getText());
+        entidade.setChassi(txtChassi.getText());
+        entidade.setTipo((EnumTipoVeiculo) cmbTipo.getSelectedItem());
+        entidade.setAnoFab((int) Long.parseLong(txtAnoFab.getText()));
+        entidade.setMarca((EnumMarcaVeiculo) cmbMarca.getSelectedItem());
+        entidade.setCombustivel((EnumCombustivel) cmbCombustivel.getSelectedItem());
+        entidade.setObservacoes(txtObservacoes.getText());
+    }
+    
+    @Override
+    protected void carregaCampos() {
+        txtModelo.setText(entidade.getModelo());
+        cmbCombustivel.setSelectedItem(entidade.getCombustivel());
+        txtPlaca.setText(entidade.getPlaca());
+        txtAnoFab.setText(Long.toString(entidade.getAnoFab()));
+        cmbMarca.setSelectedItem(entidade.getMarca());
+        cmbTipo.setSelectedItem(entidade.getTipo());
+        cmbCombustivel.setSelectedItem(entidade.getMarca());
+        txtChassi.setText(entidade.getChassi());
+        txtObservacoes.setText(entidade.getObservacoes());
+    }
+      
+    public void preencherCMB() {
+        cmbCombustivel.setModel(new DefaultComboBoxModel<>(EnumCombustivel.values()));
+        cmbMarca.setModel(new DefaultComboBoxModel<>(EnumMarcaVeiculo.values()));
+        cmbTipo.setModel(new DefaultComboBoxModel<>(EnumTipoVeiculo.values()));
+    }
 }

@@ -18,6 +18,7 @@ public abstract class TelaBuscar<T extends Entidade> extends javax.swing.JIntern
     private T filtro;
     private TelaEditar editar;
     private Repositorio<T> repositorio;
+    protected Posicionamento pos = new Posicionamento();
 
     public T getFiltro() {
         return filtro;
@@ -51,7 +52,7 @@ public abstract class TelaBuscar<T extends Entidade> extends javax.swing.JIntern
         editar.setEntidade(novaEntidade());
         editar.setBuscar(this);
         this.getParent().add(editar);
-        editar.pos.setTamanho(this);
+        editar.pos.setTamanho(editar);
         editar.setVisible(true);
         this.setVisible(false);
     }
