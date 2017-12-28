@@ -1,26 +1,45 @@
 package telas;
 import br.edu.ifnmg.marketmanagement.aplicacao.Cliente;
-import br.edu.ifnmg.marketmanagement.aplicacao.ClienteRepositorio;
 import br.edu.ifnmg.marketmanagement.aplicacao.RepositorioBuilder;
 import br.edu.ifnmg.marketmanagement.aplicacao.ViolacaoRegraNegocioException;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.DefaultFormatterFactory;
+import javax.swing.text.MaskFormatter;
 /**
  *
  * @author guilherme
  */
-public class TelaCliente extends javax.swing.JInternalFrame {
+public class TelaCliente extends TelaBuscar<Cliente>  {
     /**
      * Creates new form TelaCliente
      */
+    
+    //protected Posicionamento pos = new Posicionamento();
+    private MaskFormatter maskNome;
+    private MaskFormatter maskCpf;
+        private MaskFormatter maskTodos;
+
+
+    
     public TelaCliente() {
         initComponents();
-        rdNome.setSelected(true);
+        groupRadio();
+        setEditar(new TelaEditarCliente());
+        setRepositorio(RepositorioBuilder.getClienteRepositorio());
+        
+        
     }
+    DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -30,8 +49,8 @@ public class TelaCliente extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
-        txtBusca = new javax.swing.JTextField();
         btnEditar = new javax.swing.JButton();
         btnNovo = new javax.swing.JButton();
         btnPesquisar = new javax.swing.JButton();
@@ -39,7 +58,9 @@ public class TelaCliente extends javax.swing.JInternalFrame {
         jPanel2 = new javax.swing.JPanel();
         rdNome = new javax.swing.JRadioButton();
         rdCpf = new javax.swing.JRadioButton();
+        rdTodos = new javax.swing.JRadioButton();
         btnRelatorio = new javax.swing.JButton();
+        txtPesquisa = new javax.swing.JFormattedTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbClientes = new javax.swing.JTable();
 
@@ -47,8 +68,6 @@ public class TelaCliente extends javax.swing.JInternalFrame {
         setTitle("Pesquisar Cliente");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(160, 160, 160)));
-
-        txtBusca.setFont(new java.awt.Font("Trebuchet MS", 0, 12)); // NOI18N
 
         btnEditar.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         btnEditar.setText("Editar");
@@ -75,12 +94,17 @@ public class TelaCliente extends javax.swing.JInternalFrame {
         });
 
         lblPesquisa.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
-        lblPesquisa.setText("Pesquisar cadastro já existente por Nome:");
+        lblPesquisa.setText("Pesquisar cadastro já existente:");
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(158, 154, 154)), "Modos de Pesquisa"));
 
         rdNome.setFont(new java.awt.Font("Trebuchet MS", 1, 12)); // NOI18N
         rdNome.setText("Nome");
+        rdNome.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdNomeActionPerformed(evt);
+            }
+        });
 
         rdCpf.setFont(new java.awt.Font("Trebuchet MS", 1, 12)); // NOI18N
         rdCpf.setText("CPF");
@@ -90,26 +114,96 @@ public class TelaCliente extends javax.swing.JInternalFrame {
             }
         });
 
+        rdTodos.setFont(new java.awt.Font("Trebuchet MS", 1, 12)); // NOI18N
+        rdTodos.setText("Todos");
+        rdTodos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdTodosActionPerformed(evt);
+            }
+        });
+        
+   
+        
+        try {          
+            maskCpf = new MaskFormatter("###.###.###-##"); 
+            maskNome = new MaskFormatter("******************************************");
+            maskTodos = new MaskFormatter("******************************************");      
+        } catch (ParseException ex) {
+            ex.printStackTrace();
+        }
+        
+                // adiciona um listener aos radiobuttons
+        rdTodos.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    txtPesquisa.setEnabled(true);
+                    txtPesquisa.setValue(null);
+                    txtPesquisa.setFormatterFactory(new DefaultFormatterFactory(maskTodos));
+                }
+            }
+        });
+        
+                // adiciona um listener aos radiobuttons
+        rdCpf.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    txtPesquisa.setEnabled(true);
+                    txtPesquisa.setValue(null);
+                    txtPesquisa.setFormatterFactory(new DefaultFormatterFactory(maskCpf));
+                }
+            }
+        });
+        
+                // adiciona um listener aos radiobuttons
+        rdNome.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    txtPesquisa.setEnabled(true);
+                    txtPesquisa.setValue(null);
+                    txtPesquisa.setFormatterFactory(new DefaultFormatterFactory(maskNome));
+                }
+            }
+        });
+        
+        if (rdCpf.isSelected() == true)        
+			txtPesquisa.setFormatterFactory(new DefaultFormatterFactory(maskCpf));
+		if (rdTodos.isSelected() == true)
+			txtPesquisa.setFormatterFactory(new DefaultFormatterFactory(maskTodos));
+		if (rdNome.isSelected() == true)
+			txtPesquisa.setFormatterFactory(new DefaultFormatterFactory(maskNome));
+        
+        
+        
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(rdNome)
-                .addGap(85, 85, 85))
-            .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(rdCpf)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(rdTodos)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(rdCpf)
+                            .addComponent(rdNome))
+                        .addGap(20, 65, Short.MAX_VALUE))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(rdTodos)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(rdNome)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(8, 8, 8)
                 .addComponent(rdCpf)
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         btnRelatorio.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
@@ -123,17 +217,17 @@ public class TelaCliente extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(lblPesquisa)
-                    .addComponent(txtBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 515, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(btnNovo, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(15, 15, 15)
                         .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(btnRelatorio, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btnPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtPesquisa))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -145,7 +239,7 @@ public class TelaCliente extends javax.swing.JInternalFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(lblPesquisa)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtBusca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -192,73 +286,33 @@ public class TelaCliente extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 269, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void groupRadio() {
+        buttonGroup1.add(rdNome);
+        buttonGroup1.add(rdCpf);
+        buttonGroup1.add(rdTodos);
+        rdTodos.setSelected(true);
+        txtPesquisa.setEnabled(false);
+    }
+
     private void btnPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarActionPerformed
-        try {
-            ClienteRepositorio clientes = RepositorioBuilder.getClienteRepositorio();          
-            Cliente filtro = new Cliente();            
-            if(!txtBusca.getText().isEmpty())
-                filtro.setNome(txtBusca.getText());
-                       
-            List<Cliente> resultado = (List<Cliente>) clientes.buscar(filtro);
-            
-            DefaultTableModel modelo = new DefaultTableModel();
-            
-            modelo.addColumn("ID");
-            modelo.addColumn("NOME");
-            modelo.addColumn("NASCIMENTO");
-            modelo.addColumn("CPF");
-            modelo.addColumn("RG");
-            modelo.addColumn("TELEFONE");
-            modelo.addColumn("EMAIL");     
-            
-            for(Cliente c : resultado){
-                Vector valores = new Vector();
-                valores.add(c.getId());
-                valores.add(c.getNome());
-                valores.add(c.getDataNascimento());
-                valores.add(c.getCpf());
-                valores.add(c.getRg());
-                valores.add(c.getTelefone());
-                valores.add(c.getEmail());                
-                modelo.addRow(valores);
-            }            
-            tbClientes.setModel(modelo);
-            
-        } catch (ViolacaoRegraNegocioException ex) {
-            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
-        }     
+      buscar();
     }//GEN-LAST:event_btnPesquisarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         int linha = tbClientes.getSelectedRow();
-        if(linha <0){
+        if (linha < 0) {
             JOptionPane.showMessageDialog(rootPane, "É necessário selecionar um cliente!");
             return;
         }
-        
-        long id = Long.parseLong(tbClientes.getValueAt(linha, 0).toString() );
-        
-        ClienteRepositorio clientes = RepositorioBuilder.getClienteRepositorio();
-        
-        Cliente obj = clientes.abrir(id);     
-        
-        
-                
-        TelaEditarCliente tela = new TelaEditarCliente();
-        this.getParent().add(tela);
-        tela.setVisible(true);
-        this.setVisible(false);
-        
-        tela.setEntidade(obj);
-        
-        tela.setTelaBusca(this);
+        long id = Long.parseLong(tbClientes.getValueAt(linha, 0).toString());
+        editar(id);
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void rdCpfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdCpfActionPerformed
@@ -266,12 +320,17 @@ public class TelaCliente extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_rdCpfActionPerformed
 
     private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
-        TelaEditarCliente nova = new TelaEditarCliente();
-        this.getParent().add(nova);  
-        nova.setVisible(true);
-        this.setVisible(false);
-        nova.setTelaBusca(this);
+        novo();        
     }//GEN-LAST:event_btnNovoActionPerformed
+
+    private void rdNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdNomeActionPerformed
+        lblPesquisa.setText("Pesquisar cadastro já existente por Nome: ");
+    }//GEN-LAST:event_rdNomeActionPerformed
+
+    private void rdTodosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdTodosActionPerformed
+        lblPesquisa.setText("Pesquisar cadastro já existente: ");
+        txtPesquisa.setEnabled(false);
+    }//GEN-LAST:event_rdTodosActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -279,13 +338,65 @@ public class TelaCliente extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnNovo;
     private javax.swing.JButton btnPesquisar;
     private javax.swing.JButton btnRelatorio;
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblPesquisa;
     private javax.swing.JRadioButton rdCpf;
     private javax.swing.JRadioButton rdNome;
+    private javax.swing.JRadioButton rdTodos;
     private javax.swing.JTable tbClientes;
-    private javax.swing.JTextField txtBusca;
+    private javax.swing.JFormattedTextField txtPesquisa;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    protected void preencherTabela(List<Cliente> dados) {
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("ID");
+        modelo.addColumn("NOME");
+        modelo.addColumn("NASCIMENTO");
+        modelo.addColumn("CPF");
+        modelo.addColumn("RG");
+        modelo.addColumn("TELEFONE");
+        modelo.addColumn("EMAIL");
+        for (Cliente c : dados) {
+            Vector valores = new Vector();
+            valores.add(c.getId());
+            valores.add(c.getNome());
+            valores.add(df.format(c.getDataNascimento().getTime()));
+            valores.add(c.getCpf());
+            valores.add(c.getRg());
+            valores.add(c.getTelefone());
+            valores.add(c.getEmail());
+            modelo.addRow(valores);
+        }
+        tbClientes.setModel(modelo);
+    }
+
+    @Override
+    protected Cliente carregaFiltro() {
+        try{
+           
+            Cliente filtro = new Cliente();
+            if(!txtPesquisa.getText().isEmpty()){                
+                if (rdNome.isSelected()){
+                    filtro.setNome(txtPesquisa.getText());
+                }else if(rdCpf.isSelected() && txtPesquisa.getValue() != null){               
+                    filtro.setCpf(txtPesquisa.getText()); 
+                }else if (rdCpf.isSelected() && txtPesquisa.getValue()==null){
+                    filtro.setCpf("111.111.111-11");
+                }
+                return filtro;
+            }
+        }catch(ViolacaoRegraNegocioException ex){
+           Logger.getLogger(TelaCliente.class.getName()).log(Level.SEVERE, null, ex); 
+        }
+        return null;   
+    }
+
+    @Override
+    protected Cliente novaEntidade() {
+        return new Cliente();       
+    }
 }

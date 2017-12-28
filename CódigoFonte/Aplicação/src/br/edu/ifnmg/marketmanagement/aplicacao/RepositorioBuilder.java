@@ -113,5 +113,42 @@ public class RepositorioBuilder {
         }
         return endereco;
     }
+     private static ProdutoRepositorio produto;
+    
+    public static ProdutoRepositorio getProdutoRepositorio(){
+        if(produto == null){
+            try {
+                
+                // Carrega a classe
+                Class obj = Class.forName(prop.getProperty("ProdutoRepositorio"));
+                
+                // Cria uma nova instância da classe
+                produto = (ProdutoRepositorio)obj.newInstance();
+                
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+                Logger.getLogger(RepositorioBuilder.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return produto;
+    }
+    
+    private static CategoriaRepositorio categoria;
+    
+    public static CategoriaRepositorio getCategoriaRepositorio(){
+        if(categoria == null){
+            try {
+                
+                // Carrega a classe
+                Class obj = Class.forName(prop.getProperty("CategoriaRepositorio"));
+                
+                // Cria uma nova instância da classe
+                categoria = (CategoriaRepositorio)obj.newInstance();
+                
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+                Logger.getLogger(RepositorioBuilder.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return categoria;
+    }
     
 }
