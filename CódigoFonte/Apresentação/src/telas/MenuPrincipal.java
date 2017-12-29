@@ -50,7 +50,8 @@ public class MenuPrincipal extends javax.swing.JFrame {
         subMenuCadProdutos = new javax.swing.JMenuItem();
         subMenuCadClientes = new javax.swing.JMenuItem();
         subMenuCadFornecedores = new javax.swing.JMenuItem();
-        jMenuItem5 = new javax.swing.JMenuItem();
+        imenuLancamento = new javax.swing.JMenuItem();
+        menuEntregas = new javax.swing.JMenuItem();
         menuRelatorios = new javax.swing.JMenu();
         subMenuRelClientes = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
@@ -160,7 +161,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        menuCadastros.setText("Cadastros");
+        menuCadastros.setText("Gerenciar");
 
         subMenuCadProdutos.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.ALT_MASK));
         subMenuCadProdutos.setText("Produtos");
@@ -168,11 +169,6 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
         subMenuCadClientes.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.ALT_MASK));
         subMenuCadClientes.setText("Clientes");
-        subMenuCadClientes.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                subMenuCadClientesActionPerformed(evt);
-            }
-        });
         menuCadastros.add(subMenuCadClientes);
 
         subMenuCadFornecedores.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.ALT_MASK));
@@ -184,13 +180,23 @@ public class MenuPrincipal extends javax.swing.JFrame {
         });
         menuCadastros.add(subMenuCadFornecedores);
 
-        jMenuItem5.setText("Categoria ");
-        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+        imenuLancamento.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.ALT_MASK));
+        imenuLancamento.setText("Lançamentos");
+        imenuLancamento.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem5ActionPerformed(evt);
+                imenuLancamentoActionPerformed(evt);
             }
         });
-        menuCadastros.add(jMenuItem5);
+        menuCadastros.add(imenuLancamento);
+
+        menuEntregas.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.ALT_MASK));
+        menuEntregas.setText("Entregas");
+        menuEntregas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuEntregasActionPerformed(evt);
+            }
+        });
+        menuCadastros.add(menuEntregas);
 
         jMenuBar1.add(menuCadastros);
 
@@ -258,9 +264,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void subMenuCadFornecedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subMenuCadFornecedoresActionPerformed
-        TelaFornecedores nova = new TelaFornecedores();
-         Desktop.add(nova);
-        nova.setVisible(true);
+        // TODO add your handling code here:
     }//GEN-LAST:event_subMenuCadFornecedoresActionPerformed
 
     private void jMenu6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu6ActionPerformed
@@ -282,7 +286,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
-        TelaVendas nova = new TelaVendas();
+        TelaVendasd nova = new TelaVendasd();
         Desktop.add(nova);
         nova.setVisible(true);
     }//GEN-LAST:event_jButton4ActionPerformed
@@ -317,21 +321,22 @@ public class MenuPrincipal extends javax.swing.JFrame {
         }
         Desktop.add(nova);
         nova.setVisible(true); 
-        nova.setPosicao();
+        nova.pos.setTamanho(nova);
     }//GEN-LAST:event_btnVeiculosActionPerformed
 
-    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
-        TelaCategoria cat = new TelaCategoria();
-        Desktop.add(cat);
-        cat.setVisible(true);
- 
-    }//GEN-LAST:event_jMenuItem5ActionPerformed
+    private void imenuLancamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_imenuLancamentoActionPerformed
+        TelaFinanceira nova = new TelaFinanceira();
+        Desktop.add(nova);
+        nova.setVisible(true);
+        nova.pos.setTamanho(nova);
+    }//GEN-LAST:event_imenuLancamentoActionPerformed
 
-    private void subMenuCadClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subMenuCadClientesActionPerformed
-        TelaCliente cli = new TelaCliente();
-        Desktop.add(cli);
-        cli.setVisible(true);
-    }//GEN-LAST:event_subMenuCadClientesActionPerformed
+    private void menuEntregasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuEntregasActionPerformed
+        TelaEntregas nova = new TelaEntregas();
+        Desktop.add(nova);
+        nova.setVisible(true);
+        nova.pos.setTamanho(nova);
+    }//GEN-LAST:event_menuEntregasActionPerformed
 
     /**
      * @param args the command line arguments
@@ -371,6 +376,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane Desktop;
     private javax.swing.JButton btnVeiculos;
+    private javax.swing.JMenuItem imenuLancamento;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -387,9 +393,9 @@ public class MenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
-    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JMenu menuCadastros;
+    private javax.swing.JMenuItem menuEntregas;
     private javax.swing.JMenu menuRelatorios;
     private javax.swing.JMenuItem subMenuCadClientes;
     private javax.swing.JMenuItem subMenuCadFornecedores;

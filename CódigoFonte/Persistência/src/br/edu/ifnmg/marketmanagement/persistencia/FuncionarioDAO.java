@@ -57,24 +57,28 @@ public class FuncionarioDAO extends DAOGenerico <Funcionario> implements Funcion
             Logger.getLogger(FuncionarioDAO.class.getName()).log(Level.SEVERE, null, e);            
         }
     }
-
+    
     @Override
     protected Funcionario carregaObjeto(ResultSet dados) {
-        Funcionario func = new Funcionario();
         try {
-            func.setId(dados.getLong("id"));            
-            func.setNome(dados.getString("nome"));
-            func.setDataNascimento(dados.getDate("dataNascimento"));
-            func.setCpf(dados.getString("cpf"));
-            func.setTelefone(dados.getString("telefone"));
-            func.setEmail(dados.getString("email"));
-            func.setSalario(dados.getBigDecimal("salario"));
-            func.setCargaHoraria(dados.getInt("cargaHoraria"));
-            func.setTipo(dados.getInt("tipo"));
-            func.setSenha(dados.getString("senha"));
-            func.setCnh(dados.getString("cnh"));
+            Funcionario func = new Funcionario(
+                    dados.getBigDecimal("salario"),
+                    dados.getInt("cargaHoraria"),
+                    dados.getInt("tipo"),
+                    dados.getString("senha"),
+                    dados.getString("cnh"),
+                    dados.getString("nome"),
+                    dados.getDate("dataNascimento"),
+                    dados.getString("cpf"),
+                    null,
+                    dados.getLong("id"),
+                    null,
+                    dados.getString("telefone"),
+                    dados.getString("email"),
+                    null
+            );
             return func;
-        } catch (SQLException | ViolacaoRegraNegocioException ex) {
+        } catch (SQLException ex) {
             Logger.getLogger(FuncionarioDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;

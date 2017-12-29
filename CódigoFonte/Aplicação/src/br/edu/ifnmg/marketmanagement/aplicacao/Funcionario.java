@@ -1,6 +1,7 @@
 package br.edu.ifnmg.marketmanagement.aplicacao;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Objects;
 /**
  *
  * @author guilherme
@@ -26,7 +27,7 @@ public class Funcionario extends PessoaFisica{
 
     public Funcionario() {
     }
- 
+
     public BigDecimal getSalario() {
         return salario;
     }
@@ -82,7 +83,39 @@ public class Funcionario extends PessoaFisica{
 
     @Override
     public String toString() {
-        return "Funcionario{" + "salario=" + salario + ", cargaHoraria=" + cargaHoraria + ", tipo=" + tipo + ", senha=" + senha + ", cnh=" + cnh + '}';
+        return getNome();
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 59 * hash + Objects.hashCode(this.senha);
+        hash = 59 * hash + Objects.hashCode(this.cnh);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Funcionario other = (Funcionario) obj;
+        if (!Objects.equals(this.senha, other.senha)) {
+            return false;
+        }
+        if (!Objects.equals(this.cnh, other.cnh)) {
+            return false;
+        }
+        return true;
+    }
+
+   
+    
 
 }

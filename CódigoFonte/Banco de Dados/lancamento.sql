@@ -10,5 +10,6 @@ create table lancamento(
     cliente int, -- Chave Estrangeira de Cliente
     planejamento varchar(30),
     formaPagamento varchar(30),
-    tipoPagamento varchar(30)
+    tipoPagamento varchar(30),
+    foreign key(cliente) references clientes(id)
 );

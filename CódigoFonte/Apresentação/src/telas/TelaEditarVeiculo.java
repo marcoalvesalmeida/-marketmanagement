@@ -303,7 +303,7 @@ public final class TelaEditarVeiculo extends TelaEditar<Veiculo> {
         txtObservacoes.setText(entidade.getObservacoes());
     }
       
-    public void preencherCMB() {
+    private void preencherCMB() {
         cmbCombustivel.setModel(new DefaultComboBoxModel<>(EnumCombustivel.values()));
         cmbMarca.setModel(new DefaultComboBoxModel<>(EnumMarcaVeiculo.values()));
         cmbTipo.setModel(new DefaultComboBoxModel<>(EnumTipoVeiculo.values()));

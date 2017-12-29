@@ -10,9 +10,13 @@ package br.edu.ifnmg.marketmanagement.aplicacao;
  * @author marco
  */
 public enum EnumTipoVeiculo {
-    CAMINHONETE(1), PASSEIO(2), CAMINHAO(3), MOTOCICLETA(4), FURGAO(5);
-    private int tipoVeiculo;
-    private EnumTipoVeiculo(int tipoVeiculo){
+    CAMINHONETE("CAMINHONETE"), 
+    PASSEIO("PASSEIO"), 
+    CAMINHAO("CAMINHAO"), 
+    MOTOCICLETA("MOTOCICLETA"), 
+    FURGAO("FURGAO");
+    private String tipoVeiculo;
+    private EnumTipoVeiculo(String tipoVeiculo){
         this.tipoVeiculo = tipoVeiculo;
     }
 }

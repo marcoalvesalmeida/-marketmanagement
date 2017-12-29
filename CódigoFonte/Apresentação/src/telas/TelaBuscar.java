@@ -72,7 +72,7 @@ public abstract class TelaBuscar<T extends Entidade> extends javax.swing.JIntern
         this.getParent().add(editar);
         editar.setVisible(true);
         this.setVisible(false);
-        
+        this.pos.setTamanho(editar);
         editar.setEntidade(obj);
         
         editar.setBuscar(this);

@@ -7,9 +7,11 @@ package br.edu.ifnmg.marketmanagement.persistencia;
 
 import br.edu.ifnmg.marketmanagement.aplicacao.CaixaRepositorio;
 import br.edu.ifnmg.marketmanagement.aplicacao.Caixa;
+import br.edu.ifnmg.marketmanagement.aplicacao.Lancamento;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,8 +28,7 @@ public class CaixaDAO extends DAOGenerico<Caixa> implements CaixaRepositorio {
 
     @Override
     protected String consultaInsert() {
-        return "insert into caixa(operador, saldo, dataHoraAbertura, terminal, valorInicial, turno, valorDinheiro, valorBoleto, \n" +
-"            valorCartao, valorCarne, somaVendas, totalPagamentos, valorProximoCaixa, somalTotalTurno) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        return "insert into caixa(data_hora_abertura, valor_inicial, turno, usuario, valor_dinheiro, valor_boleto, outras_formas, total_vendas, proximo_caixa, soma_caixa, estado) values(?,?,?,?,?,?,?,?,?,?,?)";
     }
 
     @Override
@@ -53,10 +54,8 @@ public class CaixaDAO extends DAOGenerico<Caixa> implements CaixaRepositorio {
             obj = new Caixa(
                     dados.getLong("id"),
                     null,
-                    dados.getBigDecimal("saldo"),
                     null,
                     null,
-                    dados.getLong("terminal"),
                     dados.getBigDecimal("valorinicial"),
                     dados.getLong("turno"),
                     dados.getBigDecimal("valordinheiro"),
@@ -64,7 +63,6 @@ public class CaixaDAO extends DAOGenerico<Caixa> implements CaixaRepositorio {
                     dados.getBigDecimal("valorcartao"),
                     dados.getBigDecimal("valorcarne"),
                     dados.getBigDecimal("somavendas"),
-                    dados.getBigDecimal("totalpagamentos"),
                     dados.getBigDecimal("valorproximocaixa"),
                     dados.getBigDecimal("somatotalturno")
             );
@@ -79,13 +77,10 @@ public class CaixaDAO extends DAOGenerico<Caixa> implements CaixaRepositorio {
     protected void carregaParametros(Caixa obj, PreparedStatement consulta) {
         try {
             if (obj.getId() > 0) {
-                //consulta.setLong(15, obj.getId());
-                System.out.println("Editar");
+                consulta.setLong(12, obj.getId());
             } else {
                 consulta.setLong(1, obj.getOperador().getId());
-                consulta.setBigDecimal(2, obj.getSaldo());
                 consulta.setString(3, obj.getDataHoraAbertura().toString());
-                consulta.setLong(4, obj.getTerminal());
                 consulta.setBigDecimal(5, obj.getValorInicial());
                 consulta.setLong(6, obj.getTurno());
                 consulta.setBigDecimal(7, obj.getValorDinheiro());
@@ -93,7 +88,6 @@ public class CaixaDAO extends DAOGenerico<Caixa> implements CaixaRepositorio {
                 consulta.setBigDecimal(9, obj.getValorCartao());
                 consulta.setBigDecimal(10, obj.getValorCarne());
                 consulta.setBigDecimal(11, obj.getSomaVendas());
-                consulta.setBigDecimal(12, obj.getTotalPagamentos());
                 consulta.setBigDecimal(13, obj.getValorProximoCaixa());
                 consulta.setBigDecimal(14, obj.getSomaTotalTurno());
             }

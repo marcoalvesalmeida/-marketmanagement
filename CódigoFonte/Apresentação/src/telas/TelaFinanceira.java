@@ -5,17 +5,53 @@
  */
 package telas;
 
+import br.edu.ifnmg.marketmanagement.aplicacao.EnumPlanejamento;
+import br.edu.ifnmg.marketmanagement.aplicacao.Lancamento;
+import br.edu.ifnmg.marketmanagement.aplicacao.RepositorioBuilder;
+import br.edu.ifnmg.marketmanagement.aplicacao.ViolacaoRegraNegocioException;
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author marco
  */
-public class TelaFinanceira extends javax.swing.JInternalFrame {
+public class TelaFinanceira extends TelaBuscar<Lancamento> {
+
+    SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+    private int qtdeLancamentos;
+    private BigDecimal valReceita;
+    private BigDecimal valDespesa;
+    private BigDecimal valSaldo;
 
     /**
      * Creates new form TelaFinanceirad
      */
     public TelaFinanceira() {
+        this.valSaldo = new BigDecimal(0);
+        this.valDespesa = new BigDecimal(0);
+        this.valReceita = new BigDecimal(0);
+        this.qtdeLancamentos = 0;
         initComponents();
+        setEditar(new TelaNovoLancamento());
+        setRepositorio(RepositorioBuilder.getLancamentoRepositorio());
+        agrupar();
+    }
+    
+    private void agrupar(){
+        rdGrupo1.add(rdReceitas);
+        rdGrupo1.add(rdDespesas);
+        rdGrupo1.add(rdVendas);
+        rdGrupo1.add(rdCompras);
+        rdGrupo1.add(rdTodos);
+        rdTodos.setSelected(true);
     }
 
     /**
@@ -27,56 +63,51 @@ public class TelaFinanceira extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        rdGrupo1 = new javax.swing.ButtonGroup();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tabResultado = new javax.swing.JTable();
         jPanel7 = new javax.swing.JPanel();
-        jTextField19 = new javax.swing.JTextField();
-        jTextField20 = new javax.swing.JTextField();
         jLabel19 = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
         jPanel8 = new javax.swing.JPanel();
         jLabel21 = new javax.swing.JLabel();
-        jTextField21 = new javax.swing.JTextField();
+        txtReceita = new javax.swing.JTextField();
         jLabel22 = new javax.swing.JLabel();
-        jTextField22 = new javax.swing.JTextField();
+        txtDespesa = new javax.swing.JTextField();
         jLabel23 = new javax.swing.JLabel();
-        jTextField23 = new javax.swing.JTextField();
+        txtSaldo = new javax.swing.JTextField();
         jLabel24 = new javax.swing.JLabel();
-        jTextField24 = new javax.swing.JTextField();
-        jButton13 = new javax.swing.JButton();
-        jButton14 = new javax.swing.JButton();
-        jButton15 = new javax.swing.JButton();
-        jButton16 = new javax.swing.JButton();
-        jCheckBox16 = new javax.swing.JCheckBox();
-        jCheckBox17 = new javax.swing.JCheckBox();
-        jCheckBox18 = new javax.swing.JCheckBox();
-        jCheckBox19 = new javax.swing.JCheckBox();
-        jCheckBox20 = new javax.swing.JCheckBox();
-        jButton17 = new javax.swing.JButton();
-        jCheckBox21 = new javax.swing.JCheckBox();
-        jButton18 = new javax.swing.JButton();
+        txtLancamento = new javax.swing.JTextField();
+        btnNovo = new javax.swing.JButton();
+        btnEditar = new javax.swing.JButton();
+        btnSair = new javax.swing.JButton();
+        btnRelatorio = new javax.swing.JButton();
+        rdReceitas = new javax.swing.JRadioButton();
+        rdDespesas = new javax.swing.JRadioButton();
+        rdVendas = new javax.swing.JRadioButton();
+        rdCompras = new javax.swing.JRadioButton();
+        rdTodos = new javax.swing.JRadioButton();
+        btnPesquisar = new javax.swing.JButton();
+        txtPesquisa1 = new javax.swing.JFormattedTextField();
+        txtPesquisa2 = new javax.swing.JFormattedTextField();
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        setClosable(true);
+
+        tabResultado.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Vencimento", "Vr. Lançado", "Vr. Total", "Histórico Lançamento", "Nome do Cliente"
+
             }
         ));
-        jTable1.setGridColor(new java.awt.Color(254, 254, 254));
-        jScrollPane1.setViewportView(jTable1);
+        tabResultado.setGridColor(new java.awt.Color(254, 254, 254));
+        jScrollPane1.setViewportView(tabResultado);
 
         jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(172, 172, 172)), "Indicar Período", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Trebuchet MS", 1, 14))); // NOI18N
-
-        jTextField19.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
-        jTextField19.setText("01/10/2017");
-
-        jTextField20.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
-        jTextField20.setText("06/10/2017");
 
         jLabel19.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
         jLabel19.setForeground(new java.awt.Color(1, 1, 1));
@@ -90,62 +121,84 @@ public class TelaFinanceira extends javax.swing.JInternalFrame {
         jLabel21.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         jLabel21.setText("Receitas:");
 
-        jTextField21.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
-        jTextField21.setText("R$ 100,00");
-        jTextField21.setDisabledTextColor(new java.awt.Color(2, 163, 29));
+        txtReceita.setEditable(false);
+        txtReceita.setBackground(new java.awt.Color(222, 222, 222));
+        txtReceita.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
+        txtReceita.setForeground(new java.awt.Color(15, 131, 34));
+        txtReceita.setDisabledTextColor(new java.awt.Color(2, 163, 29));
 
         jLabel22.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         jLabel22.setText("Despesas:");
 
-        jTextField22.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
-        jTextField22.setText("R$ 50,00");
-        jTextField22.setDisabledTextColor(new java.awt.Color(2, 163, 29));
+        txtDespesa.setEditable(false);
+        txtDespesa.setBackground(new java.awt.Color(222, 222, 222));
+        txtDespesa.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
+        txtDespesa.setForeground(new java.awt.Color(254, 25, 25));
+        txtDespesa.setDisabledTextColor(new java.awt.Color(2, 163, 29));
 
         jLabel23.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         jLabel23.setText("Saldo:");
 
-        jTextField23.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
-        jTextField23.setText("R$ 50,00");
-        jTextField23.setDisabledTextColor(new java.awt.Color(2, 163, 29));
+        txtSaldo.setEditable(false);
+        txtSaldo.setBackground(new java.awt.Color(222, 222, 222));
+        txtSaldo.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
+        txtSaldo.setForeground(new java.awt.Color(1, 111, 249));
+        txtSaldo.setDisabledTextColor(new java.awt.Color(2, 163, 29));
 
         jLabel24.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         jLabel24.setText("Lançamentos:");
 
-        jTextField24.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
-        jTextField24.setText("2");
-        jTextField24.setDisabledTextColor(new java.awt.Color(2, 163, 29));
-
-        jButton13.setFont(new java.awt.Font("Noto Sans", 1, 12)); // NOI18N
-        jButton13.setText("Novo Lançamento");
-
-        jButton14.setFont(new java.awt.Font("Noto Sans", 1, 12)); // NOI18N
-        jButton14.setText("Editar");
-
-        jButton15.setFont(new java.awt.Font("Noto Sans", 1, 12)); // NOI18N
-        jButton15.setText("Apagar");
-
-        jButton16.setFont(new java.awt.Font("Noto Sans", 1, 12)); // NOI18N
-        jButton16.setText("Sair");
-
-        jCheckBox16.setText("Mostrar Não Confirmados");
-
-        jCheckBox17.setText("Mostrar Confirmados");
-
-        jCheckBox18.setText("Mostrar Despesas");
-
-        jCheckBox19.setText("Mostrar Vendas");
-
-        jCheckBox20.setText("Mostrar Compras");
-        jCheckBox20.addActionListener(new java.awt.event.ActionListener() {
+        txtLancamento.setEditable(false);
+        txtLancamento.setBackground(new java.awt.Color(222, 222, 222));
+        txtLancamento.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
+        txtLancamento.setDisabledTextColor(new java.awt.Color(2, 163, 29));
+        txtLancamento.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox20ActionPerformed(evt);
+                txtLancamentoActionPerformed(evt);
             }
         });
 
-        jButton17.setFont(new java.awt.Font("Noto Sans", 1, 12)); // NOI18N
-        jButton17.setText("Relatório");
+        btnNovo.setFont(new java.awt.Font("Noto Sans", 1, 12)); // NOI18N
+        btnNovo.setText("Novo Lançamento");
+        btnNovo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNovoActionPerformed(evt);
+            }
+        });
 
-        jCheckBox21.setText("Mostrar Receitas");
+        btnEditar.setFont(new java.awt.Font("Noto Sans", 1, 12)); // NOI18N
+        btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
+
+        btnSair.setFont(new java.awt.Font("Noto Sans", 1, 12)); // NOI18N
+        btnSair.setText("Sair");
+        btnSair.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSairActionPerformed(evt);
+            }
+        });
+
+        btnRelatorio.setFont(new java.awt.Font("Noto Sans", 1, 12)); // NOI18N
+        btnRelatorio.setText("Relatório");
+
+        rdReceitas.setText("Mostrar Receitas");
+        rdReceitas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdReceitasActionPerformed(evt);
+            }
+        });
+
+        rdDespesas.setText("Mostrar Despesas");
+
+        rdVendas.setText("Mostrar Vendas");
+
+        rdCompras.setText("Mostrar Compras");
+
+        rdTodos.setText("Todos");
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
@@ -157,69 +210,55 @@ public class TelaFinanceira extends javax.swing.JInternalFrame {
                     .addGroup(jPanel8Layout.createSequentialGroup()
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel21, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField21, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtReceita, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField22, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtDespesa, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel22))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel23)
-                            .addComponent(jTextField23, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel24)
-                            .addComponent(jTextField24, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txtSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addComponent(jButton13)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton14, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton15, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton17, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(68, 68, 68)
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton16, javax.swing.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE)
+                        .addComponent(btnNovo)
+                        .addGap(77, 77, 77)
+                        .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnRelatorio, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel24)
+                    .addComponent(txtLancamento, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addGap(68, 68, 68)
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jCheckBox16)
-                            .addComponent(jCheckBox17)
-                            .addComponent(jCheckBox18))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(rdDespesas)
+                                    .addComponent(rdReceitas))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(rdCompras)
+                                    .addComponent(rdVendas)))
+                            .addGroup(jPanel8Layout.createSequentialGroup()
+                                .addComponent(btnSair, javax.swing.GroupLayout.PREFERRED_SIZE, 315, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jCheckBox19)
-                            .addComponent(jCheckBox20)
-                            .addComponent(jCheckBox21))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(rdTodos)
+                        .addGap(145, 145, 145))))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jCheckBox16)
-                            .addComponent(jCheckBox21))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel8Layout.createSequentialGroup()
-                                .addComponent(jCheckBox17)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jCheckBox18))
-                            .addGroup(jPanel8Layout.createSequentialGroup()
-                                .addComponent(jCheckBox19)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jCheckBox20)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton16, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel8Layout.createSequentialGroup()
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel8Layout.createSequentialGroup()
                                 .addComponent(jLabel21)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField21, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(txtReceita, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel8Layout.createSequentialGroup()
                                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(jLabel22)
@@ -227,20 +266,53 @@ public class TelaFinanceira extends javax.swing.JInternalFrame {
                                     .addComponent(jLabel24))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jTextField22, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTextField23, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTextField24, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(txtDespesa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtLancamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton14, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton15, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton17, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(btnNovo, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnRelatorio, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel8Layout.createSequentialGroup()
+                                .addComponent(rdReceitas)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(rdDespesas))
+                            .addGroup(jPanel8Layout.createSequentialGroup()
+                                .addComponent(rdVendas)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(rdCompras)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(rdTodos)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnSair, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(24, Short.MAX_VALUE))
         );
 
-        jButton18.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
-        jButton18.setText("Pesquisar");
+        btnPesquisar.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
+        btnPesquisar.setText("Pesquisar");
+        btnPesquisar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPesquisarActionPerformed(evt);
+            }
+        });
+
+        try {
+            txtPesquisa1.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        txtPesquisa1.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
+
+        try {
+            txtPesquisa2.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        txtPesquisa2.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -248,16 +320,16 @@ public class TelaFinanceira extends javax.swing.JInternalFrame {
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel7Layout.createSequentialGroup()
-                .addGap(190, 190, 190)
+                .addGap(177, 177, 177)
                 .addComponent(jLabel19)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField19, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(75, 75, 75)
+                .addComponent(txtPesquisa1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(49, 49, 49)
                 .addComponent(jLabel20)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField20, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(36, 36, 36)
-                .addComponent(jButton18, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtPesquisa2, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(33, 33, 33)
+                .addComponent(btnPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
@@ -265,11 +337,11 @@ public class TelaFinanceira extends javax.swing.JInternalFrame {
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField19, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField20, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel19)
                     .addComponent(jLabel20)
-                    .addComponent(jButton18, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtPesquisa1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtPesquisa2, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -292,108 +364,143 @@ public class TelaFinanceira extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jCheckBox20ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox20ActionPerformed
+    private void btnPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarActionPerformed
+        buscar();
+    }//GEN-LAST:event_btnPesquisarActionPerformed
+
+    private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
+        novo();
+    }//GEN-LAST:event_btnNovoActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        int linha = tabResultado.getSelectedRow();
+        if (linha < 0) {
+            JOptionPane.showMessageDialog(this, "Um Lançamento deve estar selecionado!");
+            return;
+        }
+        long id = Long.parseLong(tabResultado.getValueAt(linha, 0).toString());
+        editar(id);
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairActionPerformed
+        this.setVisible(false);
+    }//GEN-LAST:event_btnSairActionPerformed
+
+    private void txtLancamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtLancamentoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox20ActionPerformed
+    }//GEN-LAST:event_txtLancamentoActionPerformed
+
+    private void rdReceitasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdReceitasActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_rdReceitasActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton10;
-    private javax.swing.JButton jButton11;
-    private javax.swing.JButton jButton12;
-    private javax.swing.JButton jButton13;
-    private javax.swing.JButton jButton14;
-    private javax.swing.JButton jButton15;
-    private javax.swing.JButton jButton16;
-    private javax.swing.JButton jButton17;
-    private javax.swing.JButton jButton18;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
-    private javax.swing.JButton jButton9;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JCheckBox jCheckBox10;
-    private javax.swing.JCheckBox jCheckBox11;
-    private javax.swing.JCheckBox jCheckBox12;
-    private javax.swing.JCheckBox jCheckBox13;
-    private javax.swing.JCheckBox jCheckBox14;
-    private javax.swing.JCheckBox jCheckBox15;
-    private javax.swing.JCheckBox jCheckBox16;
-    private javax.swing.JCheckBox jCheckBox17;
-    private javax.swing.JCheckBox jCheckBox18;
-    private javax.swing.JCheckBox jCheckBox19;
-    private javax.swing.JCheckBox jCheckBox2;
-    private javax.swing.JCheckBox jCheckBox20;
-    private javax.swing.JCheckBox jCheckBox21;
-    private javax.swing.JCheckBox jCheckBox3;
-    private javax.swing.JCheckBox jCheckBox4;
-    private javax.swing.JCheckBox jCheckBox5;
-    private javax.swing.JCheckBox jCheckBox6;
-    private javax.swing.JCheckBox jCheckBox7;
-    private javax.swing.JCheckBox jCheckBox8;
-    private javax.swing.JCheckBox jCheckBox9;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel18;
+    private javax.swing.JButton btnEditar;
+    private javax.swing.JButton btnNovo;
+    private javax.swing.JButton btnPesquisar;
+    private javax.swing.JButton btnRelatorio;
+    private javax.swing.JButton btnSair;
     private javax.swing.JLabel jLabel19;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
-    private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField10;
-    private javax.swing.JTextField jTextField11;
-    private javax.swing.JTextField jTextField12;
-    private javax.swing.JTextField jTextField13;
-    private javax.swing.JTextField jTextField14;
-    private javax.swing.JTextField jTextField15;
-    private javax.swing.JTextField jTextField16;
-    private javax.swing.JTextField jTextField17;
-    private javax.swing.JTextField jTextField18;
-    private javax.swing.JTextField jTextField19;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField20;
-    private javax.swing.JTextField jTextField21;
-    private javax.swing.JTextField jTextField22;
-    private javax.swing.JTextField jTextField23;
-    private javax.swing.JTextField jTextField24;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
-    private javax.swing.JTextField jTextField8;
-    private javax.swing.JTextField jTextField9;
+    private javax.swing.JRadioButton rdCompras;
+    private javax.swing.JRadioButton rdDespesas;
+    private javax.swing.ButtonGroup rdGrupo1;
+    private javax.swing.JRadioButton rdReceitas;
+    private javax.swing.JRadioButton rdTodos;
+    private javax.swing.JRadioButton rdVendas;
+    private javax.swing.JTable tabResultado;
+    private javax.swing.JTextField txtDespesa;
+    private javax.swing.JTextField txtLancamento;
+    private javax.swing.JFormattedTextField txtPesquisa1;
+    private javax.swing.JFormattedTextField txtPesquisa2;
+    private javax.swing.JTextField txtReceita;
+    private javax.swing.JTextField txtSaldo;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    protected void preencherTabela(List<Lancamento> dados) {
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("ID");
+        modelo.addColumn("Data");
+        modelo.addColumn("Tipo");
+        modelo.addColumn("Valor Total");
+        modelo.addColumn("Modo");
+        modelo.addColumn("Acrescimo");
+        modelo.addColumn("Desconto");
+        modelo.addColumn("Cliente");
+        modelo.addColumn("Planejamento");
+
+        for (Lancamento l : dados) {
+            Vector valores = new Vector();
+            valores.add(l.getId());
+            valores.add(df.format(l.getData()));
+            valores.add(l.getTipo());
+            valores.add(l.getValorTotal());
+            valores.add(l.getModo());
+            valores.add(l.getAcrescimo());
+            valores.add(l.getDesconto());
+            valores.add(l.getCliente());
+            valores.add(l.getPlanejamento());
+            modelo.addRow(valores);
+            qtdeLancamentos++;
+            if (l.getPlanejamento().toString().equals("VENDA") || l.getTipo().equals("receita")) {
+                valReceita = valReceita.add(l.getValorTotal());
+            } else {
+                valDespesa = valDespesa.add(l.getValorTotal());
+            }
+
+        }
+        tabResultado.setModel(modelo);
+        txtReceita.setText(valReceita.toString());
+        txtDespesa.setText(valDespesa.toString());
+        valSaldo = valReceita.subtract(valDespesa);
+        txtLancamento.setText(String.valueOf(this.qtdeLancamentos));
+        txtSaldo.setText(valSaldo.toString());
+        valSaldo = new BigDecimal(0);
+        valDespesa = new BigDecimal(0);
+        valReceita = new BigDecimal(0);
+        qtdeLancamentos = 0;
+    }
+
+    @Override
+    protected Lancamento carregaFiltro() {
+        try {
+            Lancamento filtro = new Lancamento("generic");
+            if ((txtPesquisa1 != null && !txtPesquisa1.getText().equals("  /  /    ")) && (txtPesquisa2 != null && !txtPesquisa2.getText().equals("  /  /    "))) {
+                filtro.setDataInicial(df.parse(txtPesquisa1.getText()));
+                filtro.setDataFinal(df.parse(txtPesquisa2.getText()));
+            }
+            if(!rdTodos.isSelected()){
+                if (rdReceitas.isSelected()) {
+                    filtro.setTipo("receita");
+                }else if (rdDespesas.isSelected()) {
+                    filtro.setTipo("despesa");
+                }else if (rdVendas.isSelected()) {
+                    filtro.setPlanejamento(EnumPlanejamento.VENDA);
+                }else if (rdCompras.isSelected()) {
+                    filtro.setPlanejamento(EnumPlanejamento.COMPRA);
+                }
+            }
+
+            return filtro;
+
+        } catch (ParseException | ViolacaoRegraNegocioException ex) {
+            Logger.getLogger(TelaFinanceira.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    @Override
+    protected Lancamento novaEntidade() {
+        return new Lancamento();
+    }
+
 }

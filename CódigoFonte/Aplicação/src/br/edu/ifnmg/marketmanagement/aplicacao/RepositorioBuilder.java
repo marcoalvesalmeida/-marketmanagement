@@ -69,30 +69,15 @@ public class RepositorioBuilder {
                 // Cria uma nova instância da classe
                 cliente = (ClienteRepositorio)obj.newInstance();
                 
-            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(RepositorioBuilder.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InstantiationException ex) {
+                Logger.getLogger(RepositorioBuilder.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalAccessException ex) {
                 Logger.getLogger(RepositorioBuilder.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return cliente;
-    }
-    
-    private static FornecedorRepositorio fornecedor;
-    
-    public static FornecedorRepositorio getFornecedorRepositorio(){
-        if(fornecedor == null){
-            try {
-                
-                // Carrega a classe
-                Class obj = Class.forName(prop.getProperty("FornecedorRepositorio"));
-                
-                // Cria uma nova instância da classe
-                fornecedor = (FornecedorRepositorio)obj.newInstance();
-                
-            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
-                Logger.getLogger(RepositorioBuilder.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        return fornecedor;
     }
     
     private static EnderecoRepositorio endereco;
@@ -107,11 +92,87 @@ public class RepositorioBuilder {
                 // Cria uma nova instância da classe
                 endereco = (EnderecoRepositorio)obj.newInstance();
                 
-            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(RepositorioBuilder.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InstantiationException ex) {
+                Logger.getLogger(RepositorioBuilder.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalAccessException ex) {
                 Logger.getLogger(RepositorioBuilder.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return endereco;
+    }
+    
+    private static LancamentoRepositorio lancamento;
+    
+    public static LancamentoRepositorio getLancamentoRepositorio(){
+        if(lancamento == null){
+            try {
+                
+                // Carrega a classe
+                Class obj = Class.forName(prop.getProperty("LancamentoRepositorio"));
+                
+                // Cria uma nova instância da classe
+                lancamento = (LancamentoRepositorio)obj.newInstance();
+                
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+                Logger.getLogger(RepositorioBuilder.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return lancamento;
+    }
+    
+    private static EntregaRepositorio entrega;
+    
+    public static EntregaRepositorio getEntregaRepositorio(){
+        if(entrega == null){
+            try {
+                // Carrega a classe
+                Class obj = Class.forName(prop.getProperty("EntregaRepositorio"));
+                
+                // Cria uma nova instância da classe
+                entrega = (EntregaRepositorio)obj.newInstance();
+                
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+                Logger.getLogger(RepositorioBuilder.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return entrega;
+    }
+    
+    private static FuncionarioRepositorio funcionario;
+    
+    public static FuncionarioRepositorio getFuncionarioRepositorio(){
+        if(funcionario == null){
+            try {
+                // Carrega a classe
+                Class obj = Class.forName(prop.getProperty("FuncionarioRepositorio"));
+                
+                // Cria uma nova instância da classe
+                funcionario = (FuncionarioRepositorio)obj.newInstance();
+                
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+                Logger.getLogger(RepositorioBuilder.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return funcionario;
+    }
+    private static CaixaRepositorio caixa;
+    
+    public static CaixaRepositorio getCaixaRepositorio(){
+        if(caixa == null){
+            try {
+                // Carrega a classe
+                Class obj = Class.forName(prop.getProperty("CaixaRepositorio"));
+                
+                // Cria uma nova instância da classe
+                caixa = (CaixaRepositorio)obj.newInstance();
+                
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+                Logger.getLogger(RepositorioBuilder.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return caixa;
     }
     
 }

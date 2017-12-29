@@ -5,11 +5,15 @@
  */
 package br.edu.ifnmg.marketmanagement.persistencia;
 
+import br.edu.ifnmg.marketmanagement.aplicacao.EnumModoPagamento;
+import br.edu.ifnmg.marketmanagement.aplicacao.EnumPlanejamento;
+import br.edu.ifnmg.marketmanagement.aplicacao.Lancamento;
 import br.edu.ifnmg.marketmanagement.aplicacao.VendaRepositorio;
 import br.edu.ifnmg.marketmanagement.aplicacao.Venda;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -44,7 +48,6 @@ public class VendaDAO extends DAOGenerico<Venda> implements VendaRepositorio {
         return "select * from venda";
     }
 
-
     @Override
     protected Venda carregaObjeto(ResultSet dados) {
         try {
@@ -57,12 +60,13 @@ public class VendaDAO extends DAOGenerico<Venda> implements VendaRepositorio {
                     dados.getLong("id"),
                     null,
                     dados.getString("tipo"),
+                    dados.getBigDecimal("valor"),
                     dados.getBigDecimal("valortotal"),
-                    dados.getString("modo"),
+                    EnumModoPagamento.valueOf(dados.getString("modo")),
                     dados.getBigDecimal("acrescimo"),
                     dados.getBigDecimal("desconto"),
                     null,
-                    dados.getString("planejamento")                    
+                    EnumPlanejamento.valueOf(dados.getString("planejamento"))                    
             );
             return obj;
         } catch (SQLException ex) {
@@ -75,17 +79,17 @@ public class VendaDAO extends DAOGenerico<Venda> implements VendaRepositorio {
     protected void carregaParametros(Venda obj, PreparedStatement consulta) {
         try {
             if (obj.getId() > 0) {
-                //consulta.setLong(10, obj.getId());
+                consulta.setLong(13, obj.getId());
                 System.out.println("Editar");
             } else {
                 consulta.setString(1, obj.getData().toString());
                 consulta.setString(2, obj.getTipo());
                 consulta.setBigDecimal(3, obj.getValorTotal());
-                consulta.setString(4, obj.getModo());
+                consulta.setString(4, obj.getModo().toString());
                 consulta.setBigDecimal(5, obj.getAcrescimo());
                 consulta.setBigDecimal(6, obj.getDesconto());
                 consulta.setLong(7, obj.getCliente().getId());
-                consulta.setString(8, obj.getPlanejamento());
+                consulta.setString(8, obj.getPlanejamento().toString());
                 consulta.setString(9, obj.getTurno());
                 consulta.setLong(10, obj.getControle());
                 consulta.setLong(11, obj.getOperador().getId());
