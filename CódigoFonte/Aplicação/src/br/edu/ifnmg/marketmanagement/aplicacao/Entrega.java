@@ -1,6 +1,7 @@
 
 package br.edu.ifnmg.marketmanagement.aplicacao;
 
+import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -13,17 +14,21 @@ public class Entrega implements Entidade {
     private Veiculo veiculo;
     private Endereco endereco;
     private Funcionario motorista;
+    private Date data;
 
-    public Entrega(long id, Venda venda, Veiculo veiculo, Endereco endereco, Funcionario motorista) {
+    public Entrega(long id, Venda venda, Veiculo veiculo, Endereco endereco, Funcionario motorista, Date data) {
         this.id = id;
         this.venda = venda;
         this.veiculo = veiculo;
         this.endereco = endereco;
         this.motorista = motorista;
+        this.data = data;
     }
 
     public Entrega() {
+        
     }
+    
     @Override
     public long getId() {
         return id;
@@ -75,6 +80,16 @@ public class Entrega implements Entidade {
     public void gerarRelatorio(){
         
     }
+
+    public Date getData() {
+        return data;
+    }
+
+    public void setData(Date data) {
+        this.data = data;
+    }
+    
+    
 
     @Override
     public int hashCode() {

@@ -17,15 +17,18 @@ public class Lancamento implements Entidade {
     private long id;
     private Date data;
     private String tipo;
+    private BigDecimal valor;
     private BigDecimal valorTotal;
-    private String modo;
+    private EnumModoPagamento modo;
     private BigDecimal acrescimo;
     private BigDecimal desconto;
     private Cliente cliente;
-    private String planejamento;
+    private EnumPlanejamento planejamento;
+    private Date dataInicial;
+    private Date dataFinal;
     private final BigDecimal TEMP = new BigDecimal(0);
 
-    public Lancamento(long id, Date data, String tipo, BigDecimal valorTotal, String modo, BigDecimal acrescimo, BigDecimal desconto,Cliente cliente, String planejamento) {
+    public Lancamento(long id, Date data, String tipo, BigDecimal valor, BigDecimal valorTotal, EnumModoPagamento modo, BigDecimal acrescimo, BigDecimal desconto,Cliente cliente, EnumPlanejamento planejamento) {
         this.id = id;
         this.data = data;
         this.tipo = tipo;
@@ -35,9 +38,24 @@ public class Lancamento implements Entidade {
         this.desconto = desconto;
         this.cliente = cliente;
         this.planejamento = planejamento;
+        this.valor=valor;
+    }
+    
+    public Lancamento(String generic){
+        
     }
 
     public Lancamento() {
+        this.id = 0;
+        this.data = new Date();
+        this.tipo = "receita";
+        this.valor= new BigDecimal(100);
+        this.valorTotal = new BigDecimal(100);
+        this.modo = EnumModoPagamento.valueOf("CRÉDITO");
+        this.acrescimo = new BigDecimal(0);
+        this.desconto = new BigDecimal(0);
+        this.cliente = new Cliente();
+        this.planejamento = EnumPlanejamento.valueOf("DESPESAS");
     }
     
      @Override
@@ -47,8 +65,6 @@ public class Lancamento implements Entidade {
 
     @Override
     public void setId(long id) throws ViolacaoRegraNegocioException {
-        if (id<=0)
-            throw new ViolacaoRegraNegocioException("Número inválido!");
         this.id = id;     
     }
     
@@ -68,8 +84,16 @@ public class Lancamento implements Entidade {
 
     public void setTipo(String tipo) throws ViolacaoRegraNegocioException {
         if(tipo==null || tipo.length()<5)
-            throw new ViolacaoRegraNegocioException("Tipo foi informado de forma incorreta!(Deve possuir no mínimo 5 caracteres");
+            throw new ViolacaoRegraNegocioException("Tipo deve possuir no mínimo 5 caracteres!");
         this.tipo = tipo;
+    }
+    
+    public BigDecimal getValor() {
+        return valor;
+    }
+
+    public void setValor(BigDecimal valor) {
+        this.valor = valor;
     }
 
     public BigDecimal getValorTotal() {
@@ -82,11 +106,11 @@ public class Lancamento implements Entidade {
         this.valorTotal = valorTotal;
     }
 
-    public String getModo() {
+    public EnumModoPagamento getModo() {
         return modo;
     }
 
-    public void setModo(String modo) throws ViolacaoRegraNegocioException {
+    public void setModo(EnumModoPagamento modo) throws ViolacaoRegraNegocioException {
         if(modo==null)
              throw new ViolacaoRegraNegocioException("É necessário informar um modo de lançamento!");
         this.modo = modo;
@@ -97,7 +121,7 @@ public class Lancamento implements Entidade {
     }
 
     public void setAcrescimo(BigDecimal acrescimo) throws ViolacaoRegraNegocioException {
-        if(acrescimo==null || acrescimo.compareTo(TEMP)<=0)
+        if(acrescimo==null)
             throw new ViolacaoRegraNegocioException("O acréscimo deve ser maior que 0!"); 
         this.acrescimo = acrescimo;
     }
@@ -107,7 +131,7 @@ public class Lancamento implements Entidade {
     }
 
     public void setDesconto(BigDecimal desconto) throws ViolacaoRegraNegocioException {
-        if(desconto==null || desconto.compareTo(TEMP)<=0)
+        if(desconto==null)
             throw new ViolacaoRegraNegocioException("O desconto deve ser maior que 0!"); 
         this.desconto = desconto;
     }
@@ -122,15 +146,32 @@ public class Lancamento implements Entidade {
         this.cliente = cliente;
     }
 
-    public String getPlanejamento() {
+    public EnumPlanejamento getPlanejamento() {
         return planejamento;
     }
 
-    public void setPlanejamento(String planejamento) throws ViolacaoRegraNegocioException {
+    public void setPlanejamento(EnumPlanejamento planejamento) throws ViolacaoRegraNegocioException {
         if(planejamento==null)
             throw new ViolacaoRegraNegocioException("É necessário informar um planejamento!"); 
         this.planejamento = planejamento;
     }
+
+    public Date getDataInicial() {
+        return dataInicial;
+    }
+
+    public void setDataInicial(Date dataInicial) {
+        this.dataInicial = dataInicial;
+    }
+
+    public Date getDataFinal() {
+        return dataFinal;
+    }
+
+    public void setDataFinal(Date dataFinal) {
+        this.dataFinal = dataFinal;
+    }
+    
 
     @Override
     public int hashCode() {

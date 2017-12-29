@@ -35,6 +35,7 @@ public class TelaVeiculo extends TelaBuscar<Veiculo> {
 
     /**
      * Creates new form TelaVeiculoInternal
+     * @throws java.text.ParseException
      */
     public TelaVeiculo() throws ParseException {
         initComponents();

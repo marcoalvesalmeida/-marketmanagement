@@ -39,18 +39,18 @@ public abstract class DAOGenerico<T extends Entidade> implements Repositorio<T> 
     protected abstract void carregaParametros(T obj, PreparedStatement consulta);
 
     protected abstract T carregaObjeto(ResultSet dados);
+    
 
     @Override
     public boolean salvar(T obj) {
         try {
             String sql = "";
-
-            if (obj.getId() == 0) {
+            //Verifica se o objeto já está salvo no banco
+            if (obj.getId() == 0)
                 sql = this.consultaInsert();
-            } else {
+            else
                 sql = this.consultaUpdate();
-            }
-            System.out.println(sql);
+          
             PreparedStatement consulta = BD.getConexao().prepareStatement(sql);
             this.carregaParametros(obj, consulta);
             return consulta.executeUpdate() > 0;
@@ -86,7 +86,7 @@ public abstract class DAOGenerico<T extends Entidade> implements Repositorio<T> 
                 sql = sql + " and ";
             }
 
-            sql = sql + campo + " = '" + valor + "'";
+            sql = sql + campo + "= '" + valor + "'";
         }
         return sql;
 

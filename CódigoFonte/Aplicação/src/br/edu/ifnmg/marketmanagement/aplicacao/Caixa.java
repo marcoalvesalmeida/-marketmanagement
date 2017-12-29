@@ -17,18 +17,15 @@ import java.util.Objects;
 public class Caixa implements Entidade {
     private long id;
     private Funcionario operador; 
-    private BigDecimal saldo;
     private Date dataHoraAbertura;
     private Date dataHoraFechamento;
-    private long terminal;
     private BigDecimal valorInicial;
-    private long turno;
+    private EnumTurno turno;
     private BigDecimal valorDinheiro;
     private BigDecimal valorBoleto;
     private BigDecimal valorCartao;
     private BigDecimal valorCarne;
     private BigDecimal somaVendas;
-    private BigDecimal totalPagamentos;
     private BigDecimal valorProximoCaixa;
     private BigDecimal somaTotalTurno;
     private final BigDecimal TEMP = new BigDecimal(0);
@@ -43,13 +40,11 @@ public class Caixa implements Entidade {
         this.id = id;
     }
 
-    public Caixa(long id, Funcionario operador, BigDecimal saldo, Date dataHoraAbertura, Date dataHoraFechamento, long terminal, BigDecimal valorInicial, long turno, BigDecimal valorDinheiro, BigDecimal valorBoleto, BigDecimal valorCartao, BigDecimal valorCarne, BigDecimal somaVendas, BigDecimal totalPagamentos, BigDecimal valorProximoCaixa, BigDecimal somaTotalTurno) {
+    public Caixa(long id, Funcionario operador, Date dataHoraAbertura, Date dataHoraFechamento, BigDecimal valorInicial, EnumTurno turno, BigDecimal valorDinheiro, BigDecimal valorBoleto, BigDecimal valorCartao, BigDecimal valorCarne, BigDecimal somaVendas, BigDecimal valorProximoCaixa, BigDecimal somaTotalTurno) {
         this.id = id;
         this.operador = operador;
-        this.saldo = saldo;
         this.dataHoraAbertura = dataHoraAbertura;
         this.dataHoraFechamento = dataHoraFechamento;
-        this.terminal = terminal;
         this.valorInicial = valorInicial;
         this.turno = turno;
         this.valorDinheiro = valorDinheiro;
@@ -57,7 +52,6 @@ public class Caixa implements Entidade {
         this.valorCartao = valorCartao;
         this.valorCarne = valorCarne;
         this.somaVendas = somaVendas;
-        this.totalPagamentos = totalPagamentos;
         this.valorProximoCaixa = valorProximoCaixa;
         this.somaTotalTurno = somaTotalTurno;
     }
@@ -72,15 +66,6 @@ public class Caixa implements Entidade {
         this.operador = operador;
     }
 
-    public BigDecimal getSaldo() {
-        return saldo;
-    }
-
-    public void setSaldo(BigDecimal saldo) throws ViolacaoRegraNegocioException {
-        if(saldo==null || saldo.compareTo(TEMP)<0)
-            throw new ViolacaoRegraNegocioException("O saldo deve ser maior ou igual que 0!");
-        this.saldo = saldo;
-    }
 
     public Date getDataHoraAbertura() {
         return dataHoraAbertura;
@@ -102,16 +87,6 @@ public class Caixa implements Entidade {
         this.dataHoraFechamento = dataHoraFechamento;
     }
 
-    public long getTerminal() {
-        return terminal;
-    }
-
-    public void setTerminal(long terminal) throws ViolacaoRegraNegocioException {
-        if(terminal<=0)
-            throw new ViolacaoRegraNegocioException("É necessário informar um terminal válido!");
-        this.terminal = terminal;
-    }
-
     public BigDecimal getValorInicial() {
         return valorInicial;
     }
@@ -122,12 +97,12 @@ public class Caixa implements Entidade {
         this.valorInicial = valorInicial;
     }
 
-    public long getTurno() {
+    public EnumTurno getTurno() {
         return turno;
     }
 
-    public void setTurno(long turno) throws ViolacaoRegraNegocioException {
-        if(turno<=0)
+    public void setTurno(EnumTurno turno) throws ViolacaoRegraNegocioException {
+        if(turno==null)
             throw new ViolacaoRegraNegocioException("É necessário informar um turno válido!");
         this.turno = turno;
     }
@@ -180,16 +155,6 @@ public class Caixa implements Entidade {
         if(somaVendas==null || somaVendas.compareTo(TEMP)<0)
             throw new ViolacaoRegraNegocioException("É necessário informar um valor maior ou igual a 0!");
         this.somaVendas = somaVendas;
-    }
-
-    public BigDecimal getTotalPagamentos() {
-        return totalPagamentos;
-    }
-
-    public void setTotalPagamentos(BigDecimal totalPagamentos) throws ViolacaoRegraNegocioException {
-        if(totalPagamentos==null || totalPagamentos.compareTo(TEMP)<0)
-            throw new ViolacaoRegraNegocioException("É necessário informar um valor maior ou igual a 0!");
-        this.totalPagamentos = totalPagamentos;
     }
 
     public BigDecimal getValorProximoCaixa() {
@@ -247,6 +212,6 @@ public class Caixa implements Entidade {
 
     @Override
     public String toString() {
-        return "Caixa{" + "id=" + id + ", operador=" + operador + ", saldo=" + saldo + ", dataHoraAbertura=" + dataHoraAbertura + ", dataHoraFechamento=" + dataHoraFechamento + ", terminal=" + terminal + '}';
+        return "Caixa{" + "id=" + id + ", operador=" + operador + " dataHoraAbertura=" + dataHoraAbertura + ", dataHoraFechamento=" + dataHoraFechamento + '}';
     }
 }

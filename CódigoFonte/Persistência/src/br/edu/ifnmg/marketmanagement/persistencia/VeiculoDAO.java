@@ -8,11 +8,13 @@ package br.edu.ifnmg.marketmanagement.persistencia;
 import br.edu.ifnmg.marketmanagement.aplicacao.EnumCombustivel;
 import br.edu.ifnmg.marketmanagement.aplicacao.EnumMarcaVeiculo;
 import br.edu.ifnmg.marketmanagement.aplicacao.EnumTipoVeiculo;
+import br.edu.ifnmg.marketmanagement.aplicacao.Lancamento;
 import br.edu.ifnmg.marketmanagement.aplicacao.Veiculo;
 import br.edu.ifnmg.marketmanagement.aplicacao.VeiculoRepositorio;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -72,19 +74,18 @@ public class VeiculoDAO extends DAOGenerico<Veiculo> implements VeiculoRepositor
     @Override
     protected void carregaParametros(Veiculo obj, PreparedStatement consulta) {
         try {
-            if (obj.getId() > 0) {
+            if (obj.getId() > 0)
                 consulta.setLong(9, obj.getId());
-            } else {
-                consulta.setString(1, obj.getModelo());
-                consulta.setString(2, obj.getPlaca());
-                consulta.setString(3, obj.getChassi());
-                consulta.setString(4, obj.getTipo().toString());
-                consulta.setLong(5, obj.getAnoFab());
-                consulta.setString(6, obj.getMarca().toString());
-                consulta.setString(7, obj.getCombustivel().toString());
-                consulta.setString(8, obj.getObservacoes());
-            }
-
+            
+            consulta.setString(1, obj.getModelo());
+            consulta.setString(2, obj.getPlaca());
+            consulta.setString(3, obj.getChassi());
+            consulta.setString(4, obj.getTipo().toString());
+            consulta.setLong(5, obj.getAnoFab());
+            consulta.setString(6, obj.getMarca().toString());
+            consulta.setString(7, obj.getCombustivel().toString());
+            consulta.setString(8, obj.getObservacoes());
+            
         } catch (SQLException ex) {
             Logger.getLogger(VeiculoDAO.class.getName()).log(Level.SEVERE, null, ex);
         }

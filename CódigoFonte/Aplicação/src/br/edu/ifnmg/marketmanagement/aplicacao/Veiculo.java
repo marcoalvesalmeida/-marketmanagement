@@ -175,7 +175,7 @@ public class Veiculo implements Entidade{
 
     @Override
     public String toString() {
-        return "Veiculo{" + "id=" + id + ", modelo=" + modelo + ", placa=" + placa + ", chassi=" + chassi + ", tipo=" + tipo + ", anoFab=" + anoFab + ", marca=" + marca + ", combustivel=" + combustivel + ", observacoes=" + observacoes + '}';
+        return modelo + " - " + placa;
     }
    
 }

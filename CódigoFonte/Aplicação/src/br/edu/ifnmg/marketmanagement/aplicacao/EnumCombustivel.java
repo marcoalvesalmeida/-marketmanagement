@@ -10,13 +10,17 @@ package br.edu.ifnmg.marketmanagement.aplicacao;
  * @author marco
  */
 public enum EnumCombustivel {
-    FLEX(1),
-    GASNATURAL(2),
-    GASOLINA(3),
-    ALCOOL(4),
-    DIESEL(5); 
-    private int combustivel;
-    private EnumCombustivel(int combustivel){
-        this.combustivel = combustivel;
+    FLEX("FLEX"),
+    GASNATURAL("GASNATURAL"),
+    GASOLINA("GASOLINA"),
+    ALCOOL("ALCOOL"),
+    DIESEL("DIESEL"); 
+    
+    private final String combustiveis;
+    EnumCombustivel(String combustivel){
+        this.combustiveis = combustivel;
+    }
+    public String getEnumCombustivel(){
+        return combustiveis;
     }
 }

@@ -5,10 +5,13 @@
  */
 package br.edu.ifnmg.marketmanagement.aplicacao;
 
+import java.util.List;
+
+
+
 /**
  *
  * @author marco
  */
 public interface LancamentoRepositorio extends Repositorio<Lancamento>{
-    
 }
