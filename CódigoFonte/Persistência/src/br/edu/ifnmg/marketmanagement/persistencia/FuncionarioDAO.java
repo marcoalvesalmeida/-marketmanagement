@@ -87,12 +87,17 @@ public class FuncionarioDAO extends DAOGenerico <Funcionario> implements Funcion
     @Override
     protected String carregaParametrosBusca(Funcionario obj) {
         String sql = "";        
-        if(obj.getId() > 0)
-            sql = this.filtrarPor(sql, "id", Long.toString( obj.getId()));        
+                
         if(obj.getNome() != null && !obj.getNome().isEmpty())
             sql = this.filtrarPor(sql, "nome", obj.getNome());        
         if(obj.getCpf() != null && !obj.getCpf().isEmpty()){
             sql = this.filtrarPor(sql, "cpf", obj.getCpf());             
+        }
+        if(obj.getEmail()!= null && !obj.getEmail().isEmpty()){
+            sql = this.filtrarPor(sql, "email", obj.getEmail());             
+        }
+        if(obj.getSenha()!= null && !obj.getSenha().isEmpty()){
+            sql = this.filtrarPor(sql, "senha", obj.getSenha());             
         }
         return sql;
     }
