@@ -7,11 +7,12 @@ create table if not exists funcionarios (
     dataNascimento date,
     endereco int,
     telefone varchar (11),
+     celular varchar (12),
 	email varchar (50),
     salario numeric (8,2),
     cargaHoraria int,
-    tipo int,
+    funcao varchar (50),
     senha varchar (20),
     cnh varchar (11),
-    foreign key (endereco) references enderecos (id)    
+    foreign key (endereco) references enderecos (id) on delete cascade 
 );

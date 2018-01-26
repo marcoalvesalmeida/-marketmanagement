@@ -27,7 +27,7 @@ public class TelaCliente extends TelaBuscar<Cliente>  {
     //protected Posicionamento pos = new Posicionamento();
     private MaskFormatter maskNome;
     private MaskFormatter maskCpf;
-        private MaskFormatter maskTodos;
+    private MaskFormatter maskTodos;
 
 
     

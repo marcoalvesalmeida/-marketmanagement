@@ -50,8 +50,8 @@ public class Produto implements Entidade {
         this.fornecedor = fornecedor;
     }
     
-    public Produto(){
-        
+    public Produto() {   
+  
     }
 
     public String getDescricao() {

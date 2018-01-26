@@ -27,6 +27,8 @@ public class Endereco implements Entidade {
     }  
 
     public Endereco() {
+        this.uf = "MG";
+        
     }
 
     @Override

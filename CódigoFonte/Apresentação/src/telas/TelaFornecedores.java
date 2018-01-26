@@ -1,25 +1,35 @@
 package telas;
 import br.edu.ifnmg.marketmanagement.aplicacao.Fornecedor;
-import br.edu.ifnmg.marketmanagement.aplicacao.FornecedorRepositorio;
 import br.edu.ifnmg.marketmanagement.aplicacao.RepositorioBuilder;
 import br.edu.ifnmg.marketmanagement.aplicacao.ViolacaoRegraNegocioException;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.text.ParseException;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.DefaultFormatterFactory;
+import javax.swing.text.MaskFormatter;
 /**
  *
  * @author guilherme
  */
-public class TelaFornecedores extends javax.swing.JInternalFrame{
+public class TelaFornecedores extends TelaBuscar<Fornecedor>{
     /**
      * Creates new form TelaFornecedoresd
      */
     public TelaFornecedores() {
         initComponents();
+        groupRadio();
+        setEditar(new TelaEditarFornecedor());
+        setRepositorio(RepositorioBuilder.getFornecedorRepositorio());
     }
+    
+    private MaskFormatter maskNome;
+    private MaskFormatter maskCnpj;
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -29,16 +39,18 @@ public class TelaFornecedores extends javax.swing.JInternalFrame{
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
-        txtBusca = new javax.swing.JTextField();
         btnEditar = new javax.swing.JButton();
         btnNovo = new javax.swing.JButton();
         btnRelatorio = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        rdNome = new javax.swing.JRadioButton();
+        rdTodos = new javax.swing.JRadioButton();
         rdCnpj = new javax.swing.JRadioButton();
+        rdNome = new javax.swing.JRadioButton();
         btnPesquisar = new javax.swing.JButton();
+        txtPesquisa = new javax.swing.JFormattedTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbResultado = new javax.swing.JTable();
 
@@ -46,8 +58,6 @@ public class TelaFornecedores extends javax.swing.JInternalFrame{
         setTitle("Pesquisar Fornecedores");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(160, 160, 160)));
-
-        txtBusca.setFont(new java.awt.Font("Trebuchet MS", 0, 12)); // NOI18N
 
         btnEditar.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         btnEditar.setText("Editar");
@@ -59,6 +69,11 @@ public class TelaFornecedores extends javax.swing.JInternalFrame{
 
         btnNovo.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         btnNovo.setText("Novo");
+        btnNovo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNovoActionPerformed(evt);
+            }
+        });
 
         btnRelatorio.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         btnRelatorio.setText("Relatório");
@@ -66,34 +81,96 @@ public class TelaFornecedores extends javax.swing.JInternalFrame{
         jLabel1.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         jLabel1.setText("Pesquisar cadastro já existente por Nome:");
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Modos de Pesquisa"));
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(201, 201, 201)), "Modos de Pesquisa", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 12), new java.awt.Color(4, 2, 2))); // NOI18N
 
-        rdNome.setFont(new java.awt.Font("Trebuchet MS", 1, 12)); // NOI18N
-        rdNome.setText("Nome");
+        rdTodos.setFont(new java.awt.Font("Trebuchet MS", 1, 12)); // NOI18N
+        rdTodos.setText("Todos");
+        rdTodos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdTodosActionPerformed(evt);
+            }
+        });
 
         rdCnpj.setFont(new java.awt.Font("Trebuchet MS", 1, 12)); // NOI18N
         rdCnpj.setText("CNPJ");
+
+        rdNome.setFont(new java.awt.Font("Trebuchet MS", 1, 12)); // NOI18N
+        rdNome.setText("Nome");
+        
+            try {          
+            maskCnpj = new MaskFormatter("##.###.###/####-##"); 
+            maskNome = new MaskFormatter("******************************************");
+            
+                 
+        } catch (ParseException ex) {
+            ex.printStackTrace();
+        }
+        
+                // adiciona um listener aos radiobuttons
+        rdCnpj.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    txtPesquisa.setEnabled(true);
+                    txtPesquisa.setValue(null);
+                    txtPesquisa.setFormatterFactory(new DefaultFormatterFactory(maskCnpj));
+                }
+            }
+        });
+        
+        
+            rdTodos.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    txtPesquisa.setEnabled(true);
+                    txtPesquisa.setValue(null);
+                    try{
+						txtPesquisa.setFormatterFactory(new DefaultFormatterFactory(new MaskFormatter("*")));
+					} catch (ParseException ex) {
+            ex.printStackTrace();
+        }
+                }
+            }
+        });
+        
+                    // adiciona um listener aos radiobuttons
+        rdNome.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    txtPesquisa.setEnabled(true);
+                    txtPesquisa.setValue(null);
+                    txtPesquisa.setFormatterFactory(new DefaultFormatterFactory(maskNome));
+                }
+            }
+        });
+        
+        
+        
+        
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(rdNome)
-                .addGap(85, 85, 85))
-            .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(rdCnpj)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(rdCnpj)
+                    .addComponent(rdNome)
+                    .addComponent(rdTodos))
+                .addContainerGap(55, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(rdTodos, javax.swing.GroupLayout.DEFAULT_SIZE, 24, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(rdNome)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(rdCnpj)
-                .addContainerGap(41, Short.MAX_VALUE))
+                .addGap(6, 6, 6))
         );
 
         btnPesquisar.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
@@ -111,40 +188,39 @@ public class TelaFornecedores extends javax.swing.JInternalFrame{
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(btnNovo, javax.swing.GroupLayout.DEFAULT_SIZE, 118, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnRelatorio, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
-                        .addGap(18, 18, 18))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(txtBusca, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(btnNovo, javax.swing.GroupLayout.DEFAULT_SIZE, 114, Short.MAX_VALUE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnRelatorio, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(6, 6, 6)))
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(txtPesquisa))
+                .addGap(18, 18, 18)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(27, 27, 27))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtBusca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnNovo, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnRelatorio, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                            .addComponent(btnPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(34, Short.MAX_VALUE))
         );
 
         tbResultado.setBorder(null);
@@ -184,39 +260,23 @@ public class TelaFornecedores extends javax.swing.JInternalFrame{
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 269, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void groupRadio(){
+        buttonGroup1.add(rdTodos);
+        buttonGroup1.add(rdNome);
+        buttonGroup1.add(rdCnpj);
+        rdTodos.setSelected(true);
+        txtPesquisa.setEnabled(false);
+    }
+    
     private void btnPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarActionPerformed
-        try {
-            FornecedorRepositorio fornecedores = RepositorioBuilder.getFornecedorRepositorio();          
-            Fornecedor filtro = new Fornecedor();            
-            if(!txtBusca.getText().isEmpty())
-                filtro.setRazaoSocial(txtBusca.getText());                       
-            List<Fornecedor> resultado = (List<Fornecedor>) fornecedores.buscar(filtro);            
-            DefaultTableModel modelo = new DefaultTableModel();            
-            modelo.addColumn("ID");
-            modelo.addColumn("RAZAO SOCIAL");
-            modelo.addColumn("CNPJ");      
-            modelo.addColumn("TELEFONE");
-            modelo.addColumn("EMAIL");           
-            for(Fornecedor c : resultado){
-                Vector valores = new Vector();
-                valores.add(c.getId());
-                valores.add(c.getRazaoSocial());
-                valores.add(c.getCnpj());
-                valores.add(c.getTelefone());              
-                valores.add(c.getEmail());                
-                modelo.addRow(valores);
-            }            
-            tbResultado.setModel(modelo);            
-        } catch (ViolacaoRegraNegocioException ex) {
-            Logger.getLogger(Fornecedor.class.getName()).log(Level.SEVERE, null, ex);
-        }     
+        buscar();
     }//GEN-LAST:event_btnPesquisarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
@@ -225,36 +285,72 @@ public class TelaFornecedores extends javax.swing.JInternalFrame{
             JOptionPane.showMessageDialog(rootPane, "É necessário selecionar um fornecedor!");
             return;
         }
-        
         long id = Long.parseLong(tbResultado.getValueAt(linha, 0).toString() );
-        
-        FornecedorRepositorio fornecedores = RepositorioBuilder.getFornecedorRepositorio();
-        
-        Fornecedor obj = fornecedores.abrir(id);
-        
-        TelaEditarFornecedor tela = new TelaEditarFornecedor();
-        this.getParent().add(tela);
-        tela.setVisible(true);
-        this.setVisible(false);
-        
-        tela.setEntidade(obj);
-        
-        tela.setTelaBusca(this);
+        editar(id);
     }//GEN-LAST:event_btnEditarActionPerformed
 
+    private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
+        novo();        
+    }//GEN-LAST:event_btnNovoActionPerformed
+
+    private void rdTodosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdTodosActionPerformed
+        txtPesquisa.setEnabled(false);
+    }//GEN-LAST:event_rdTodosActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnNovo;
     private javax.swing.JButton btnPesquisar;
     private javax.swing.JButton btnRelatorio;
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JRadioButton rdCnpj;
     private javax.swing.JRadioButton rdNome;
+    private javax.swing.JRadioButton rdTodos;
     private javax.swing.JTable tbResultado;
-    private javax.swing.JTextField txtBusca;
+    private javax.swing.JFormattedTextField txtPesquisa;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    protected void preencherTabela(List<Fornecedor> dados) {
+        DefaultTableModel modelo = new DefaultTableModel();            
+            modelo.addColumn("ID");
+            modelo.addColumn("RAZAO SOCIAL");
+            modelo.addColumn("CNPJ");      
+            modelo.addColumn("TELEFONE");
+            modelo.addColumn("EMAIL");           
+            for(Fornecedor c : dados){
+                Vector valores = new Vector();
+                valores.add(c.getId());
+                valores.add(c.getRazaoSocial());
+                valores.add(c.getCnpj());
+                valores.add(c.getTelefone());              
+                valores.add(c.getEmail());                
+                modelo.addRow(valores);
+            }            
+            tbResultado.setModel(modelo); 
+    }
+
+    @Override
+    protected Fornecedor carregaFiltro() {
+        try {
+            Fornecedor filtro = new Fornecedor();
+            if (!txtPesquisa.getText().isEmpty() && rdNome.isSelected())
+                filtro.setRazaoSocial(txtPesquisa.getText());
+            else if (!txtPesquisa.getText().isEmpty() && rdCnpj.isSelected())
+                filtro.setCnpj(txtPesquisa.getText());            
+            return filtro;
+        } catch (ViolacaoRegraNegocioException ex) {
+            Logger.getLogger(TelaFornecedores.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    @Override
+    protected Fornecedor novaEntidade() {
+        return new Fornecedor();
+    }
 }

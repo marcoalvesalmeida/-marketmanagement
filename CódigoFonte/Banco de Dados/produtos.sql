@@ -15,6 +15,6 @@ create table if not exists produtos (
     informacoesAdicionais varchar (50),
     fracionar boolean,
     fornecedor int,
-    foreign key (fornecedor) references fornecedores (id),
-    foreign key (categoria) references categorias (id)
+    foreign key (fornecedor) references fornecedores (id) on delete cascade,
+    foreign key (categoria) references categorias (id) on delete cascade
 );

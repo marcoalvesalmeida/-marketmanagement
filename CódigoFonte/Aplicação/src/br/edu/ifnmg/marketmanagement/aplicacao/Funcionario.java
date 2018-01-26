@@ -1,7 +1,9 @@
 package br.edu.ifnmg.marketmanagement.aplicacao;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Date;
-import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  *
  * @author guilherme
@@ -9,16 +11,16 @@ import java.util.Objects;
 public class Funcionario extends PessoaFisica{
     private BigDecimal salario;
     private int cargaHoraria;
-    private int tipo;
+    private EnumFuncoes funcao;
     private String senha;
     private String cnh;
     private final BigDecimal TEMP = new BigDecimal(0);
 
-    public Funcionario(BigDecimal salario, int cargaHoraria, int tipo, String senha, String cnh, String nome, Date dataNascimento, String cpf, String rg, long id, Endereco endereco, String telefone, String email, String celular) {
+    public Funcionario(BigDecimal salario, int cargaHoraria, EnumFuncoes funcao, String senha, String cnh, String nome, Date dataNascimento, String cpf, String rg, long id, Endereco endereco, String telefone, String email, String celular) {
         super(nome, dataNascimento, cpf, rg, id, endereco, telefone, email, celular);
         this.salario = salario;
         this.cargaHoraria = cargaHoraria;
-        this.tipo = tipo;
+        this.funcao = funcao;
         this.senha = senha;
         this.cnh = cnh;
     }
@@ -26,8 +28,24 @@ public class Funcionario extends PessoaFisica{
  
 
     public Funcionario() {
+        this.salario = new BigDecimal(0);
+        this.senha = "";
+        this.cnh = "";
+        try {            
+            Endereco n = new Endereco();
+            n.setBairro("");
+            n.setCep("00000-000");
+            n.setCidade("");
+            n.setId(0);            
+            n.setUf("");
+            n.setRua("");
+            n.setNumero(0);
+            this.setEndereco(n);            
+        } catch (ViolacaoRegraNegocioException ex) {
+            Logger.getLogger(Cliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-
+ 
     public BigDecimal getSalario() {
         return salario;
     }
@@ -50,15 +68,15 @@ public class Funcionario extends PessoaFisica{
         this.cargaHoraria = cargaHoraria;
     }
 
-    public int getTipo() {
-        return tipo;
+    public EnumFuncoes getFuncao() {
+        return funcao;
     }
 
-    public void setTipo(int tipo) throws ViolacaoRegraNegocioException {
-        if(tipo <= 0){
-            throw new ViolacaoRegraNegocioException("O tipo deve ser maior que 0!"); 
+    public void setFuncao(EnumFuncoes funcao) throws ViolacaoRegraNegocioException {
+        if(funcao == null){
+            throw new ViolacaoRegraNegocioException("A função não pode nula !"); 
         }
-        this.tipo = tipo;
+        this.funcao = funcao;
     }
 
     public String getSenha(){       
@@ -83,39 +101,7 @@ public class Funcionario extends PessoaFisica{
 
     @Override
     public String toString() {
-        return getNome();
+        return nome;
     }
-
-    @Override
-    public int hashCode() {
-        int hash = 3;
-        hash = 59 * hash + Objects.hashCode(this.senha);
-        hash = 59 * hash + Objects.hashCode(this.cnh);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Funcionario other = (Funcionario) obj;
-        if (!Objects.equals(this.senha, other.senha)) {
-            return false;
-        }
-        if (!Objects.equals(this.cnh, other.cnh)) {
-            return false;
-        }
-        return true;
-    }
-
-   
-    
 
 }

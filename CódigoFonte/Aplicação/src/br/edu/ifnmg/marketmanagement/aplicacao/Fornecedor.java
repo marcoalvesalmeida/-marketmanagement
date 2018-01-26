@@ -1,5 +1,7 @@
 package br.edu.ifnmg.marketmanagement.aplicacao;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  *
  * @author guilherme
@@ -21,6 +23,11 @@ public class Fornecedor extends Pessoa {
     }
 
     public Fornecedor() {
+        try {
+            super.setEndereco(new Endereco());
+        } catch (ViolacaoRegraNegocioException ex) {
+            Logger.getLogger(Fornecedor.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public String getInformacoesAdicionais() {
@@ -98,7 +105,7 @@ public class Fornecedor extends Pessoa {
 
     @Override
     public String toString() {
-        return "Fornecedor{" + "razaoSocial=" + razaoSocial + ", cnpj=" + cnpj + '}';
+        return razaoSocial ;
     } 
   
 }

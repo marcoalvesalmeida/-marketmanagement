@@ -9,5 +9,5 @@ create table if not exists fornecedores (
 	email varchar (50),
 	informacoesAdicionais text,
 	ativo boolean,
-    foreign key (endereco) references enderecos (id)    
+    foreign key (endereco) references enderecos (id) on delete cascade  
 );

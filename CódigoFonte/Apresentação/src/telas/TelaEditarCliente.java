@@ -27,6 +27,7 @@ public class TelaEditarCliente extends TelaEditar<Cliente>{
     public TelaEditarCliente() {
         initComponents(); 
         setRepositorio(RepositorioBuilder.getClienteRepositorio());
+        
     }
     
     private MaskFormatter maskCpf;
@@ -119,7 +120,7 @@ public class TelaEditarCliente extends TelaEditar<Cliente>{
         setClosable(true);
         setTitle("Editar Cliente");
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Informações Básicas", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 12), new java.awt.Color(0, 0, 0))); // NOI18N
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(187, 187, 187)), "", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 12), new java.awt.Color(183, 183, 183)), "Informações Básicas", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 12), new java.awt.Color(0, 0, 0))); // NOI18N
 
         txtNome.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
 
@@ -206,29 +207,6 @@ public class TelaEditarCliente extends TelaEditar<Cliente>{
 
         btnImprimir1.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         btnImprimir1.setText("Imprimir Ficha");
-        
-         // cria as mascaras e já a deixa pronta pra uso
-        try {
-            masktel = new MaskFormatter("##-########");
-            maskcel = new MaskFormatter("##-#########");
-            maskCpf = new MaskFormatter("###.###.###-##");
-            maskcep = new MaskFormatter("#####-###");
-            maskuf = new MaskFormatter("UU");
-            masknascimento = new MaskFormatter("##/##/####");
-           
-            
-        } catch (ParseException ex) {
-            ex.printStackTrace();
-        }
-
-     
-        txtCpf.setFormatterFactory(new DefaultFormatterFactory(maskCpf));
-        txtTelefone.setFormatterFactory(new DefaultFormatterFactory(masktel));
-        txtCelular.setFormatterFactory(new DefaultFormatterFactory(maskcel));
-        txtCep.setFormatterFactory(new DefaultFormatterFactory(maskcep));
-        txtUf.setFormatterFactory(new DefaultFormatterFactory(maskuf));
-        txtDataNascimento.setFormatterFactory(new DefaultFormatterFactory(masknascimento));
-       
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -411,8 +389,7 @@ public class TelaEditarCliente extends TelaEditar<Cliente>{
         txtCpf.setText(entidade.getCpf());
         txtEmail.setText(entidade.getEmail());
         txtTelefone.setText(entidade.getTelefone());
-        txtRg.setText(entidade.getRg());
-        System.out.println(entidade.getCelular());
+        txtRg.setText(entidade.getRg());        
         txtCelular.setText(entidade.getCelular());
         txtSaldoCompras.setText(entidade.getSaldoCompras().toString());
         txtDescontos.setText(entidade.getDescontos().toString());

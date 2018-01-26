@@ -24,7 +24,7 @@ public class FornecedorDAO extends DAOGenerico <Fornecedor> implements Fornecedo
 
     @Override
     protected String consultaInsert() {
-        return "insert into fornecedores (razaoSocial, cnpj, telefone,telefone2,inscricaoSocial,endereco,informacoesAdicionais,ativo, email) values (?,?,?,?)";
+        return "insert into fornecedores (razaoSocial, cnpj, telefone,telefone2,inscricaoSocial,endereco,informacoesAdicionais,ativo, email) values (?,?,?,?,?,?,?,?,?)";
     }
 
     @Override
@@ -93,5 +93,7 @@ public class FornecedorDAO extends DAOGenerico <Fornecedor> implements Fornecedo
             sql = this.filtrarPor(sql, "cnpj", obj.getCnpj());        
         return sql;
     }
+
+   
     
 }

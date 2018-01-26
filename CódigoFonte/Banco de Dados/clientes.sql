@@ -11,5 +11,5 @@ create table if not exists clientes (
     informacoesAdicionais text,
     saldoCompras numeric (8,2),
     descontos numeric (8,2),
-    foreign key (endereco) references enderecos (id)
+    foreign key (endereco) references enderecos (id) on delete cascade
 );

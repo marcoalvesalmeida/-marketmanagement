@@ -22,14 +22,20 @@ public abstract class Pessoa implements Entidade {
     }   
 
     public Pessoa() {
+        this.telefone = "";
+        this.celular = "";
     }
 
     public String getCelular() {
-        return celular;
+        
+            return celular;
+        
+       
     }
 
     public void setCelular(String celular) {
         this.celular = celular;
+        
     }
     
   
@@ -58,10 +64,7 @@ public abstract class Pessoa implements Entidade {
         return telefone;
     }
 
-    public void setTelefone(String telefone) throws ViolacaoRegraNegocioException{
-        if(telefone==null || telefone.length()< 11 || telefone.length() > 12){
-            throw new ViolacaoRegraNegocioException("O telefone deve ter o seguinte formato: 00-12345678 ou 00-123456789");
-        }
+    public void setTelefone(String telefone){       
         this.telefone = telefone;
     }
 

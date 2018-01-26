@@ -1,68 +1,52 @@
 package telas;
+import br.edu.ifnmg.marketmanagement.aplicacao.Endereco;
 import br.edu.ifnmg.marketmanagement.aplicacao.EnderecoRepositorio;
 import br.edu.ifnmg.marketmanagement.aplicacao.Fornecedor;
-import br.edu.ifnmg.marketmanagement.aplicacao.FornecedorRepositorio;
 import br.edu.ifnmg.marketmanagement.aplicacao.RepositorioBuilder;
 import br.edu.ifnmg.marketmanagement.aplicacao.ViolacaoRegraNegocioException;
-import java.text.ParseException;
-import javax.swing.JOptionPane;
+
 /**
  *
  * @author guilherme
  */
-public class TelaEditarFornecedor extends javax.swing.JInternalFrame {
+public class TelaEditarFornecedor extends TelaEditar<Fornecedor> { 
     /**
      * Creates new form TelaEditarFornecedor
      */
     public TelaEditarFornecedor() {
         initComponents();
+        setRepositorio(RepositorioBuilder.getFornecedorRepositorio());
     }
+    EnderecoRepositorio end = RepositorioBuilder.getEnderecoRepositorio();
+
     
-    Fornecedor entidade;
-    
-    TelaFornecedores telaBusca;
-
-    public Fornecedor getEntidade() {
-        return entidade;
-    }
-
-    public void setEntidade(Fornecedor entidade) {
-        this.entidade = entidade;        
-        txtNome.setText(entidade.getRazaoSocial());
-        txtCnpj.setText(entidade.getCnpj());
-        txtEmail.setText(entidade.getEmail());
-        txtTelefone.setText(entidade.getTelefone());  
-        txtCelular.setText(entidade.getCelular());
-        txtInfo.setText(entidade.getInformacoesAdicionais());
-        txtInscricao.setText(entidade.getInscricaoEstadual());     
-        txtUf.setText(entidade.getEndereco().getUf());
-        txtRua.setText(entidade.getEndereco().getRua());
-        txtCidade.setText(entidade.getEndereco().getCidade());
-        txtBairro.setText(entidade.getEndereco().getBairro());
-        txtCep.setText(entidade.getEndereco().getCep());
-        if(entidade.isAtivo()){
-            rdSim.setSelected(true);
-        }else{
-            rdNao.setSelected(true);
-        }   
-        System.out.println(entidade.getEndereco().getCep());
-    }
-
-    public TelaFornecedores getTelaBusca() {
-        return telaBusca;
-    }
-
-    public void setTelaBusca(TelaFornecedores telaBusca) {
-        this.telaBusca = telaBusca;
-    }
-    
-    private void carregaObjeto() throws ViolacaoRegraNegocioException{        
+  
+    @Override
+    protected void carregaObjeto() throws ViolacaoRegraNegocioException{        
         entidade.setRazaoSocial(txtNome.getText());        
         entidade.setCnpj(txtCnpj.getText());  
         entidade.setTelefone(txtTelefone.getText());  
         entidade.setEmail(txtEmail.getText());
-        
-        
+        entidade.setAtivo(rdSim.isSelected());
+        entidade.setCelular(txtCelular.getText());
+        entidade.setInscricaoEstadual(txtInscricao.getText());
+        entidade.setInformacoesAdicionais(txtInfo.getText());
+        Endereco endereco = new Endereco();
+        if (entidade.getEndereco().getId() > 0)
+            endereco.setId(entidade.getEndereco().getId());
+        else 
+            endereco.setId(0);
+        endereco.setBairro(txtBairro.getText());
+        endereco.setCep(txtCep.getText());
+        endereco.setCidade(txtCidade.getText());
+        endereco.setRua(txtRua.getText());        
+        endereco.setUf(txtUf.getText());
+        entidade.setEndereco(endereco);       
+        end.salvar(endereco);
+        Long id = end.maxID(); 
+        if (entidade.getEndereco().getId() <= 0)
+            entidade.getEndereco().setId(id);
+            
     }
 
     /**
@@ -111,7 +95,7 @@ public class TelaEditarFornecedor extends javax.swing.JInternalFrame {
         setClosable(true);
         setTitle("Editar Fornecedor");
 
-        jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Informações Básicas", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 12), new java.awt.Color(0, 0, 0))); // NOI18N
+        jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(198, 188, 188)), "Informações Básicas", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Dialog", 0, 12), new java.awt.Color(0, 0, 0))); // NOI18N
 
         jLabel70.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         jLabel70.setText("Nome do Fornecedor:");
@@ -152,7 +136,12 @@ public class TelaEditarFornecedor extends javax.swing.JInternalFrame {
         jLabel80.setText("Email:");
 
         btnRelatorio.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
-        btnRelatorio.setText("Imprimir Ficha");
+        btnRelatorio.setText("Deletar");
+        btnRelatorio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRelatorioActionPerformed(evt);
+            }
+        });
 
         btnSair.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         btnSair.setText("Sair");
@@ -170,7 +159,7 @@ public class TelaEditarFornecedor extends javax.swing.JInternalFrame {
             }
         });
 
-        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder("Ativo:"));
+        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(209, 209, 209)), "Ativo:"));
 
         rdSim.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         rdSim.setText("Sim");
@@ -275,12 +264,12 @@ public class TelaEditarFornecedor extends javax.swing.JInternalFrame {
                                 .addComponent(jLabel22)))
                         .addContainerGap())))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(85, 85, 85)
-                .addComponent(btnRelatorio)
-                .addGap(85, 85, 85)
-                .addComponent(btnSair, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(64, 64, 64)
+                .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(94, 94, 94)
+                .addComponent(btnRelatorio, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnSair, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(84, 84, 84))
         );
         jPanel7Layout.setVerticalGroup(
@@ -304,7 +293,7 @@ public class TelaEditarFornecedor extends javax.swing.JInternalFrame {
                     .addGroup(jPanel7Layout.createSequentialGroup()
                         .addComponent(jLabel74)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtCelular, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -343,10 +332,11 @@ public class TelaEditarFornecedor extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)))
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnRelatorio, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSair, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnSair, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnRelatorio, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
 
@@ -367,25 +357,16 @@ public class TelaEditarFornecedor extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairActionPerformed
-        this.setVisible(false);
-        this.telaBusca.setVisible(true);
+        voltar();
     }//GEN-LAST:event_btnSairActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        if(JOptionPane.showConfirmDialog(this, "Deseja realmente salvar os dados ?", "Confirmação", JOptionPane.YES_NO_OPTION)==0){
-            try {
-                carregaObjeto();
-                FornecedorRepositorio fornecedores = RepositorioBuilder.getFornecedorRepositorio();
-                
-                if(fornecedores.salvar(entidade))
-                    JOptionPane.showMessageDialog(rootPane, "Dados salvos com sucesso!");
-                else  
-                    JOptionPane.showMessageDialog(rootPane, "Falha ao salvar os dados! Informe o administrador do sistema.");
-            } catch (ViolacaoRegraNegocioException ex) {
-                JOptionPane.showMessageDialog(rootPane, ex.getMessage());
-            }
-        }
+        salvar();
     }//GEN-LAST:event_btnSalvarActionPerformed
+
+    private void btnRelatorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRelatorioActionPerformed
+        apagar();
+    }//GEN-LAST:event_btnRelatorioActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -423,4 +404,25 @@ public class TelaEditarFornecedor extends javax.swing.JInternalFrame {
     private javax.swing.JTextField txtTelefone;
     private javax.swing.JTextField txtUf;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    protected void carregaCampos() {
+        txtNome.setText(entidade.getRazaoSocial());
+        txtCnpj.setText(entidade.getCnpj());
+        txtEmail.setText(entidade.getEmail());
+        txtTelefone.setText(entidade.getTelefone());  
+        txtCelular.setText(entidade.getCelular());
+        txtInfo.setText(entidade.getInformacoesAdicionais());
+        txtInscricao.setText(entidade.getInscricaoEstadual());     
+        txtUf.setText(entidade.getEndereco().getUf());
+        txtRua.setText(entidade.getEndereco().getRua());
+        txtCidade.setText(entidade.getEndereco().getCidade());
+        txtBairro.setText(entidade.getEndereco().getBairro());
+        txtCep.setText(entidade.getEndereco().getCep());
+        if(entidade.isAtivo()){
+            rdSim.setSelected(true);
+        }else{
+            rdNao.setSelected(true);
+        }   
+    }
 }

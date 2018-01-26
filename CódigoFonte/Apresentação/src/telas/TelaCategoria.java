@@ -1,6 +1,7 @@
 package telas;
 import br.edu.ifnmg.marketmanagement.aplicacao.Categoria;
 import br.edu.ifnmg.marketmanagement.aplicacao.CategoriaRepositorio;
+import br.edu.ifnmg.marketmanagement.aplicacao.RepositorioBuilder;
 import br.edu.ifnmg.marketmanagement.aplicacao.ViolacaoRegraNegocioException;
 import br.edu.ifnmg.marketmanagement.persistencia.CategoriaDAO;
 import java.util.List;
@@ -9,18 +10,21 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author guilherme
  */
-public class TelaCategoria extends javax.swing.JInternalFrame {
+public class TelaCategoria extends TelaBuscar<Categoria> {
+
     /**
      * Creates new form TelaCategorias
      */
     public TelaCategoria() {
         initComponents();
-        this.exibirTodos();
-    }    
+        setRepositorio(RepositorioBuilder.getCategoriaRepositorio());
+        carregaTabela();
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -37,8 +41,8 @@ public class TelaCategoria extends javax.swing.JInternalFrame {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbDescricao = new javax.swing.JTable();
-        jButton2a1 = new javax.swing.JButton();
-        jButton2a = new javax.swing.JButton();
+        btnSalvar = new javax.swing.JButton();
+        btnDeletar = new javax.swing.JButton();
 
         setClosable(true);
         setTitle("Edição de Categorias");
@@ -85,24 +89,25 @@ public class TelaCategoria extends javax.swing.JInternalFrame {
             }
         ));
         tbDescricao.setToolTipText("Categorias Cadastradas");
-        tbDescricao.setEnabled(false);
+        tbDescricao.setFocusable(false);
         tbDescricao.setGridColor(new java.awt.Color(254, 254, 254));
+        tbDescricao.setRequestFocusEnabled(false);
         jScrollPane1.setViewportView(tbDescricao);
         tbDescricao.getAccessibleContext().setAccessibleName("");
 
-        jButton2a1.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
-        jButton2a1.setText("Salvar");
-        jButton2a1.addActionListener(new java.awt.event.ActionListener() {
+        btnSalvar.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
+        btnSalvar.setText("Salvar");
+        btnSalvar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2a1ActionPerformed(evt);
+                btnSalvarActionPerformed(evt);
             }
         });
 
-        jButton2a.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
-        jButton2a.setText("Deletar");
-        jButton2a.addActionListener(new java.awt.event.ActionListener() {
+        btnDeletar.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
+        btnDeletar.setText("Deletar");
+        btnDeletar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2aActionPerformed(evt);
+                btnDeletarActionPerformed(evt);
             }
         });
 
@@ -118,9 +123,9 @@ public class TelaCategoria extends javax.swing.JInternalFrame {
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 1, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton2a1, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton2a, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnDeletar, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -132,64 +137,81 @@ public class TelaCategoria extends javax.swing.JInternalFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2a, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2a1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnDeletar, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(15, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2a1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2a1ActionPerformed
+    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
         CategoriaRepositorio cat = new CategoriaDAO();
         Categoria c = new Categoria();
-        if(JOptionPane.showConfirmDialog(this, "Deseja realmente salvar os dados?","Confirmação",
+        if (JOptionPane.showConfirmDialog(this, "Deseja realmente salvar os dados?", "Confirmação",
                 JOptionPane.YES_NO_OPTION) == 0) {
             if (txtCategoria.getText().length() > 3 && !txtCategoria.getText().isEmpty()) {
                 try {
                     c.setDescricao(txtCategoria.getText());
-                    if (cat.salvar(c)){
-                        this.exibirTodos(); 
+                    if (cat.salvar(c)) {
                         txtCategoria.setText("");
+                        carregaTabela();
                     }
                 } catch (ViolacaoRegraNegocioException ex) {
                     Logger.getLogger(TelaCategoria.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            }else{
+            } else {
                 JOptionPane.showMessageDialog(null, "A descrição deve ter no mínimo 4 caracteres!");
             }
         }
-    }//GEN-LAST:event_jButton2a1ActionPerformed
+    }//GEN-LAST:event_btnSalvarActionPerformed
 
-    private void jButton2aActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2aActionPerformed
+    private void btnDeletarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeletarActionPerformed
         int linha = tbDescricao.getSelectedRow();
         long id = Long.parseLong(tbDescricao.getValueAt(linha, 0).toString());
         String descricao = tbDescricao.getValueAt(linha, 1).toString();
-        CategoriaRepositorio cat = new  CategoriaDAO();
-        Categoria nova = new Categoria();  
+        CategoriaRepositorio cat = new CategoriaDAO();
+        Categoria nova = new Categoria();
         nova.setId(id);
-        try {           
+        try {
             nova.setDescricao(descricao);
         } catch (ViolacaoRegraNegocioException ex) {
             Logger.getLogger(TelaCategoria.class.getName()).log(Level.SEVERE, null, ex);
         }
-        if (JOptionPane.showConfirmDialog(null,"Deseja realmente apagar ?", "Aviso",JOptionPane.ERROR_MESSAGE) == 0){
-            if (cat.apagar(nova))
+        if (JOptionPane.showConfirmDialog(null, "Deseja realmente apagar ?", "Aviso", JOptionPane.ERROR_MESSAGE) == 0) {
+            if (cat.apagar(nova)) {
                 JOptionPane.showMessageDialog(null, "Registro apagado com sucesso!");
-            this.exibirTodos();           
-        }           
-    }//GEN-LAST:event_jButton2aActionPerformed
- 
-    private void exibirTodos() {        
+                carregaTabela();
+            } else {
+                JOptionPane.showMessageDialog(null, "Essa categoria esta vinculada com outro produto! Apague primeiro o produto.");
+                return;
+            }
+        }
+    }//GEN-LAST:event_btnDeletarActionPerformed
+
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnDeletar;
+    private javax.swing.JButton btnSalvar;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tbDescricao;
+    private javax.swing.JTextField txtCategoria;
+    // End of variables declaration//GEN-END:variables
+
+    @Override
+    protected void preencherTabela(List<Categoria> dados) {
+    }
+
+    private void carregaTabela() {
         CategoriaRepositorio clientes = new CategoriaDAO();
         DefaultTableModel modelo = new DefaultTableModel();
-        
-        Categoria filtro = new Categoria();
         modelo.addColumn("ID");
         modelo.addColumn("DESCRIÇÃO");
-        List<Categoria> resultado = (List<Categoria>) clientes.buscar(filtro);
-        int linha=0;
-        for (Categoria c : resultado) {             
+        List<Categoria> resultado = (List<Categoria>) clientes.buscar(carregaFiltro());
+        int linha = 0;
+        for (Categoria c : resultado) {
             Vector valores = new Vector();
             valores.add(c.getId());
             valores.add(c.getDescricao());
@@ -197,13 +219,16 @@ public class TelaCategoria extends javax.swing.JInternalFrame {
         }
         tbDescricao.setModel(modelo);
     }
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton2a;
-    private javax.swing.JButton jButton2a1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tbDescricao;
-    private javax.swing.JTextField txtCategoria;
-    // End of variables declaration//GEN-END:variables
+
+    @Override
+    protected Categoria carregaFiltro() {
+        Categoria filtro = new Categoria();
+        return filtro;
+    }
+
+    @Override
+    protected Categoria novaEntidade() {
+        Categoria categoria = new Categoria();
+        return categoria;
+    }
 }

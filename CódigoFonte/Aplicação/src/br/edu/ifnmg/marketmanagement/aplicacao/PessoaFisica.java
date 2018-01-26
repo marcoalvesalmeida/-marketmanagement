@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
  * @author guilherme
  */
 public abstract class PessoaFisica extends Pessoa{
-    private String nome;
+    String nome;
     private Date dataNascimento;
     private String cpf;
     private String rg;
@@ -24,6 +24,7 @@ public abstract class PessoaFisica extends Pessoa{
 
  
     public PessoaFisica(){
+        this.dataNascimento =  new Date ("01/01/01111");
     }
     
   

@@ -29,12 +29,12 @@ public class ClienteDAO extends DAOGenerico <Cliente> implements ClienteReposito
 
     @Override
     protected String consultaInsert() {
-        return "insert into clientes (nome, dataNascimento, cpf, rg,endereco, telefone,celular, email,informacoesAdicionais, saldoCompras,descontos ) values (?,?,?,?,?,?)";
+        return "insert into clientes (nome, dataNascimento, cpf, rg,endereco, telefone,celular, email,informacoesAdicionais, saldoCompras,descontos ) values (?,?,?,?,?,?,?,?,?,?,?)";
     }
 
     @Override
     protected String consultaUpdate() {
-        return "update clientes set nome = ?, dataNascimento = ?,cpf = ?, rg = ?, telefone = ?,celular=?, email = ?, informacoesAdicionais = ?,saldoCompras =?, descontos=? where id = ?";
+        return "update clientes set nome = ?, dataNascimento = ?,cpf = ?, rg = ?,endereco =?, telefone = ?,celular=?, email = ?, informacoesAdicionais = ?,saldoCompras =?, descontos=? where id = ?";
     }
 
     @Override
@@ -51,17 +51,19 @@ public class ClienteDAO extends DAOGenerico <Cliente> implements ClienteReposito
     protected void carregaParametros(Cliente obj, PreparedStatement consulta) {
         try{            
             consulta.setString(1, obj.getNome());
-            consulta.setDate(2, (Date) obj.getDataNascimento());            
+            consulta.setDate(2, new java.sql.Date( obj.getDataNascimento().getTime()));            
             consulta.setString(3, obj.getCpf().replace(".", "").replace("-", ""));
-            consulta.setString(4, obj.getRg());           
-            consulta.setString(5, obj.getTelefone());
-            consulta.setString(6, obj.getCelular());
-            consulta.setString(7, obj.getEmail());
-            consulta.setString(8, obj.getInformacoesAdicionais());
-            consulta.setBigDecimal(9, obj.getSaldoCompras());
-            consulta.setBigDecimal(10, obj.getDescontos());                        
+            consulta.setString(4, obj.getRg());            
+            consulta.setInt(5, Integer.parseInt(String.valueOf(obj.getEndereco().getId())));
+            consulta.setString(6, obj.getTelefone().replace("-", ""));
+            consulta.setString(7, obj.getCelular().replace("-", ""));
+            consulta.setString(8, obj.getEmail());
+            consulta.setString(9, obj.getInformacoesAdicionais());
+            consulta.setBigDecimal(10, obj.getSaldoCompras());
+            consulta.setBigDecimal(11, obj.getDescontos());                        
             if(obj.getId() > 0)
-                consulta.setLong(11, obj.getId()); 
+                consulta.setLong(12, obj.getId()); 
+            System.out.println(consulta);
             
         }catch(SQLException e){
             Logger.getLogger(ClienteDAO.class.getName()).log(Level.SEVERE, null, e);            
@@ -77,11 +79,14 @@ public class ClienteDAO extends DAOGenerico <Cliente> implements ClienteReposito
             cli.setId(dados.getLong("id"));
             cli.setEmail(dados.getString("email"));          
             cli.setCpf(dados.getString("cpf").substring(0,3)+"."+dados.getString("cpf").substring(3,6)+"."+dados.getString("cpf").substring(6,9)+"-"+dados.getString("cpf").substring(9,11));
-            cli.setTelefone(dados.getString("telefone"));
+           
+            cli.setTelefone(dados.getString("telefone").substring(0,2)+"-"+dados.getString("telefone").substring(2,10));
+          
             cli.setEndereco(endereco.abrir(dados.getInt("endereco")));
             cli.setRg(dados.getString("rg"));
             cli.setDataNascimento(dados.getDate("dataNascimento"));
-            cli.setCelular(dados.getString("celular"));
+  
+            cli.setCelular(dados.getString("celular").substring(0,2)+"-"+dados.getString("celular").substring(2,9));
             cli.setDescontos(dados.getBigDecimal("descontos"));
             cli.setInformacoesAdicionais(dados.getString("informacoesAdicionais"));
             cli.setSaldoCompras(dados.getBigDecimal("saldoCompras"));

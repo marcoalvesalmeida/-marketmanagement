@@ -5,4 +5,6 @@ package br.edu.ifnmg.marketmanagement.aplicacao;
  */
 public interface FornecedorRepositorio extends Repositorio<Fornecedor>{
     
+    
+    
 }

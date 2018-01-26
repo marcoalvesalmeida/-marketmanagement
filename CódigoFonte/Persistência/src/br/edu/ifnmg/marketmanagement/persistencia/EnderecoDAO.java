@@ -1,4 +1,5 @@
 package br.edu.ifnmg.marketmanagement.persistencia;
+
 import br.edu.ifnmg.marketmanagement.aplicacao.Endereco;
 import br.edu.ifnmg.marketmanagement.aplicacao.EnderecoRepositorio;
 import br.edu.ifnmg.marketmanagement.aplicacao.Entidade;
@@ -8,11 +9,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 /**
  *
  * @author guilherme
  */
-public class EnderecoDAO extends DAOGenerico<Endereco> implements EnderecoRepositorio{
+public class EnderecoDAO extends DAOGenerico<Endereco> implements EnderecoRepositorio {
 
     @Override
     protected String consultaAbrir() {
@@ -42,13 +44,15 @@ public class EnderecoDAO extends DAOGenerico<Endereco> implements EnderecoReposi
     @Override
     protected String carregaParametrosBusca(Endereco obj) {
         String sql = "";
-        
-        if(obj.getId() > 0)
-            sql = this.filtrarPor(sql, "id", Long.toString( obj.getId() ));
-        
-        if(obj.getCep() != null && !obj.getCep().isEmpty())
-            sql = this.filtrarPor(sql, "cep", obj.getCep());      
-        
+
+        if (obj.getId() > 0) {
+            sql = this.filtrarPor(sql, "id", Long.toString(obj.getId()));
+        }
+
+        if (obj.getCep() != null && !obj.getCep().isEmpty()) {
+            sql = this.filtrarPor(sql, "cep", obj.getCep());
+        }
+
         return sql;
     }
 
@@ -56,13 +60,15 @@ public class EnderecoDAO extends DAOGenerico<Endereco> implements EnderecoReposi
     protected void carregaParametros(Endereco obj, PreparedStatement consulta) {
         try {
             consulta.setString(1, obj.getRua());
-            consulta.setString(2,(obj.getCep().replace("-", "")));
+            consulta.setString(2, (obj.getCep().replace("-", "")));
             consulta.setInt(3, obj.getNumero());
             consulta.setString(4, obj.getBairro());
             consulta.setString(5, obj.getCidade());
-            consulta.setString(6, obj.getUf());            
-            if(obj.getId() > 0)
+            consulta.setString(6, obj.getUf());
+            if (obj.getId() > 0) {
                 consulta.setLong(7, obj.getId());
+            }
+            System.out.println(consulta);
         } catch (SQLException ex) {
             Logger.getLogger(EnderecoDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -71,19 +77,34 @@ public class EnderecoDAO extends DAOGenerico<Endereco> implements EnderecoReposi
     @Override
     protected Endereco carregaObjeto(ResultSet dados) {
         Endereco end = new Endereco();
-        try {           
+        try {
             end.setBairro(dados.getString("bairro"));
             end.setId(dados.getLong("id"));
-            end.setCep((dados.getString("cep").substring(0,5)+"-"+dados.getString("cep").substring(5,8)));
+            end.setCep((dados.getString("cep").substring(0, 5) + "-" + dados.getString("cep").substring(5, 8)));
             end.setCidade(dados.getString("cidade"));
             end.setNumero(dados.getInt("numero"));
             end.setRua(dados.getString("rua"));
             end.setUf(dados.getString("uf"));
             return end;
-        } catch (SQLException | ViolacaoRegraNegocioException ex) {        
+        } catch (SQLException | ViolacaoRegraNegocioException ex) {
             Logger.getLogger(EnderecoDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
-    
+
+    @Override
+    public long maxID() {
+        try {
+            String sql = "select MAX(id) from enderecos";
+            PreparedStatement ps = BD.getConexao().prepareStatement(sql);
+            ResultSet dados = ps.executeQuery();
+            if (dados.next()) {     
+                return dados.getLong(1);                
+            }
+        } catch (ClassNotFoundException | SQLException ex) {
+            Logger.getLogger(EnderecoDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return 0;
+    }
+
 }

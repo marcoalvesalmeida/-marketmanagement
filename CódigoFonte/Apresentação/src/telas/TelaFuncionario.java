@@ -5,17 +5,40 @@
  */
 package telas;
 
+import br.edu.ifnmg.marketmanagement.aplicacao.Funcionario;
+import br.edu.ifnmg.marketmanagement.aplicacao.RepositorioBuilder;
+import br.edu.ifnmg.marketmanagement.aplicacao.ViolacaoRegraNegocioException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
- * @author marco
+ * @author guilherme
  */
-public class TelaFuncionario extends javax.swing.JInternalFrame {
+public class TelaFuncionario extends TelaBuscar<Funcionario> {
 
     /**
      * Creates new form TelaFuncionariod
      */
     public TelaFuncionario() {
         initComponents();
+        groupRadio();
+        setEditar(new TelaEditarFuncionario());
+        setRepositorio(RepositorioBuilder.getFuncionarioRepositorio());
+    }
+    
+    DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+    
+    private void groupRadio() {
+        grupo1.add(rdNome);
+        grupo1.add(rdCpf);
+        txtPesquisa.setEnabled(false);
     }
 
     /**
@@ -27,41 +50,63 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        grupo1 = new javax.swing.ButtonGroup();
         jPanel3 = new javax.swing.JPanel();
-        jTextField2 = new javax.swing.JTextField();
-        jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
+        btnEditar = new javax.swing.JButton();
+        btnNovo = new javax.swing.JButton();
+        btnRelatorio = new javax.swing.JButton();
+        lblTexto = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
-        jRadioButton3 = new javax.swing.JRadioButton();
-        jRadioButton4 = new javax.swing.JRadioButton();
+        rdNome = new javax.swing.JRadioButton();
+        rdCpf = new javax.swing.JRadioButton();
+        btnPesquisa = new javax.swing.JButton();
+        txtPesquisa = new javax.swing.JFormattedTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tbResultado = new javax.swing.JTable();
+
+        setClosable(true);
 
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(160, 160, 160)));
 
-        jTextField2.setFont(new java.awt.Font("Trebuchet MS", 0, 12)); // NOI18N
+        btnEditar.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
+        btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
 
-        jButton6.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
-        jButton6.setText("Editar");
+        btnNovo.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
+        btnNovo.setText("Novo");
+        btnNovo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNovoActionPerformed(evt);
+            }
+        });
 
-        jButton7.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
-        jButton7.setText("Novo");
+        btnRelatorio.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
+        btnRelatorio.setText("Relatório");
 
-        jButton8.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
-        jButton8.setText("Relatório");
+        lblTexto.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
+        lblTexto.setText("Pesquisar cadastro já existente por Nome:");
 
-        jLabel2.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
-        jLabel2.setText("Pesquisar cadastro já existente por Nome:");
+        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(185, 185, 185)), "Modos de Pesquisa"));
 
-        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Modos de Pesquisa"));
+        rdNome.setFont(new java.awt.Font("Trebuchet MS", 1, 12)); // NOI18N
+        rdNome.setText("Nome");
+        rdNome.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdNomeActionPerformed(evt);
+            }
+        });
 
-        jRadioButton3.setFont(new java.awt.Font("Trebuchet MS", 1, 12)); // NOI18N
-        jRadioButton3.setText("Nome");
-
-        jRadioButton4.setFont(new java.awt.Font("Trebuchet MS", 1, 12)); // NOI18N
-        jRadioButton4.setText("CPF");
+        rdCpf.setFont(new java.awt.Font("Trebuchet MS", 1, 12)); // NOI18N
+        rdCpf.setText("CPF");
+        rdCpf.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdCpfActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -69,21 +114,30 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jRadioButton3)
+                .addComponent(rdNome)
                 .addGap(85, 85, 85))
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jRadioButton4)
+                .addComponent(rdCpf)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(jRadioButton3)
+                .addGap(6, 6, 6)
+                .addComponent(rdNome)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jRadioButton4)
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addComponent(rdCpf)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
+
+        btnPesquisa.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
+        btnPesquisa.setText("Pesquisar");
+        btnPesquisa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPesquisaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -91,60 +145,64 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 515, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(lblTexto)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(82, 82, 82)
-                        .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(83, 83, 83)
-                        .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(17, 17, 17)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                        .addComponent(btnNovo, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnRelatorio, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtPesquisa))
+                .addGap(20, 20, 20)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(28, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
+                        .addComponent(lblTexto)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                            .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnNovo, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnRelatorio, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
-        jTable1.setBorder(null);
-        jTable1.setFont(new java.awt.Font("Trebuchet MS", 0, 12)); // NOI18N
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tbResultado.setBorder(null);
+        tbResultado.setFont(new java.awt.Font("Trebuchet MS", 0, 12)); // NOI18N
+        tbResultado.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Código", "Nome do Funcionário", "CPF", "Telefone ", "Email", "Endereço"
+
             }
         ));
-        jTable1.setGridColor(new java.awt.Color(254, 254, 254));
-        jTable1.setRowMargin(0);
-        jScrollPane1.setViewportView(jTable1);
+        tbResultado.setGridColor(new java.awt.Color(254, 254, 254));
+        tbResultado.setRowMargin(0);
+        jScrollPane1.setViewportView(tbResultado);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -157,26 +215,107 @@ public class TelaFuncionario extends javax.swing.JInternalFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 261, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnPesquisaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisaActionPerformed
+        buscar();
+    }//GEN-LAST:event_btnPesquisaActionPerformed
+
+    private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
+        novo();
+    }//GEN-LAST:event_btnNovoActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        int linha = tbResultado.getSelectedRow();
+        if (linha < 0) {
+            JOptionPane.showMessageDialog(rootPane, "É necessário selecionar um cliente!");
+            return;
+        }
+        long id = Long.parseLong(tbResultado.getValueAt(linha, 0).toString());
+        editar(id);
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void rdNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdNomeActionPerformed
+        txtPesquisa.setEnabled(true);
+        lblTexto.setText("Pesquisar cadastro já existente por Nome: ");
+    }//GEN-LAST:event_rdNomeActionPerformed
+
+    private void rdCpfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdCpfActionPerformed
+        txtPesquisa.setEnabled(true);
+        lblTexto.setText("Pesquisar cadastro já existente por CPF: ");
+    }//GEN-LAST:event_rdCpfActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JButton btnEditar;
+    private javax.swing.JButton btnNovo;
+    private javax.swing.JButton btnPesquisa;
+    private javax.swing.JButton btnPesquisar;
+    private javax.swing.JButton btnRelatorio;
+    private javax.swing.ButtonGroup grupo1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
-    private javax.swing.JRadioButton jRadioButton3;
-    private javax.swing.JRadioButton jRadioButton4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JLabel lblTexto;
+    private javax.swing.JRadioButton rdCpf;
+    private javax.swing.JRadioButton rdNome;
+    private javax.swing.JTable tbResultado;
+    private javax.swing.JFormattedTextField txtPesquisa;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    protected void preencherTabela(List<Funcionario> dados) {
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("ID");
+        modelo.addColumn("NOME");
+        modelo.addColumn("NASCIMENTO");
+        modelo.addColumn("CPF");
+        modelo.addColumn("CARGA HORÁRIA");
+        modelo.addColumn("TELEFONE");
+        modelo.addColumn("EMAIL");
+        for (Funcionario c : dados) {
+            Vector valores = new Vector();
+            valores.add(c.getId());
+            valores.add(c.getNome());
+            valores.add(df.format(c.getDataNascimento().getTime()));
+            valores.add(c.getCpf());
+            valores.add(c.getCargaHoraria());
+            valores.add(c.getTelefone());
+            valores.add(c.getEmail());
+            modelo.addRow(valores);
+        }
+        tbResultado.setModel(modelo);
+    }
+
+    @Override
+    protected Funcionario carregaFiltro() {
+         try{
+           
+            Funcionario filtro = new Funcionario();
+            if(!txtPesquisa.getText().isEmpty()){                
+                if (rdNome.isSelected()){
+                    filtro.setNome(txtPesquisa.getText());
+                }else if(rdCpf.isSelected() && txtPesquisa.getValue() != null){               
+                    filtro.setCpf(txtPesquisa.getText()); 
+                }else if (rdCpf.isSelected() && txtPesquisa.getValue()==null){
+                    filtro.setCpf("111.111.111-11");
+                }
+                return filtro;
+            }
+        }catch(ViolacaoRegraNegocioException ex){
+           Logger.getLogger(TelaFuncionario.class.getName()).log(Level.SEVERE, null, ex); 
+        }
+        return null;  
+    }
+
+    @Override
+    protected Funcionario novaEntidade() {
+        return new Funcionario();
+    }
 }
