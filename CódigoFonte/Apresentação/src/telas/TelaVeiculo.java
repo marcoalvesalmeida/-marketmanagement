@@ -8,10 +8,26 @@ package telas;
 import br.edu.ifnmg.marketmanagement.aplicacao.EnumTipoVeiculo;
 import br.edu.ifnmg.marketmanagement.aplicacao.RepositorioBuilder;
 import br.edu.ifnmg.marketmanagement.aplicacao.Veiculo;
+import br.edu.ifnmg.marketmanagement.aplicacao.VeiculoRepositorio;
 import br.edu.ifnmg.marketmanagement.aplicacao.ViolacaoRegraNegocioException;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Font.FontFamily;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.awt.Desktop;
+import com.itextpdf.text.Font;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -32,7 +48,9 @@ public class TelaVeiculo extends TelaBuscar<Veiculo> {
     private MaskFormatter maskAno;
     private MaskFormatter maskModelo;
     private MaskFormatter maskTipo;
-
+    
+    SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+    SimpleDateFormat hf = new SimpleDateFormat("hh:mm:ss");
     /**
      * Creates new form TelaVeiculoInternal
      * @throws java.text.ParseException
@@ -342,6 +360,72 @@ public class TelaVeiculo extends TelaBuscar<Veiculo> {
         if (linha < 0) {
             JOptionPane.showMessageDialog(this, "Um veículo deve estar selecionado!");
             return;
+        }
+        long id = Long.parseLong(tabResultado.getValueAt(linha, 0).toString());
+        Veiculo ve = new Veiculo();
+        VeiculoRepositorio v = RepositorioBuilder.getVeiculoRepositorio();
+        ve = v.abrir(id);
+        Document doc = new Document();
+        try {
+            PdfWriter.getInstance(doc, new FileOutputStream("relatorioveiculo.pdf"));
+            doc.open();
+             PdfPTable table = new PdfPTable(1);
+        Paragraph titulo = new Paragraph("RELATÓRIO DE VEÍCULOS ",new Font(FontFamily.HELVETICA, 12, Font.BOLD));
+        titulo.setIndentationLeft(60);
+        PdfPCell tituloCell = new PdfPCell(titulo);
+        table.addCell(tituloCell);
+        Paragraph placa = new Paragraph("Placa: "+ve.getPlaca());
+        placa.setIndentationLeft(20);
+        PdfPCell placaCell = new PdfPCell();
+        placaCell.addElement(placa);
+        table.addCell(placaCell);
+        Paragraph modelo = new Paragraph("Modelo: "+ve.getModelo());
+        modelo.setIndentationLeft(20);
+        PdfPCell modeloCell = new PdfPCell();
+        modeloCell.addElement(modelo);
+        table.addCell(modeloCell);
+        Paragraph marca = new Paragraph("Marca: "+ve.getMarca());
+        marca.setIndentationLeft(20);
+        PdfPCell marcaCell = new PdfPCell();
+        marcaCell.addElement(marca);
+        table.addCell(marcaCell);
+        Paragraph ano = new Paragraph("Ano Fab.: "+ve.getAnoFab());
+        ano.setIndentationLeft(20);
+        PdfPCell anoCell = new PdfPCell();
+        anoCell.addElement(ano);
+        table.addCell(anoCell);
+        Paragraph combustivel = new Paragraph("Combustivel: "+ve.getCombustivel());
+        combustivel.setIndentationLeft(20);
+        PdfPCell combustivelCell = new PdfPCell();
+        combustivelCell.addElement(combustivel);
+        table.addCell(combustivelCell);
+        Paragraph tipo = new Paragraph("Tipo: "+ve.getTipo());
+        tipo.setIndentationLeft(20);
+        PdfPCell tipoCell = new PdfPCell();
+        tipoCell.addElement(tipo);
+        table.addCell(tipoCell);
+        Paragraph chassi = new Paragraph("Chassi: "+ve.getChassi());
+        chassi.setIndentationLeft(20);
+        PdfPCell chassiCell = new PdfPCell();
+        chassiCell.addElement(chassi);
+        table.addCell(chassiCell);
+        Paragraph observacoes = new Paragraph("Observações: "+ve.getObservacoes());
+        observacoes.setIndentationLeft(20);
+        PdfPCell observacoesCell = new PdfPCell();
+        observacoesCell.addElement(observacoes);
+        table.addCell(observacoesCell);
+        doc.add(table);
+        doc.add(new Paragraph("Relatório gerado em "+df.format(new Date())+" às "+hf.format(new Date())));
+        } catch (FileNotFoundException | DocumentException ex) {
+            Logger.getLogger(MenuPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            doc.close();
+        }
+        
+        try {
+            Desktop.getDesktop().open(new File("relatorioveiculo.pdf"));
+        } catch (IOException ex) {
+            Logger.getLogger(MenuPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnRelatorioActionPerformed
 
