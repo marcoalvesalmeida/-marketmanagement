@@ -6,10 +6,25 @@
 package telas;
 
 import br.edu.ifnmg.marketmanagement.aplicacao.Funcionario;
+import br.edu.ifnmg.marketmanagement.aplicacao.FuncionarioRepositorio;
 import br.edu.ifnmg.marketmanagement.aplicacao.RepositorioBuilder;
 import br.edu.ifnmg.marketmanagement.aplicacao.ViolacaoRegraNegocioException;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.awt.Desktop;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -32,9 +47,11 @@ public class TelaFuncionario extends TelaBuscar<Funcionario> {
         setEditar(new TelaEditarFuncionario());
         setRepositorio(RepositorioBuilder.getFuncionarioRepositorio());
     }
-    
+
     DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-    
+    DateFormat dfy = new SimpleDateFormat("dd_MM_yyyy");
+    DateFormat hf = new SimpleDateFormat("hh:mm:ss");
+
     private void groupRadio() {
         grupo1.add(rdNome);
         grupo1.add(rdCpf);
@@ -86,6 +103,11 @@ public class TelaFuncionario extends TelaBuscar<Funcionario> {
 
         btnRelatorio.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         btnRelatorio.setText("Relatório");
+        btnRelatorio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRelatorioActionPerformed(evt);
+            }
+        });
 
         lblTexto.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         lblTexto.setText("Pesquisar cadastro já existente por Nome:");
@@ -251,12 +273,62 @@ public class TelaFuncionario extends TelaBuscar<Funcionario> {
         lblTexto.setText("Pesquisar cadastro já existente por CPF: ");
     }//GEN-LAST:event_rdCpfActionPerformed
 
+    private void btnRelatorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRelatorioActionPerformed
+        String hora = hf.format(new Date());
+        String titledoc = "Funcionarios_Geral_" + dfy.format(new Date()) +"_"+hora+".pdf";
+        int linha = tbResultado.getSelectedRow();
+        if (linha < 0) {
+            if (JOptionPane.showConfirmDialog(this, "Você deseja realmente realizar o relatório de todos os funcioários?", "Atenção",
+                    JOptionPane.YES_NO_OPTION) == 0) {
+                Document doc = new Document();
+                try {
+                    FuncionarioRepositorio funcionarios = RepositorioBuilder.getFuncionarioRepositorio();
+                    List<Funcionario> dados = (ArrayList) funcionarios.buscar(null);
+                    PdfWriter.getInstance(doc, new FileOutputStream(titledoc));
+                    doc.open();
+                    PdfPTable table = new PdfPTable(1);
+                    Paragraph titulo = new Paragraph("RELATÓRIO GERAL DE FUNCIONÁRIOS ", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD));
+                    titulo.setIndentationLeft(60);
+                    PdfPCell tituloCell = new PdfPCell(titulo);
+                    table.addCell(tituloCell);
+                    for (Funcionario f : dados) {
+                        Paragraph nome = new Paragraph("Nome: " + f.getNome(),new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD));
+                        nome.setIndentationLeft(20);
+                        PdfPCell nomeCell = new PdfPCell();
+                        nomeCell.addElement(nome);
+                        table.addCell(nomeCell);
+                        Paragraph cpf = new Paragraph("CPF: " + f.getCpf());
+                        cpf.setIndentationLeft(20);
+                        PdfPCell cpfCell = new PdfPCell();
+                        cpfCell.addElement(cpf);
+                        table.addCell(cpfCell);
+                    }
+                    doc.add(table);
+                    Paragraph rodape = new Paragraph("Relatório gerado em " + df.format(new Date()) + " às " + hora);
+                    rodape.setSpacingBefore(30f);
+                    rodape.setIndentationLeft(130f);
+                    doc.add(rodape);
+                } catch (FileNotFoundException | DocumentException ex) {
+                    Logger.getLogger(MenuPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+                } finally {
+                    doc.close();
+                }
+
+                try {
+                    Desktop.getDesktop().open(new File(titledoc));
+                } catch (IOException ex) {
+                    Logger.getLogger(MenuPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                JOptionPane.showMessageDialog(rootPane, "Relatório gerado com sucesso!");
+            }
+        }
+    }//GEN-LAST:event_btnRelatorioActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnNovo;
     private javax.swing.JButton btnPesquisa;
-    private javax.swing.JButton btnPesquisar;
     private javax.swing.JButton btnRelatorio;
     private javax.swing.ButtonGroup grupo1;
     private javax.swing.JPanel jPanel3;
@@ -295,23 +367,23 @@ public class TelaFuncionario extends TelaBuscar<Funcionario> {
 
     @Override
     protected Funcionario carregaFiltro() {
-         try{
-           
+        try {
+
             Funcionario filtro = new Funcionario();
-            if(!txtPesquisa.getText().isEmpty()){                
-                if (rdNome.isSelected()){
+            if (!txtPesquisa.getText().isEmpty()) {
+                if (rdNome.isSelected()) {
                     filtro.setNome(txtPesquisa.getText());
-                }else if(rdCpf.isSelected() && txtPesquisa.getValue() != null){               
-                    filtro.setCpf(txtPesquisa.getText()); 
-                }else if (rdCpf.isSelected() && txtPesquisa.getValue()==null){
+                } else if (rdCpf.isSelected() && txtPesquisa.getValue() != null) {
+                    filtro.setCpf(txtPesquisa.getText());
+                } else if (rdCpf.isSelected() && txtPesquisa.getValue() == null) {
                     filtro.setCpf("111.111.111-11");
                 }
                 return filtro;
             }
-        }catch(ViolacaoRegraNegocioException ex){
-           Logger.getLogger(TelaFuncionario.class.getName()).log(Level.SEVERE, null, ex); 
+        } catch (ViolacaoRegraNegocioException ex) {
+            Logger.getLogger(TelaFuncionario.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return null;  
+        return null;
     }
 
     @Override
