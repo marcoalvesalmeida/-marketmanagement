@@ -12,11 +12,14 @@ import br.edu.ifnmg.marketmanagement.aplicacao.ViolacaoRegraNegocioException;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.Font.FontFamily;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import java.awt.Desktop;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -31,6 +34,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.DefaultFormatterFactory;
+import javax.swing.text.MaskFormatter;
 
 /**
  *
@@ -47,14 +52,20 @@ public class TelaFuncionario extends TelaBuscar<Funcionario> {
         setEditar(new TelaEditarFuncionario());
         setRepositorio(RepositorioBuilder.getFuncionarioRepositorio());
     }
+    
+     private MaskFormatter maskCpf;
+    private MaskFormatter maskNome;
+    
 
     DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
     DateFormat dfy = new SimpleDateFormat("dd_MM_yyyy");
     DateFormat hf = new SimpleDateFormat("hh:mm:ss");
 
     private void groupRadio() {
-        grupo1.add(rdNome);
+        grupo1.add(rdTodos);
         grupo1.add(rdCpf);
+        grupo1.add(rdNome1);
+        rdTodos.setSelected(true);
         txtPesquisa.setEnabled(false);
     }
 
@@ -74,14 +85,16 @@ public class TelaFuncionario extends TelaBuscar<Funcionario> {
         btnRelatorio = new javax.swing.JButton();
         lblTexto = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
-        rdNome = new javax.swing.JRadioButton();
+        rdTodos = new javax.swing.JRadioButton();
         rdCpf = new javax.swing.JRadioButton();
+        rdNome1 = new javax.swing.JRadioButton();
         btnPesquisa = new javax.swing.JButton();
         txtPesquisa = new javax.swing.JFormattedTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbResultado = new javax.swing.JTable();
 
         setClosable(true);
+        setTitle("Buscar Funcionário");
 
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(160, 160, 160)));
 
@@ -114,11 +127,11 @@ public class TelaFuncionario extends TelaBuscar<Funcionario> {
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(185, 185, 185)), "Modos de Pesquisa"));
 
-        rdNome.setFont(new java.awt.Font("Trebuchet MS", 1, 12)); // NOI18N
-        rdNome.setText("Nome");
-        rdNome.addActionListener(new java.awt.event.ActionListener() {
+        rdTodos.setFont(new java.awt.Font("Trebuchet MS", 1, 12)); // NOI18N
+        rdTodos.setText("Todos");
+        rdTodos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                rdNomeActionPerformed(evt);
+                rdTodosActionPerformed(evt);
             }
         });
 
@@ -130,27 +143,39 @@ public class TelaFuncionario extends TelaBuscar<Funcionario> {
             }
         });
 
+        rdNome1.setFont(new java.awt.Font("Trebuchet MS", 1, 12)); // NOI18N
+        rdNome1.setText("Nome");
+        rdNome1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdNome1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(rdNome)
+                .addComponent(rdTodos)
                 .addGap(85, 85, 85))
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(rdCpf)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(rdNome1)
+                    .addComponent(rdCpf))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(6, 6, 6)
-                .addComponent(rdNome)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(rdTodos)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(rdNome1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(rdCpf)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         btnPesquisa.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
@@ -158,6 +183,36 @@ public class TelaFuncionario extends TelaBuscar<Funcionario> {
         btnPesquisa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnPesquisaActionPerformed(evt);
+            }
+        });
+        
+          try{
+			maskCpf = new MaskFormatter("###.###.###-##");
+			maskNome = new MaskFormatter("************************************");
+		}catch(Exception ex){
+			System.out.println(ex);
+			
+		}
+		
+		    rdCpf.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    txtPesquisa.setEnabled(true);
+                    txtPesquisa.setValue(null);
+                    txtPesquisa.setFormatterFactory(new DefaultFormatterFactory(maskCpf));
+                }
+            }
+        });
+        
+            rdNome1.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED) {
+                    txtPesquisa.setEnabled(true);
+                    txtPesquisa.setValue(null);
+                    txtPesquisa.setFormatterFactory(new DefaultFormatterFactory(maskNome));
+                }
             }
         });
 
@@ -238,7 +293,7 @@ public class TelaFuncionario extends TelaBuscar<Funcionario> {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 261, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -263,10 +318,10 @@ public class TelaFuncionario extends TelaBuscar<Funcionario> {
         editar(id);
     }//GEN-LAST:event_btnEditarActionPerformed
 
-    private void rdNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdNomeActionPerformed
-        txtPesquisa.setEnabled(true);
-        lblTexto.setText("Pesquisar cadastro já existente por Nome: ");
-    }//GEN-LAST:event_rdNomeActionPerformed
+    private void rdTodosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdTodosActionPerformed
+        txtPesquisa.setEnabled(false);
+        lblTexto.setText("Pesquisar cadastro já existente: ");
+    }//GEN-LAST:event_rdTodosActionPerformed
 
     private void rdCpfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdCpfActionPerformed
         txtPesquisa.setEnabled(true);
@@ -302,14 +357,69 @@ public class TelaFuncionario extends TelaBuscar<Funcionario> {
                         PdfPCell cpfCell = new PdfPCell();
                         cpfCell.addElement(cpf);
                         table.addCell(cpfCell);
+                        Paragraph rg = new Paragraph("RG: " + f.getRg());
+                        rg.setIndentationLeft(20);
+                        PdfPCell rgCell = new PdfPCell();
+                        rgCell.addElement(rg);
+                        table.addCell(rgCell);
+                        Paragraph nasc = new Paragraph("NASCIMENTO: " + df.format(f.getDataNascimento()));
+                        nasc.setIndentationLeft(20);
+                        PdfPCell nascCell = new PdfPCell();
+                        nascCell.addElement(nasc);
+                        table.addCell(nascCell);
+                        Paragraph email = new Paragraph("E-MAIL: " +  f.getEmail());
+                        email.setIndentationLeft(20);
+                        PdfPCell emailCell = new PdfPCell();
+                        emailCell.addElement(email);
+                        table.addCell(emailCell);
+                        Paragraph end = new Paragraph("ENDEREÇO: " + "Rua " +   f.getEndereco().getRua() + " " + f.getEndereco().getCidade() + "-"+ f.getEndereco().getUf() + " " + f.getEndereco().getCep());
+                        end.setIndentationLeft(20);
+                        PdfPCell endCell = new PdfPCell();
+                        endCell.addElement(end);
+                        table.addCell(endCell);
+                        Paragraph tel1 = new Paragraph("TELEFONE: " + f.getTelefone());
+                        tel1.setIndentationLeft(20);
+                        PdfPCell tel1Cell = new PdfPCell();
+                        tel1Cell.addElement(tel1);
+                        table.addCell(tel1Cell);
+                        Paragraph tel2 = new Paragraph("CELULAR: " + f.getCelular());
+                        tel2.setIndentationLeft(20);
+                        PdfPCell tel2Cell = new PdfPCell();
+                        tel2Cell.addElement(tel2);
+                        table.addCell(tel2Cell);
+                        Paragraph func = new Paragraph("FUNÇÃO: " + f.getFuncao());
+                        func.setIndentationLeft(20);
+                        PdfPCell funcCell = new PdfPCell();
+                        funcCell.addElement(func);
+                        table.addCell(funcCell);
+                        if(f.getCnh() != null && !f.getCnh().isEmpty()){
+                            Paragraph cnh = new Paragraph("CNH: " + f.getCnh());
+                            cnh.setIndentationLeft(20);
+                            PdfPCell cnhCell = new PdfPCell();
+                            cnhCell.addElement(cnh);
+                            table.addCell(cnhCell);
+                        }
+                        Paragraph ch = new Paragraph("CARGA HORÁRIA: " + f.getCargaHoraria());
+                        ch.setIndentationLeft(20);
+                        PdfPCell chCell = new PdfPCell();
+                        chCell.addElement(ch);
+                        table.addCell(chCell);
+                        Paragraph sal = new Paragraph("SALÁRIO: " + f.getSalario());
+                        sal.setIndentationLeft(20);
+                        PdfPCell salCell = new PdfPCell();
+                        salCell.addElement(sal);
+                        table.addCell(salCell);                     
+                        
                     }
                     doc.add(table);
                     Paragraph rodape = new Paragraph("Relatório gerado em " + df.format(new Date()) + " às " + hora);
                     rodape.setSpacingBefore(30f);
                     rodape.setIndentationLeft(130f);
                     doc.add(rodape);
-                } catch (FileNotFoundException | DocumentException ex) {
+                } catch (FileNotFoundException ex) {
                     Logger.getLogger(MenuPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (DocumentException ex) {
+                    Logger.getLogger(TelaFuncionario.class.getName()).log(Level.SEVERE, null, ex);
                 } finally {
                     doc.close();
                 }
@@ -321,8 +431,105 @@ public class TelaFuncionario extends TelaBuscar<Funcionario> {
                 }
                 JOptionPane.showMessageDialog(rootPane, "Relatório gerado com sucesso!");
             }
+        }else{
+            long id = Long.parseLong(tbResultado.getValueAt(linha, 0).toString());
+            Funcionario f = new Funcionario();
+            FuncionarioRepositorio v = RepositorioBuilder.getFuncionarioRepositorio();
+            f = v.abrir(id);
+            Document doc = new Document();
+        try {
+            PdfWriter.getInstance(doc, new FileOutputStream("relatoriofuncionario.pdf"));
+            doc.open();
+             PdfPTable table = new PdfPTable(1);
+        Paragraph titulo = new Paragraph("RELATÓRIO GERAL DE FUNCIONÁRIOS ",new Font(FontFamily.HELVETICA, 12, Font.BOLD));
+        titulo.setIndentationLeft(60);
+        PdfPCell tituloCell = new PdfPCell(titulo);
+        table.addCell(tituloCell);
+   
+        Paragraph nome = new Paragraph("Nome: " + f.getNome(),new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD));
+                        nome.setIndentationLeft(20);
+                        PdfPCell nomeCell = new PdfPCell();
+                        nomeCell.addElement(nome);
+                        table.addCell(nomeCell);
+                        Paragraph cpf = new Paragraph("CPF: " + f.getCpf());
+                        cpf.setIndentationLeft(20);
+                        PdfPCell cpfCell = new PdfPCell();
+                        cpfCell.addElement(cpf);
+                        table.addCell(cpfCell);
+                        Paragraph rg = new Paragraph("RG: " + f.getRg());
+                        rg.setIndentationLeft(20);
+                        PdfPCell rgCell = new PdfPCell();
+                        rgCell.addElement(rg);
+                        table.addCell(rgCell);
+                        Paragraph nasc = new Paragraph("NASCIMENTO: " + df.format(f.getDataNascimento()));
+                        nasc.setIndentationLeft(20);
+                        PdfPCell nascCell = new PdfPCell();
+                        nascCell.addElement(nasc);
+                        table.addCell(nascCell);
+                        Paragraph email = new Paragraph("E-MAIL: " +  f.getEmail());
+                        email.setIndentationLeft(20);
+                        PdfPCell emailCell = new PdfPCell();
+                        emailCell.addElement(email);
+                        table.addCell(emailCell);
+                        Paragraph end = new Paragraph("ENDEREÇO: " + "Rua " +   f.getEndereco().getRua() + " " + f.getEndereco().getCidade() + "-"+ f.getEndereco().getUf() + " " + f.getEndereco().getCep());
+                        end.setIndentationLeft(20);
+                        PdfPCell endCell = new PdfPCell();
+                        endCell.addElement(end);
+                        table.addCell(endCell);
+                        Paragraph tel1 = new Paragraph("TELEFONE: " + f.getTelefone());
+                        tel1.setIndentationLeft(20);
+                        PdfPCell tel1Cell = new PdfPCell();
+                        tel1Cell.addElement(tel1);
+                        table.addCell(tel1Cell);
+                        Paragraph tel2 = new Paragraph("CELULAR: " + f.getCelular());
+                        tel2.setIndentationLeft(20);
+                        PdfPCell tel2Cell = new PdfPCell();
+                        tel2Cell.addElement(tel2);
+                        table.addCell(tel2Cell);
+                        Paragraph func = new Paragraph("FUNÇÃO: " + f.getFuncao());
+                        func.setIndentationLeft(20);
+                        PdfPCell funcCell = new PdfPCell();
+                        funcCell.addElement(func);
+                        table.addCell(funcCell);
+                        if(f.getCnh() != null && !f.getCnh().isEmpty()){
+                            Paragraph cnh = new Paragraph("CNH: " + f.getCnh());
+                            cnh.setIndentationLeft(20);
+                            PdfPCell cnhCell = new PdfPCell();
+                            cnhCell.addElement(cnh);
+                            table.addCell(cnhCell);
+                        }
+                        Paragraph ch = new Paragraph("CARGA HORÁRIA: " + f.getCargaHoraria());
+                        ch.setIndentationLeft(20);
+                        PdfPCell chCell = new PdfPCell();
+                        chCell.addElement(ch);
+                        table.addCell(chCell);
+                        Paragraph sal = new Paragraph("SALÁRIO: " + f.getSalario());
+                        sal.setIndentationLeft(20);
+                        PdfPCell salCell = new PdfPCell();
+                        salCell.addElement(sal);
+                        table.addCell(salCell);     
+               doc.add(table);
+                    Paragraph rodape = new Paragraph("Relatório gerado em " + df.format(new Date()) + " às " + hora);
+                    rodape.setSpacingBefore(30f);
+                    rodape.setIndentationLeft(130f);
+                    doc.add(rodape);
+        } catch (FileNotFoundException | DocumentException ex) {
+            Logger.getLogger(MenuPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            doc.close();
+        }
+        
+        try {
+            Desktop.getDesktop().open(new File("relatoriofuncionario.pdf"));
+        } catch (IOException ex) {
+            Logger.getLogger(MenuPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
         }
     }//GEN-LAST:event_btnRelatorioActionPerformed
+
+    private void rdNome1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdNome1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_rdNome1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -336,7 +543,8 @@ public class TelaFuncionario extends TelaBuscar<Funcionario> {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblTexto;
     private javax.swing.JRadioButton rdCpf;
-    private javax.swing.JRadioButton rdNome;
+    private javax.swing.JRadioButton rdNome1;
+    private javax.swing.JRadioButton rdTodos;
     private javax.swing.JTable tbResultado;
     private javax.swing.JFormattedTextField txtPesquisa;
     // End of variables declaration//GEN-END:variables
@@ -367,23 +575,22 @@ public class TelaFuncionario extends TelaBuscar<Funcionario> {
 
     @Override
     protected Funcionario carregaFiltro() {
-        try {
-
+        try{           
             Funcionario filtro = new Funcionario();
-            if (!txtPesquisa.getText().isEmpty()) {
-                if (rdNome.isSelected()) {
+            if(!txtPesquisa.getText().isEmpty()){                
+                if (rdNome1.isSelected()){
                     filtro.setNome(txtPesquisa.getText());
-                } else if (rdCpf.isSelected() && txtPesquisa.getValue() != null) {
-                    filtro.setCpf(txtPesquisa.getText());
-                } else if (rdCpf.isSelected() && txtPesquisa.getValue() == null) {
-                    filtro.setCpf("111.111.111-11");
+                }else if(rdCpf.isSelected() && txtPesquisa.getValue() != null){               
+                    filtro.setCpf(txtPesquisa.getText());                     
+                }else if (rdCpf.isSelected() && txtPesquisa.getValue()==null){
+                    filtro.setCpf("111.111.111-11");                   
                 }
                 return filtro;
             }
-        } catch (ViolacaoRegraNegocioException ex) {
-            Logger.getLogger(TelaFuncionario.class.getName()).log(Level.SEVERE, null, ex);
+        }catch(ViolacaoRegraNegocioException ex){
+           Logger.getLogger(TelaCliente.class.getName()).log(Level.SEVERE, null, ex); 
         }
-        return null;
+        return null;   
     }
 
     @Override

@@ -1,5 +1,6 @@
 package br.edu.ifnmg.marketmanagement.aplicacao;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 /**
  *
  * @author guilherme
@@ -50,7 +51,10 @@ public class Produto implements Entidade {
         this.fornecedor = fornecedor;
     }
     
-    public Produto() {   
+    public Produto() {  
+        this.valorCusto = new BigDecimal(0);
+        this.valorVarejo =  new BigDecimal(0);
+        this.valorAtacado =  new BigDecimal(0);
   
     }
 

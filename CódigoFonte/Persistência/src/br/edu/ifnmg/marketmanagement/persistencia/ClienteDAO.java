@@ -86,7 +86,7 @@ public class ClienteDAO extends DAOGenerico <Cliente> implements ClienteReposito
             cli.setRg(dados.getString("rg"));
             cli.setDataNascimento(dados.getDate("dataNascimento"));
   
-            cli.setCelular(dados.getString("celular").substring(0,2)+"-"+dados.getString("celular").substring(2,9));
+            cli.setCelular(dados.getString("celular"));
             cli.setDescontos(dados.getBigDecimal("descontos"));
             cli.setInformacoesAdicionais(dados.getString("informacoesAdicionais"));
             cli.setSaldoCompras(dados.getBigDecimal("saldoCompras"));

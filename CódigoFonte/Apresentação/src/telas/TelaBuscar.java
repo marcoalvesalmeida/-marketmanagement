@@ -1,17 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package telas;
-
 import br.edu.ifnmg.marketmanagement.aplicacao.Entidade;
 import br.edu.ifnmg.marketmanagement.aplicacao.Repositorio;
 import java.util.List;
 
 /**
  *
- * @author petronio
+ * @author guilherme
  */
 public abstract class TelaBuscar<T extends Entidade> extends javax.swing.JInternalFrame {
     
@@ -67,12 +61,11 @@ public abstract class TelaBuscar<T extends Entidade> extends javax.swing.JIntern
     }
     
     protected void editar(long id) {
-        T obj = getRepositorio().abrir(id);
-        
+        T obj = getRepositorio().abrir(id);         
         this.getParent().add(editar);
         editar.setVisible(true);
         this.setVisible(false);
-        this.pos.setTamanho(editar);
+        pos.setTamanho(editar);
         editar.setEntidade(obj);
         
         editar.setBuscar(this);

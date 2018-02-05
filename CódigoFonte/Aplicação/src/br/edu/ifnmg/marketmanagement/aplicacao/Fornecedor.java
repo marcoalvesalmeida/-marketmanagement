@@ -10,7 +10,6 @@ public class Fornecedor extends Pessoa {
     private String razaoSocial;
     private String cnpj;
     private String informacoesAdicionais;
-    private String inscricaoEstadual;
     private boolean ativo;
 
     public Fornecedor(String razaoSocial, String cnpj, String informacoesAdicionais, String inscricaoEstadual, boolean ativo, long id, Endereco endereco, String telefone, String email, String celular) {
@@ -18,7 +17,6 @@ public class Fornecedor extends Pessoa {
         this.razaoSocial = razaoSocial;
         this.cnpj = cnpj;
         this.informacoesAdicionais = informacoesAdicionais;
-        this.inscricaoEstadual = inscricaoEstadual;
         this.ativo = ativo;
     }
 
@@ -36,14 +34,6 @@ public class Fornecedor extends Pessoa {
 
     public void setInformacoesAdicionais(String informacoesAdicionais) {
         this.informacoesAdicionais = informacoesAdicionais;
-    }
-
-    public String getInscricaoEstadual() {
-        return inscricaoEstadual;
-    }
-
-    public void setInscricaoEstadual(String inscricaoEstadual) {
-        this.inscricaoEstadual = inscricaoEstadual;
     }
 
     public boolean isAtivo() {

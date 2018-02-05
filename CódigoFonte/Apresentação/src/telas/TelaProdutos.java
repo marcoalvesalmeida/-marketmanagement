@@ -6,14 +6,37 @@
 package telas;
 
 import br.edu.ifnmg.marketmanagement.aplicacao.Produto;
+import br.edu.ifnmg.marketmanagement.aplicacao.ProdutoRepositorio;
 import br.edu.ifnmg.marketmanagement.aplicacao.RepositorioBuilder;
 import br.edu.ifnmg.marketmanagement.aplicacao.ViolacaoRegraNegocioException;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Font.FontFamily;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.awt.Desktop;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.DefaultFormatterFactory;
+import javax.swing.text.MaskFormatter;
 
 /**
  *
@@ -26,9 +49,24 @@ public class TelaProdutos extends TelaBuscar<Produto> {
      */
     public TelaProdutos() {
         initComponents();
-        setEditar(new TelaEditarProduto());
-        
+        setEditar(new TelaEditarProduto());        
         setRepositorio(RepositorioBuilder.getProdutoRepositorio());
+        groupRadio();
+    }
+    
+    private MaskFormatter maskCodigo;
+    private MaskFormatter maskDescricao;
+    
+    DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+    DateFormat dfy = new SimpleDateFormat("dd_MM_yyyy");
+    DateFormat hf = new SimpleDateFormat("hh:mm:ss");
+    
+    private void groupRadio(){
+        grupo1.add(rdTodos);
+        grupo1.add(rdDescricao);
+        grupo1.add(rdCodigo);
+        rdTodos.setSelected(true);
+        txtPesquisa.enable(false);
     }
 
     /**
@@ -40,36 +78,52 @@ public class TelaProdutos extends TelaBuscar<Produto> {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        grupo1 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         rdTodos = new javax.swing.JRadioButton();
         rdCodigo = new javax.swing.JRadioButton();
-        rdDescricao1 = new javax.swing.JRadioButton();
+        rdDescricao = new javax.swing.JRadioButton();
         btnEditar = new javax.swing.JButton();
         btnNovo = new javax.swing.JButton();
         btnRelatorio = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
+        txtinfo = new javax.swing.JLabel();
         btnPesquisar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbResultado = new javax.swing.JTable();
         txtPesquisa = new javax.swing.JFormattedTextField();
 
         setClosable(true);
-        setTitle("Pesquisar Produtos");
+        setTitle("Buscar Produto");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(160, 160, 160)));
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Modos de Pesquisa"));
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(186, 184, 184)), "Modos de Pesquisa"));
         jPanel2.setOpaque(false);
 
         rdTodos.setFont(new java.awt.Font("Trebuchet MS", 1, 12)); // NOI18N
         rdTodos.setText("Todos");
+        rdTodos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdTodosActionPerformed(evt);
+            }
+        });
 
         rdCodigo.setFont(new java.awt.Font("Trebuchet MS", 1, 12)); // NOI18N
         rdCodigo.setText("Código");
+        rdCodigo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdCodigoActionPerformed(evt);
+            }
+        });
 
-        rdDescricao1.setFont(new java.awt.Font("Trebuchet MS", 1, 12)); // NOI18N
-        rdDescricao1.setText("Descrição");
+        rdDescricao.setFont(new java.awt.Font("Trebuchet MS", 1, 12)); // NOI18N
+        rdDescricao.setText("Descrição");
+        rdDescricao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rdDescricaoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -79,19 +133,20 @@ public class TelaProdutos extends TelaBuscar<Produto> {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(rdCodigo)
-                    .addComponent(rdDescricao1)
+                    .addComponent(rdDescricao)
                     .addComponent(rdTodos))
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addContainerGap(42, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(rdTodos)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(rdDescricao1)
+                .addComponent(rdDescricao)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(rdCodigo)
-                .addGap(42, 42, 42))
+                .addGap(62, 62, 62))
         );
 
         btnEditar.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
@@ -112,9 +167,14 @@ public class TelaProdutos extends TelaBuscar<Produto> {
 
         btnRelatorio.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         btnRelatorio.setText("Relatório");
+        btnRelatorio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRelatorioActionPerformed(evt);
+            }
+        });
 
-        jLabel1.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
-        jLabel1.setText("Pesquisar cadastro já existente por Descrição:");
+        txtinfo.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
+        txtinfo.setText("Pesquisar cadastro já existente:");
 
         btnPesquisar.setFont(new java.awt.Font("Trebuchet MS", 1, 14)); // NOI18N
         btnPesquisar.setText("Pesquisar");
@@ -156,27 +216,22 @@ public class TelaProdutos extends TelaBuscar<Produto> {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1)
-                        .addContainerGap())
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(btnNovo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnNovo, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(btnRelatorio, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnRelatorio, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(btnPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel1)
-                                    .addComponent(txtPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 515, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(6, 6, 6))))
+                                .addComponent(btnPesquisar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(txtinfo)
+                            .addComponent(txtPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 515, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -184,7 +239,7 @@ public class TelaProdutos extends TelaBuscar<Produto> {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
+                        .addComponent(txtinfo)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -233,28 +288,284 @@ public class TelaProdutos extends TelaBuscar<Produto> {
         editar(id);      
     }//GEN-LAST:event_btnEditarActionPerformed
 
+    private void rdTodosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdTodosActionPerformed
+        txtinfo.setText("Pesquisar cadastro já existente: ");
+        txtPesquisa.setEnabled(false);
+    }//GEN-LAST:event_rdTodosActionPerformed
+
+    private void rdDescricaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdDescricaoActionPerformed
+        txtinfo.setText("Pesquisar cadastro já existente por Descrição: ");
+        txtPesquisa.setEnabled(true);
+    }//GEN-LAST:event_rdDescricaoActionPerformed
+
+    private void rdCodigoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rdCodigoActionPerformed
+        txtinfo.setText("Pesquisar cadastro já existente por Código: ");
+        txtPesquisa.setEnabled(true);
+    }//GEN-LAST:event_rdCodigoActionPerformed
+
+    private void btnRelatorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRelatorioActionPerformed
+        String hora = hf.format(new Date());
+        String titledoc = "Funcionarios_Geral_" + dfy.format(new Date()) +"_"+hora+".pdf";
+        int linha = tbResultado.getSelectedRow();
+        if (linha < 0) {
+            if (JOptionPane.showConfirmDialog(this, "Você deseja realmente realizar o relatório de todos os produtos?", "Atenção",
+                    JOptionPane.YES_NO_OPTION) == 0) {
+                Document doc = new Document();
+                try {
+                    ProdutoRepositorio produto = RepositorioBuilder.getProdutoRepositorio();
+                    List<Produto> dados = (ArrayList) produto.buscar(null);
+                    PdfWriter.getInstance(doc, new FileOutputStream(titledoc));
+                    doc.open();
+                    PdfPTable table = new PdfPTable(1);
+                    Paragraph titulo = new Paragraph("RELATÓRIO GERAL DE PRODUTOS ", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD));
+                    titulo.setIndentationLeft(60);
+                    PdfPCell tituloCell = new PdfPCell(titulo);
+                    table.addCell(tituloCell);
+                    for (Produto f : dados) {
+                        Paragraph cod = new Paragraph("CODIGO: " + f.getCodigo(),new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD));
+                        cod.setIndentationLeft(20);
+                        PdfPCell codCell = new PdfPCell();
+                        codCell.addElement(cod);
+                        table.addCell(codCell);
+                        Paragraph nome = new Paragraph("DESCRIÇÃO: " + f.getDescricao(),new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD));
+                        nome.setIndentationLeft(20);
+                        PdfPCell nomeCell = new PdfPCell();
+                        nomeCell.addElement(nome);
+                        table.addCell(nomeCell);                        
+                        Paragraph cpf = new Paragraph("CATEGORIA: " + f.getCategoria().getDescricao());
+                        cpf.setIndentationLeft(20);
+                        PdfPCell cpfCell = new PdfPCell();
+                        cpfCell.addElement(cpf);
+                        table.addCell(cpfCell);
+                        Paragraph rg = new Paragraph("VALOR DE CUSTO: " + f.getValorCusto());
+                        rg.setIndentationLeft(20);
+                        PdfPCell rgCell = new PdfPCell();
+                        rgCell.addElement(rg);
+                        table.addCell(rgCell);
+                        Paragraph nasc = new Paragraph("VALOR DE VAREJO: " + f.getValorVarejo());
+                        nasc.setIndentationLeft(20);
+                        PdfPCell nascCell = new PdfPCell();
+                        nascCell.addElement(nasc);
+                        table.addCell(nascCell);
+                        Paragraph email = new Paragraph("VALOR DE ATACADO: " +  f.getValorAtacado());
+                        email.setIndentationLeft(20);
+                        PdfPCell emailCell = new PdfPCell();
+                        emailCell.addElement(email);
+                        table.addCell(emailCell);
+                        Paragraph end = new Paragraph("UNIDADE DE MEDIDA: " + f.getUnMedida());
+                        end.setIndentationLeft(20);
+                        PdfPCell endCell = new PdfPCell();
+                        endCell.addElement(end);
+                        table.addCell(endCell);
+                        Paragraph tel1 = new Paragraph("PONTUAÇÃO: " + f.getPontuacao());
+                        tel1.setIndentationLeft(20);
+                        PdfPCell tel1Cell = new PdfPCell();
+                        tel1Cell.addElement(tel1);
+                        table.addCell(tel1Cell);
+                        Paragraph tel2 = new Paragraph("ESTOQUE MINIMO: " + f.getEstoqueMinimo());
+                        tel2.setIndentationLeft(20);
+                        PdfPCell tel2Cell = new PdfPCell();
+                        tel2Cell.addElement(tel2);
+                        table.addCell(tel2Cell);
+                        Paragraph func = new Paragraph("ESTOQUE ATUAL: " + f.getEstoqueAtual());
+                        func.setIndentationLeft(20);
+                        PdfPCell funcCell = new PdfPCell();
+                        funcCell.addElement(func);
+                        table.addCell(funcCell);                      
+                        
+                        String ativo ="";
+                        if(f.isAtivo())
+                            ativo = "Sim";
+                        else
+                            ativo = "Não";
+                        Paragraph ch = new Paragraph("ATIVO: " + ativo);
+                        ch.setIndentationLeft(20);
+                        PdfPCell chCell = new PdfPCell();
+                        chCell.addElement(ch);
+                        table.addCell(chCell);
+                        if (f.isFracionar())
+                            ativo = "Sim";
+                        else
+                            ativo = "Não";
+                        Paragraph sal = new Paragraph("FRACIONAR: " +ativo);
+                        sal.setIndentationLeft(20);
+                        PdfPCell salCell = new PdfPCell();
+                        salCell.addElement(sal);
+                        table.addCell(salCell);    
+                        
+                        Paragraph sal2 = new Paragraph("FORNECEDOR: " + f.getFornecedor().getRazaoSocial());
+                        sal2.setIndentationLeft(20);
+                        PdfPCell sal2Cell = new PdfPCell();
+                        sal2Cell.addElement(sal2);
+                        table.addCell(sal2Cell);  
+                        
+                        Paragraph sal3 = new Paragraph("INFORMAÇÕES ADICIONAIS: " + f.getInformacoesAdicionais());
+                        sal3.setIndentationLeft(20);
+                        PdfPCell sal3Cell = new PdfPCell();
+                        sal3Cell.addElement(sal3);
+                        table.addCell(sal3Cell);  
+                        
+                    }
+                    doc.add(table);
+                    Paragraph rodape = new Paragraph("Relatório gerado em " + df.format(new Date()) + " às " + hora);
+                    rodape.setSpacingBefore(30f);
+                    rodape.setIndentationLeft(130f);
+                    doc.add(rodape);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(MenuPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (DocumentException ex) {
+                    Logger.getLogger(TelaFuncionario.class.getName()).log(Level.SEVERE, null, ex);
+                } finally {
+                    doc.close();
+                }
+
+                try {
+                    Desktop.getDesktop().open(new File(titledoc));
+                } catch (IOException ex) {
+                    Logger.getLogger(MenuPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                JOptionPane.showMessageDialog(rootPane, "Relatório gerado com sucesso!");
+            }
+        }else{
+            long id = Long.parseLong(tbResultado.getValueAt(linha, 0).toString());
+            Produto f = new Produto();
+            ProdutoRepositorio v = RepositorioBuilder.getProdutoRepositorio();
+            f = v.abrir(id);
+            Document doc = new Document();
+        try {
+            PdfWriter.getInstance(doc, new FileOutputStream("relatorioprodutos.pdf"));
+            doc.open();
+             PdfPTable table = new PdfPTable(1);
+        Paragraph titulo = new Paragraph("RELATÓRIO GERAL DE PRODUTOS ",new Font(FontFamily.HELVETICA, 12, Font.BOLD));
+        titulo.setIndentationLeft(60);
+        PdfPCell tituloCell = new PdfPCell(titulo);
+        table.addCell(tituloCell);
+   
+         Paragraph cod = new Paragraph("CODIGO: " + f.getCodigo(),new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD));
+                        cod.setIndentationLeft(20);
+                        PdfPCell codCell = new PdfPCell();
+                        codCell.addElement(cod);
+                        table.addCell(codCell);
+                        Paragraph nome = new Paragraph("DESCRIÇÃO: " + f.getDescricao(),new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD));
+                        nome.setIndentationLeft(20);
+                        PdfPCell nomeCell = new PdfPCell();
+                        nomeCell.addElement(nome);
+                        table.addCell(nomeCell);                        
+                        Paragraph cpf = new Paragraph("CATEGORIA: " + f.getCategoria().getDescricao());
+                        cpf.setIndentationLeft(20);
+                        PdfPCell cpfCell = new PdfPCell();
+                        cpfCell.addElement(cpf);
+                        table.addCell(cpfCell);
+                        Paragraph rg = new Paragraph("VALOR DE CUSTO: " + f.getValorCusto());
+                        rg.setIndentationLeft(20);
+                        PdfPCell rgCell = new PdfPCell();
+                        rgCell.addElement(rg);
+                        table.addCell(rgCell);
+                        Paragraph nasc = new Paragraph("VALOR DE VAREJO: " + df.format(f.getValorVarejo()));
+                        nasc.setIndentationLeft(20);
+                        PdfPCell nascCell = new PdfPCell();
+                        nascCell.addElement(nasc);
+                        table.addCell(nascCell);
+                        Paragraph email = new Paragraph("VALOR DE ATACADO: " +  f.getValorAtacado());
+                        email.setIndentationLeft(20);
+                        PdfPCell emailCell = new PdfPCell();
+                        emailCell.addElement(email);
+                        table.addCell(emailCell);
+                        Paragraph end = new Paragraph("UNIDADE DE MEDIDA: " + f.getUnMedida());
+                        end.setIndentationLeft(20);
+                        PdfPCell endCell = new PdfPCell();
+                        endCell.addElement(end);
+                        table.addCell(endCell);
+                        Paragraph tel1 = new Paragraph("PONTUAÇÃO: " + f.getPontuacao());
+                        tel1.setIndentationLeft(20);
+                        PdfPCell tel1Cell = new PdfPCell();
+                        tel1Cell.addElement(tel1);
+                        table.addCell(tel1Cell);
+                        Paragraph tel2 = new Paragraph("ESTOQUE MINIMO: " + f.getEstoqueMinimo());
+                        tel2.setIndentationLeft(20);
+                        PdfPCell tel2Cell = new PdfPCell();
+                        tel2Cell.addElement(tel2);
+                        table.addCell(tel2Cell);
+                        Paragraph func = new Paragraph("ESTOQUE ATUAL: " + f.getEstoqueAtual());
+                        func.setIndentationLeft(20);
+                        PdfPCell funcCell = new PdfPCell();
+                        funcCell.addElement(func);
+                        table.addCell(funcCell);                      
+                        
+                        String ativo ="";
+                        if(f.isAtivo())
+                            ativo = "Sim";
+                        else
+                            ativo = "Não";
+                        Paragraph ch = new Paragraph("ATIVO: " + ativo);
+                        ch.setIndentationLeft(20);
+                        PdfPCell chCell = new PdfPCell();
+                        chCell.addElement(ch);
+                        table.addCell(chCell);
+                        if (f.isFracionar())
+                            ativo = "Sim";
+                        else
+                            ativo = "Não";
+                        Paragraph sal = new Paragraph("FRACIONAR: " +ativo);
+                        sal.setIndentationLeft(20);
+                        PdfPCell salCell = new PdfPCell();
+                        salCell.addElement(sal);
+                        table.addCell(salCell);    
+                        
+                        Paragraph sal2 = new Paragraph("FORNECEDOR: " + f.getFornecedor().getRazaoSocial());
+                        sal2.setIndentationLeft(20);
+                        PdfPCell sal2Cell = new PdfPCell();
+                        sal2Cell.addElement(sal2);
+                        table.addCell(sal2Cell);  
+                        
+                        Paragraph sal3 = new Paragraph("INFORMAÇÕES ADICIONAIS: " + f.getInformacoesAdicionais());
+                        sal3.setIndentationLeft(20);
+                        PdfPCell sal3Cell = new PdfPCell();
+                        sal3Cell.addElement(sal3);
+                        table.addCell(sal3Cell);  
+               doc.add(table);
+                    Paragraph rodape = new Paragraph("Relatório gerado em " + df.format(new Date()) + " às " + hora);
+                    rodape.setSpacingBefore(30f);
+                    rodape.setIndentationLeft(130f);
+                    doc.add(rodape);
+        } catch (FileNotFoundException | DocumentException ex) {
+            Logger.getLogger(MenuPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }finally{
+            doc.close();
+        }
+        
+        try {
+            Desktop.getDesktop().open(new File("relatorioprodutos.pdf"));
+        } catch (IOException ex) {
+            Logger.getLogger(MenuPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        }
+    }//GEN-LAST:event_btnRelatorioActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnNovo;
     private javax.swing.JButton btnPesquisar;
     private javax.swing.JButton btnRelatorio;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.ButtonGroup grupo1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JRadioButton rdCodigo;
-    private javax.swing.JRadioButton rdDescricao1;
+    private javax.swing.JRadioButton rdDescricao;
     private javax.swing.JRadioButton rdTodos;
     private javax.swing.JTable tbResultado;
     private javax.swing.JFormattedTextField txtPesquisa;
+    private javax.swing.JLabel txtinfo;
     // End of variables declaration//GEN-END:variables
 
     @Override
     protected void preencherTabela(List<Produto> dados) {
         DefaultTableModel modelo = new DefaultTableModel();
-        modelo.addColumn("ID");
+        modelo.addColumn("ID");      
         modelo.addColumn("DESCRIÇÃO");
+        modelo.addColumn("CODIGO");
         modelo.addColumn("ESTOQUE MINIMO");
         modelo.addColumn("ESTOQUE ATUAL");
         modelo.addColumn("UNID MEDIDA");
@@ -262,6 +573,7 @@ public class TelaProdutos extends TelaBuscar<Produto> {
             Vector valores = new Vector();
             valores.add(c.getId());
             valores.add(c.getDescricao());
+            valores.add(c.getCodigo());
             valores.add(c.getEstoqueMinimo());
             valores.add(c.getEstoqueAtual());
             valores.add(c.getUnMedida());
@@ -272,13 +584,13 @@ public class TelaProdutos extends TelaBuscar<Produto> {
 
     @Override
     protected Produto carregaFiltro() {
-         try{           
+        try{           
             Produto filtro = new Produto();
             if(!txtPesquisa.getText().isEmpty()){                
-                if (rdDescricao1.isSelected()){
+                if (rdDescricao.isSelected()){
                     filtro.setDescricao(txtPesquisa.getText());
-                }else if(rdCodigo.isSelected() && txtPesquisa.getValue() != null){               
-                    filtro.setCodigo(Integer.parseInt(txtPesquisa.getText())); 
+                }else if(rdCodigo.isSelected() && Integer.parseInt(txtPesquisa.getText()) > 0){                
+                    filtro.setCodigo(Integer.parseInt(txtPesquisa.getText()));                   
                 }
                 return filtro;
             }

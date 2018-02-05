@@ -7,6 +7,7 @@
   </NonVisualComponents>
   <Properties>
     <Property name="closable" type="boolean" value="true"/>
+    <Property name="title" type="java.lang.String" value="Buscar Funcion&#xe1;rio"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
@@ -35,7 +36,7 @@
           <Group type="102" alignment="0" attributes="0">
               <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="jScrollPane1" pref="261" max="32767" attributes="0"/>
+              <Component id="jScrollPane1" pref="242" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -163,12 +164,15 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="32767" attributes="0"/>
-                      <Component id="rdNome" min="-2" max="-2" attributes="0"/>
+                      <Component id="rdTodos" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="85" max="-2" attributes="0"/>
                   </Group>
-                  <Group type="102" alignment="0" attributes="0">
+                  <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="rdCpf" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="rdNome1" min="-2" max="-2" attributes="0"/>
+                          <Component id="rdCpf" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -177,24 +181,26 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
-                      <Component id="rdNome" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="rdTodos" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="rdNome1" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="rdCpf" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JRadioButton" name="rdNome">
+            <Component class="javax.swing.JRadioButton" name="rdTodos">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Trebuchet MS" size="12" style="1"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Nome"/>
+                <Property name="text" type="java.lang.String" value="Todos"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rdNomeActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rdTodosActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JRadioButton" name="rdCpf">
@@ -206,6 +212,17 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rdCpfActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JRadioButton" name="rdNome1">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Trebuchet MS" size="12" style="1"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Nome"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rdNome1ActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>

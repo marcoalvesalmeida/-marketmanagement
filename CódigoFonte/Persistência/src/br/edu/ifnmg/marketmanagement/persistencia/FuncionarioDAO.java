@@ -80,7 +80,8 @@ public class FuncionarioDAO extends DAOGenerico <Funcionario> implements Funcion
             func.setEmail(dados.getString("email"));
             func.setSalario(dados.getBigDecimal("salario"));
             func.setCargaHoraria(dados.getInt("cargaHoraria"));
-            func.setCelular(dados.getString("celular").substring(0,2)+"-"+dados.getString("celular").substring(2,9));
+            String teste = dados.getString("celular");           
+            func.setCelular(teste.substring(0,2)+"-"+teste.substring(2, 11));          
             func.setFuncao(EnumFuncoes.valueOf(dados.getString("funcao")));
             func.setSenha(dados.getString("senha"));
             func.setCnh(dados.getString("cnh"));
@@ -93,12 +94,16 @@ public class FuncionarioDAO extends DAOGenerico <Funcionario> implements Funcion
 
     @Override
     protected String carregaParametrosBusca(Funcionario obj) {
-        String sql = "";              
+        String sql = ""; 
+        
+                if(obj.getId() > 0)
+            sql = this.filtrarPor(sql, "id", Long.toString( obj.getId() ));
+             
         if(obj.getNome() != null && !obj.getNome().isEmpty())
-            sql = this.filtrarPor(sql, "nome", obj.getNome());        
-        if(obj.getCpf() != null && !obj.getCpf().isEmpty()){
-            sql = this.filtrarPor(sql, "cpf", obj.getCpf());             
-        }
+            sql = this.filtrarPor(sql, "nome", obj.getNome()); 
+        
+      if(obj.getCpf() != null && !obj.getCpf().isEmpty())
+            sql = this.filtrarPor(sql, "cpf", obj.getCpf().replace(".", "").replace("-", ""));       
         return sql;
     }
 }

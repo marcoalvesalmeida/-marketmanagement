@@ -103,7 +103,7 @@ public class ProdutoDAO extends DAOGenerico <Produto> implements ProdutoReposito
         if(obj.getDescricao() != null && !obj.getDescricao().isEmpty())
             sql = this.filtrarPor(sql, "descricao", obj.getDescricao());        
         if(obj.getCodigo() > 0)
-            sql = this.filtrarPor(sql, "codigo", Long.toString(obj.getCodigo()));        
+            sql = this.filtrarPor(sql, "codigo", Integer.toString(obj.getCodigo()));        
         return sql;    
     }
    
